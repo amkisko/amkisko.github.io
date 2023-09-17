@@ -304,8 +304,15 @@ class Application {
   }
   onRoomMessage(room, peerId, msg) {
     if (msg.q === "new_game_room") {
-      const decisionValue = this.resolveDecision({ peerId }).value;
-      if (msg.d === decisionValue) {
+      const decisionValue = this.resolveDecision({ peerId })?.value;
+      if (!decisionValue) {
+        if (this.gameRoom) {
+          this.sendMessage({ q: "game_room", rid: this.gameRoom.id }, peerId);
+        } else {
+          const decision = this.resolveDecision({ peerId, force: true }).value;
+          this.sendMessage({ q: "new_game_room", d: decision }, peerId);
+        }
+      } else if (msg.d === decisionValue) {
         this.sendMessage(
           {
             q: "new_game_room",
