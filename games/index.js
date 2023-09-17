@@ -278,7 +278,9 @@ class Application {
       if (this.gameRoom?.id === id) {
         return { room: this.gameRoom, status: "playing" };
       }
-      this.gameRoom.room.leave();
+      if (this.gameRoom?.connected) {
+        this.gameRoom.room.leave();
+      }
       this.gameRoom = null;
       this.gameRoom = new Room({
         id,
