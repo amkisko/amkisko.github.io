@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Snake</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body style="margin: 0">
+    <div id="log">
+      <div id="log-content"></div>
+      <div id="log-control">
+        <div>
+          <input type="text" id="log-input" onkeyup="if (event.keyCode === 13) window.app.sendLog();" />
+          <button type="button" id="log-send" onclick="window.app.sendLog();">
+            Send
+          </button>
+        </div>
+        <div>
+          <button type="reset" id="log-clear" onclick="window.app.clearLog();">
+            Clear log
+          </button>
+          <input type="checkbox" id="log-autoscroll" checked />
+          <label for="log-autoscroll">Autoscroll</label>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import { joinRoom } from "https://cdn.skypack.dev/trystero";
+      window.trysteroJoinRoom = joinRoom;
+    </script>
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+#log {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6rem;
+  border: 1px solid red;
+}
+
+#log-content {
+  height: 5rem;
+  overflow-y: scroll;
+}
+
+#log-control {
+  display: flex;
+  height: 1rem;
+}
+
+#log-content div {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+#log-content div:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.02);
+}

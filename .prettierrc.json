@@ -1,0 +1,13 @@
+{
+    "bracketSpacing": true,
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": false,
+    "semi": true,
+    "rubySingleQuote": false,
+    "plugins": [
+      "@prettier/plugin-ruby",
+      "@prettier/plugin-xml",
+      "prettier-plugin-sql"
+    ]
+  }
