@@ -1,3 +1,21 @@
+* { margin: 0; padding: 0;}
+
+body, html { height:100%; }
+
+#view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#stage-view {
+  height: calc(100% - 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 #log {
   position: fixed;
   bottom: 0;
