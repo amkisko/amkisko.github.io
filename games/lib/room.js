@@ -92,7 +92,10 @@ class Room {
       this.roomCallbacks.peerStream(stream, peerId);
     });
     const [sendMsg, getMsg] = this.room.makeAction("msg");
-    this.sendMessage = sendMsg;
+    this.sendMessage = (...args) => {
+      this.log("send message", this.id, JSON.stringify(args));
+      return sendMsg(...args);
+    }
     this.getMessage = getMsg;
     getMsg((msg, peerId) => {
       this.addPeer(peerId);
@@ -100,6 +103,7 @@ class Room {
       this.peers[peerId].receivedMessage(msg);
       this.roomCallbacks.peerMessage(msg, peerId);
     });
+    this.sendPresence({ status: "online" });
   }
   get connected() {
     return !!this.room;
@@ -117,5 +121,14 @@ class Room {
   onMessage(callback) {
     this.roomCallbacks.peerMessage = (msg, peerId) =>
       callback(this, peerId, msg);
+  }
+  sendPresence({ status = "online", peerId = null }) {
+    const msg = { q: "presence", s: status };
+    if (peerId) {
+      msg.to = peerId;
+      this.sendMessage(msg, peerId);
+    } else {
+      this.sendMessage(msg);
+    }
   }
 }

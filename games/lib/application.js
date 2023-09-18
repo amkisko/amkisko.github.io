@@ -1,17 +1,55 @@
 /* global Logger, Room */
 
 class Application {
-  constructor(context) {
+  constructor({ context }) {
     this.context = context;
     this.log = Logger.getLog({ prefix: "app", context: this.context });
     this.id = "amkisko.github.io/snake/v1";
+    this.game = new Game({ context: this.context });
+  }
+  handleDeviceOrientation(event, debounced = false) {
+    if (!debounced) {
+      clearTimeout(this.handleDeviceOrientationTimer);
+      this.handleDeviceOrientationTimer = setTimeout(() => this.handleDeviceOrientation(event, true), 100);
+      return;
+    }
+    const x = event.gamma;
+    const y = event.beta;
+    if (this.game.isActive()) {
+      this.game.setAccel({ x, y });
+      this.gameRoom.sendMessage({ q: "accel", x, y });
+    }
+  }
+  handleMouseMove(event, debounced = false) {
+    if (!debounced) {
+      clearTimeout(this.handleMouseMoveTimer);
+      this.handleMouseMoveTimer = setTimeout(() => this.handleMouseMove(event, true), 100);
+      return;
+    }
+    const x = (event.clientX / this.game.stage.clientWidth) * 2 - 1;
+    const y = (event.clientY / this.game.stage.clientHeight) * 2 - 1;
+    if (this.game.isActive()) {
+      this.game.setAccel({ x, y });
+      this.gameRoom.sendMessage({ q: "accel", x, y });
+    }
   }
   init() {
+    this.game.showLoader();
     this.room = new Room({ appId: this.id, context: this.context });
     this.room.onJoin((...args) => this.onRoomJoin(...args));
     this.room.onLeave((...args) => this.onRoomLeave(...args));
     this.room.onStream((...args) => this.onRoomStream(...args));
     this.room.onMessage((...args) => this.onRoomMessage(...args));
+    window.addEventListener(
+      "deviceorientation",
+      (event) => this.handleDeviceOrientation(event),
+      true,
+    );
+    this.context.querySelector("#stage").addEventListener(
+      "mousemove",
+      (event) => this.handleMouseMove(event),
+      true,
+    );
   }
   clearLog() {
     this.log.clearLog();
@@ -21,11 +59,13 @@ class Application {
     this.room.sendMessage(msg);
   }
   sendLog() {
-    const value = this.context.document.getElementById("log-input").value;
-    this.context.document.getElementById("log-input").value = "";
+    const logInput = this.context.querySelector("#log-input");
+    const value = logInput.value;
     if (value) {
+      this.log(value);
       this.sendMessage({ q: "log", d: value });
     }
+    logInput.value = "";
   }
   // negotiate new room within the main room
   // start sending device location to others
@@ -70,16 +110,8 @@ class Application {
       ).length,
     };
   }
-  sendPresence({ status = "online", peerId = null }) {
-    const msg = { q: "presence", d: status };
-    if (peerId) {
-      this.sendMessage(msg, peerId);
-    } else {
-      this.sendMessage(msg);
-    }
-  }
   onRoomJoin(room, peerId) {
-    this.sendPresence({ peerId });
+    this.room.sendPresence({ peerId });
   }
   onRoomLeave(room, peerId) {
     this.resolveDecision({ peerId, remove: true });
@@ -128,11 +160,19 @@ class Application {
     this.gameRoom.onMessage((...args) => this.onGameRoomMessage(...args));
     return { room: this.gameRoom, status };
   }
+  sendGameRoomInvitation({ peerId }) {
+    const newPlayerEmoji = Resources.getRandomEmojiIdx();
+    this.game.addPlayer({ id: peerId, emoji: newPlayerEmoji });
+    this.sendMessage(
+      { q: "game_room", rid: this.gameRoom.id, emoji: newPlayerEmoji },
+      peerId,
+    );
+  }
   handleNewGameRoomQuery({ room, peerId, msg }) {
     const decisionValue = this.resolveDecision({ peerId })?.value;
     if (!decisionValue) {
       if (this.gameRoom) {
-        this.sendMessage({ q: "game_room", rid: this.gameRoom.id }, peerId);
+        this.sendGameRoomInvitation({ peerId });
       } else {
         const decision = this.resolveDecision({ peerId, force: true }).value;
         this.sendMessage({ q: "new_game_room", d: decision }, peerId);
@@ -148,7 +188,7 @@ class Application {
     } else if (msg.d < decisionValue) {
       this.resolveDecision({ peerId, host: true });
       const { room: gameRoom, status } = this.resolveGameRoom({});
-      this.sendMessage({ q: "game_room", rid: gameRoom.id }, peerId);
+      this.sendGameRoomInvitation({ peerId });
     } else {
       this.resolveDecision({ peerId, user: true });
     }
@@ -156,14 +196,17 @@ class Application {
   handleGameRoomQuery({ room, peerId, msg }) {
     const { room: gameRoom, status } = this.resolveGameRoom({ id: msg.rid });
     if (status === "accepted") {
+      this.game.setHostId(peerId);
+      this.game.emoji = msg.emoji;
       this.gameRoom.time = msg.ts;
     }
   }
   handlePresenceQuery({ room, peerId, msg }) {
     this.gameRoomInvitations = this.gameRoomInvitations || {};
     if (!this.gameRoomInvitations[peerId]) {
+      this.log("sending game room invitation", peerId);
       if (this.gameRoom) {
-        this.sendMessage({ q: "game_room", rid: this.gameRoom.id }, peerId);
+        this.sendGameRoomInvitation({ peerId });
       } else {
         const decision = this.resolveDecision({ peerId, force: true }).value;
         this.sendMessage({ q: "new_game_room", d: decision }, peerId);
@@ -176,10 +219,37 @@ class Application {
       this.handleNewGameRoomQuery({ room, peerId, msg });
     } else if (msg.q === "game_room") {
       this.handleGameRoomQuery({ room, peerId, msg });
+    } else if (msg.q === "presence") {
+      this.handlePresenceQuery({ room, peerId, msg });
     }
   }
-  onGameRoomJoin(room, peerId) {}
-  onGameRoomLeave(room, peerId) {}
+  onGameRoomJoin(room, peerId) {
+    room.sendPresence({ peerId });
+    if (!this.game.hostId) {
+      room.sendMessage(
+        { q: "player", id: null, emoji: this.game.emoji },
+        peerId,
+      );
+      Object.keys(this.game.players)
+        .filter((id) => id !== peerId)
+        .forEach((id) => {
+          room.sendMessage({ q: "player", id, emoji: this.game.emoji }, peerId);
+        });
+    }
+  }
+  onGameRoomLeave(room, peerId) {
+    this.game.removePlayer({ id: peerId });
+  }
   onGameRoomStream(room, stream, peerId) {}
-  onGameRoomMessage(room, peerId, msg) {}
+  onGameRoomMessage(room, peerId, msg) {
+    if (msg.q === "presence") {
+      if (msg.s === "offline") {
+        this.game.removePlayer({ id: peerId });
+      }
+    } else if (msg.q === "player") {
+      this.game.addPlayer({ id: msg.id || peerId, emoji: msg.emoji });
+    } else if (msg.q === "accel") {
+      this.game.setAccel({ x: msg.x, y: msg.y }, peerId);
+    }
+  }
 }

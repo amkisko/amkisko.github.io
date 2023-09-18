@@ -8,12 +8,18 @@ class Logger {
     this.prefix = prefix;
   }
   getContentElement() {
-    return this.context.document.getElementById("log-content");
+    return this.context.querySelector("#log-content");
   }
   getAutoscrollElement() {
-    return this.context.document.getElementById("log-autoscroll");
+    return this.context.querySelector("#log-autoscroll");
+  }
+  isLogEnabled() {
+    return document.body.classList.contains("log-visible");
   }
   log(...args) {
+    if (!this.isLogEnabled()) {
+      return;
+    }
     console.log(...args);
     const contentElement = this.getContentElement();
     const autoscrollElement = this.getAutoscrollElement();

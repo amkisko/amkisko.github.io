@@ -5,7 +5,7 @@
     <title>Snake</title>
     <link rel="stylesheet" href="index.css" />
   </head>
-  <body style="margin: 0">
+  <body id="app" style="margin: 0">
     <div id="view">
       <div id="stage-view">
         <canvas id="stage"></canvas>
@@ -13,8 +13,9 @@
       <div id="log">
         <div id="log-content"></div>
         <div id="log-control">
-          <div>
+          <div style="min-width:20rem;display:flex;align-items:center;gap:0.4rem;">
             <input
+              style="flex:1;"
               type="text"
               id="log-input"
               onkeyup="if (event.keyCode === 13) window.app.sendLog();"
@@ -23,7 +24,7 @@
               Send
             </button>
           </div>
-          <div>
+          <div style="display:flex;align-items:center;gap:0.4rem;">
             <button
               type="reset"
               id="log-clear"
@@ -42,6 +43,7 @@
       window.trysteroJoinRoom = joinRoom;
     </script>
     <script src="lib/logger.js"></script>
+    <script src="lib/resources.js"></script>
     <script src="lib/peer.js"></script>
     <script src="lib/room.js"></script>
     <script src="lib/game.js"></script>
