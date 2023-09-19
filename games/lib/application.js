@@ -40,9 +40,9 @@ class Application {
     this.room.onLeave((...args) => this.onRoomLeave(...args));
     this.room.onStream((...args) => this.onRoomStream(...args));
     this.room.onMessage((...args) => this.onRoomMessage(...args));
-    window.addEventListener(
-      "deviceorientation",
-      (event) => this.handleDeviceOrientation(event),
+    this.context.querySelector("#stage").addEventListener(
+      "touchmove",
+      (event) => this.handleMouseMove(event),
       true,
     );
     this.context.querySelector("#stage").addEventListener(
