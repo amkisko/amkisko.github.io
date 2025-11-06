@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Error Reporting: Managing Multiple Services with ActionReporter</title>
+    <meta name="description" content="How ActionReporter solves the problem of managing multiple error reporting services (Sentry, Honeybadger, Rails logger, etc.) with a single unified interface.">
+    <meta name="keywords" content="rails, error reporting, sentry, honeybadger, exception tracking, action_reporter, observability">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Unified Error Reporting: Managing Multiple Services with ActionReporter">
+    <meta property="og:description" content="How ActionReporter solves the problem of managing multiple error reporting services with a single unified interface.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html">
+    <meta property="article:published_time" content="2025-11-05T12:00:00+00:00">
+    <meta property="article:modified_time" content="2025-11-05T12:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Unified Error Reporting: Managing Multiple Services with ActionReporter">
+    <meta name="twitter:description" content="How ActionReporter solves the problem of managing multiple error reporting services with a single unified interface.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Unified Error Reporting: Managing Multiple Services with ActionReporter</h1>
+        <div class="date">5 November 2025, Helsinki, Åndrei Makarov</div>
+
+        <p>In the modern Rails application, error reporting has become a symphony of services. Sentry tracks production exceptions. Honeybadger sends alerts. Rails logger captures development details. Audited maintains audit trails. PaperTrail preserves version history. Each service requires its own configuration, its own API calls, its own context management. The result? Code duplication, inconsistent context, and maintenance overhead that grows with every new service you add.</p>
+
+        <p>ActionReporter changes this. It provides a single unified interface that works across all reporting services, eliminating duplication while ensuring every service receives consistent, properly formatted context. One API call reports to all configured services. One context setting applies everywhere. One configuration manages everything.</p>
+
+        <h2>The Multi-Service Challenge</h2>
+
+        <p>Production Rails applications typically integrate with multiple reporting and tracking services. Error tracking services like Sentry or Honeybadger monitor exceptions in production. Rails logger provides detailed logs for development. Audit trail gems like Audited or PaperTrail track changes to records. APM tools like Scout monitor performance. Custom internal systems may require their own reporting endpoints.</p>
+
+        <p>Each service has different requirements. Sentry expects user objects with specific attributes. Honeybadger uses a different context format. Rails logger accepts plain strings. Audited requires ActiveRecord objects. Without a unified interface, you end up writing the same error reporting logic multiple times, each time adapting it to a different service's API.</p>
+
+        <p>Consider setting user context across services. Without ActionReporter, you might write conditional checks for each service, setting context in different formats. If Sentry is present, set its user context. If Honeybadger is present, set its context. If Rails logger is active, log the user information. This approach is verbose, error-prone, and difficult to maintain.</p>
+
+        <h2>The Thread Safety Imperative</h2>
+
+        <p>Modern Rails applications run in multi-threaded environments. Puma, the default Rails server, handles multiple requests concurrently. Each request runs in its own thread, and context set in one thread must not leak into others.</p>
+
+        <p>ActionReporter uses thread-local storage to manage context safely. When you set <code>ActionReporter.current_user</code>, it's stored in <code>Thread.current</code>, isolated from other threads. This ensures that user context set in one request doesn't accidentally appear in another request running concurrently.</p>
+
+        <p>This thread safety is crucial for applications that process multiple requests simultaneously. Without it, user context can leak between requests, causing security issues and incorrect audit trails.</p>
+
+        <h2>Error Isolation Architecture</h2>
+
+        <p>ActionReporter wraps each reporter in error handling. If Sentry fails to report an error, Honeybadger and other reporters continue working. Errors in one reporter never break the application or prevent other reporters from functioning.</p>
+
+        <p>This isolation is essential in production environments where services may be temporarily unavailable. If Sentry's API is down, your application continues reporting errors to other services. The failure is logged but never propagated, ensuring resilience across the reporting infrastructure.</p>
+
+        <h2>Automatic Context Transformation</h2>
+
+        <p>Different services expect context in different formats. Sentry may need user objects with specific attributes. Honeybadger may need a hash with user IDs. Rails logger may need plain strings. ActionReporter automatically transforms context to match each service's requirements.</p>
+
+        <p>You can pass ActiveRecord objects directly to ActionReporter. The framework converts them to GlobalID strings or extracts the necessary attributes, depending on what each service expects. This eliminates the need to manually transform context for each service.</p>
+
+        <h2>Transaction Tracking</h2>
+
+        <p>ActionReporter provides transaction tracking with automatic context preservation. You can set transaction IDs and names that apply to all reporters. When using block-based transactions, previous transaction context is automatically restored after the block completes, ensuring nested transactions don't interfere with each other.</p>
+
+        <p>This is particularly useful for tracking requests across multiple services. A single transaction ID can be used to correlate errors, logs, and audit trails across Sentry, Honeybadger, Rails logger, and audit trail systems.</p>
+
+        <h2>Extensibility Through Design</h2>
+
+        <p>ActionReporter's architecture makes it easy to add custom reporters for internal services or new third-party tools. Creating a custom reporter requires inheriting from <code>ActionReporter::Base</code> and implementing the <code>notify</code> and <code>context</code> methods. The framework handles error isolation and context transformation automatically.</p>
+
+        <p>The plugin discovery system allows third-party gems to register reporters automatically. When a gem that integrates with ActionReporter is loaded, its reporter becomes available without manual configuration. This makes it easy for gem authors to provide ActionReporter integration while keeping the user experience simple.</p>
+
+        <h2>Real-World Impact</h2>
+
+        <p>In a typical Rails controller, error reporting might involve multiple conditional checks and service-specific API calls. With ActionReporter, a single call to <code>ActionReporter.notify</code> reports the error to all configured services with consistent context.</p>
+
+        <p>Setting context once applies to all services. User information, request IDs, and remote addresses are set in one place and automatically propagated to Sentry, Honeybadger, Rails logger, and audit trail systems. This reduces code duplication while ensuring consistent context across all reporting services.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>Managing multiple error reporting and tracking services is a common challenge in production Rails applications. ActionReporter solves this by providing a unified interface that works across all services, handles errors gracefully, and maintains thread-safe context management.</p>
+
+        <p>Whether you're using Sentry, Honeybadger, Rails logger, Audited, PaperTrail, or custom services, ActionReporter gives you a single API to manage them all. This reduces code duplication, ensures consistent context, and makes it easy to add or remove services as your needs change.</p>
+
+        <p>The framework's design prioritizes resilience, thread safety, and extensibility. Error isolation ensures that failures in one service don't affect others. Thread-local storage prevents context leakage in multi-threaded environments. The extensible architecture makes it straightforward to add new reporters as requirements evolve.</p>
+
+        <p>For teams building production Rails applications, ActionReporter provides the foundation for unified error reporting. One interface, multiple services, consistent context, resilient architecture. The complexity of managing multiple reporting services disappears, replaced by a simple, unified API that works everywhere.</p>
+
+        <div class="references">
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://github.com/amkisko/action_reporter.rb">ActionReporter on GitHub</a></li>
+                <li><a href="https://sentry.io">Sentry Error Tracking</a></li>
+                <li><a href="https://www.honeybadger.io">Honeybadger Error Monitoring</a></li>
+                <li><a href="https://github.com/collectiveidea/audited">Audited Gem</a></li>
+                <li><a href="https://github.com/paper-trail-gem/paper_trail">PaperTrail Gem</a></li>
+            </ul>
+        </div>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

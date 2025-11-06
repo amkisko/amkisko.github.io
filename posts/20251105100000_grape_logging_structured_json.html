@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solving Grape API Logging: The Missing Piece for Structured Logs</title>
+    <meta name="description" content="Why existing Grape logging solutions fail to provide complete request logging and structured JSON output, and how grape-rails-logger and activesupport-json_logging solve this problem.">
+    <meta name="keywords" content="grape, rails, logging, structured logging, json logging, grape-rails-logger, activesupport-json_logging, api logging, observability">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Solving Grape API Logging: The Missing Piece for Structured Logs">
+    <meta property="og:description" content="Why existing Grape logging solutions fail to provide complete request logging and structured JSON output.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html">
+    <meta property="article:published_time" content="2025-11-05T10:00:00+00:00">
+    <meta property="article:modified_time" content="2025-11-05T10:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Solving Grape API Logging: The Missing Piece for Structured Logs">
+    <meta name="twitter:description" content="Why existing Grape logging solutions fail to provide complete request logging and structured JSON output.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Solving Grape API Logging: The Missing Piece for Structured Logs</h1>
+        <div class="date">5 November 2025, Helsinki, Åndrei Makarov</div>
+
+        <p><strong>Document ID:</strong> LOG-2025-001<br>
+        <strong>Classification:</strong> Technical Investigation<br>
+        <strong>Subject:</strong> Grape API logging gaps and structured logging fragmentation in Rails applications</p>
+
+        <h2>Evidence Collection</h2>
+
+        <p><strong>Observation 1:</strong> Rails controllers log automatically. Grape APIs do not. This asymmetry creates blind spots in production monitoring.</p>
+
+        <p><strong>Observation 2:</strong> Existing Grape logging solutions (grape_logging, grape-middleware-logger) fail to capture final response status codes. They instrument before error handlers execute, recording incorrect statuses when exceptions are rescued and transformed into 200 OK responses.</p>
+
+        <p><strong>Observation 3:</strong> Even when Grape logging is solved, the problem expands. Modern Rails applications contain multiple logging systems operating independently:</p>
+
+        <ul>
+            <li>Sidekiq maintains its own logger for background jobs</li>
+            <li>Puma logs server events in a separate format</li>
+            <li>OmniAuth, Shrine, Sentry, and other gems each maintain independent logging mechanisms</li>
+            <li>ActiveRecord, ActiveJob, ActionMailer each have configurable loggers</li>
+        </ul>
+
+        <p><strong>Observation 4:</strong> Each logger produces different output formats. Rails controllers emit plain text. Sidekiq uses timestamp-prefixed lines. Puma uses bracket-enclosed timestamps. Without unification, correlating events across components becomes impossible.</p>
+
+        <h2>Technical Analysis</h2>
+
+        <p><strong>Root Cause:</strong> Grape's middleware stack wraps requests in error handlers. Logging instrumentation must occur after <code>rescue_from</code> blocks execute to capture accurate response status codes. Most solutions instrument too early in the request lifecycle.</p>
+
+        <p><strong>Secondary Issue:</strong> Rails provides no mechanism to automatically unify logger configuration across gems. Each gem's logger must be manually configured to use a shared JSON logger. This configuration step is:</p>
+        <ul>
+            <li>Easy to forget when adding new gems</li>
+            <li>Not documented in most gem READMEs</li>
+            <li>Rarely implemented by teams due to perceived complexity</li>
+        </ul>
+
+        <p><strong>Impact Assessment:</strong> Without structured JSON logs, teams cannot:</p>
+        <ul>
+            <li>Query logs efficiently in Datadog, CloudWatch, or ELK stacks</li>
+            <li>Trace requests across Rails controllers, Grape APIs, and Sidekiq jobs using request IDs</li>
+            <li>Build dashboards based on structured fields (duration, status codes, database query times)</li>
+            <li>Debug production issues that span multiple application components</li>
+        </ul>
+
+        <h2>Solution Documentation</h2>
+
+        <p><strong>Component 1: grape-rails-logger</strong><br>
+        Patches <code>Grape::Endpoint#build_stack</code> to instrument requests after error handlers execute. Captures method, path, status, duration, database query metrics, request ID, and filtered parameters. Integrates with Rails' <code>filter_parameters</code> configuration automatically.</p>
+
+        <p><strong>Component 2: activesupport-json_logging</strong><br>
+        Provides structured JSON formatter for Rails loggers. Handles hashes, JSON strings, plain strings, and Exception objects. Never raises exceptions from the formatter, ensuring logging failures don't break applications.</p>
+
+        <p><strong>Unification Process:</strong><br>
+        To achieve unified structured logging, configure each gem's logger to use the JSON logger. This includes Sidekiq, Puma, OmniAuth, Shrine, Sentry, and all Rails component loggers. The configuration is manual but necessary—no automated mechanism exists.</p>
+
+        <h2>Case Study: Fragmented Logging</h2>
+
+        <p><strong>Scenario:</strong> A production issue requires tracing a request from a Grape API endpoint through a Sidekiq background job.</p>
+
+        <p><strong>Without unified logging:</strong> Grape endpoint produces no logs. Sidekiq job logs in plain text with different timestamp format. Rails controller logs in yet another format. Request IDs don't propagate. Correlation impossible.</p>
+
+        <p><strong>With unified logging:</strong> All components emit structured JSON with consistent request IDs. Single query traces the request across all components. Duration metrics reveal bottlenecks. Database query times visible in all logs.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>Grape API logging requires instrumentation at the correct point in the middleware stack. Structured JSON logging requires manual configuration of each gem's logger. These are separate but related problems. Solving both enables true observability in Rails applications.</p>
+
+        <p>The gems <a href="https://github.com/amkisko/grape-rails-logger.rb">grape-rails-logger</a> and <a href="https://github.com/amkisko/activesupport-json_logging.rb">activesupport-json_logging</a> provide the necessary components. The manual logger configuration step remains unavoidable but becomes straightforward once the JSON logger is established.</p>
+
+        <div class="references">
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://github.com/amkisko/grape-rails-logger.rb">grape-rails-logger on GitHub</a></li>
+                <li><a href="https://github.com/amkisko/activesupport-json_logging.rb">activesupport-json_logging on GitHub</a></li>
+                <li><a href="https://github.com/ruby-grape/grape">Grape Framework</a></li>
+                <li><a href="https://guides.rubyonrails.org/debugging_rails_applications.html#log-files">Rails Logging Documentation</a></li>
+            </ul>
+        </div>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

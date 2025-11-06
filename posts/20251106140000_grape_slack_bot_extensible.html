@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</title>
+    <meta name="description" content="How grape-slack-bot provides an extensible framework for building Slack bots with Grape, supporting slash commands, interactive components, events, and views.">
+    <meta name="keywords" content="slack, bot, grape, rails, api, slack bot, slash commands, interactive components, slack events">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Building Extensible Slack Bots with Grape: The grape-slack-bot Framework">
+    <meta property="og:description" content="How grape-slack-bot provides an extensible framework for building Slack bots with Grape.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html">
+    <meta property="article:published_time" content="2025-11-06T14:00:00+00:00">
+    <meta property="article:modified_time" content="2025-11-06T14:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Building Extensible Slack Bots with Grape: The grape-slack-bot Framework">
+    <meta name="twitter:description" content="How grape-slack-bot provides an extensible framework for building Slack bots with Grape.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</h1>
+        <div class="date">6 November 2025, Helsinki, Åndrei Makarov</div>
+
+        <p>Slack bots live in the space between user intent and system response. A user types <code>/command</code> and expects something to happen. A button is clicked, an event fires, a modal opens. Each interaction carries the weight of expectation—the bot must respond correctly, securely, immediately.</p>
+
+        <p>Building this responsiveness requires handling signatures that prove authenticity, parsing requests that arrive in different formats, storing callbacks that preserve state, formatting responses that satisfy Slack's requirements. The complexity accumulates like layers of sediment—each requirement building on the last, each edge case revealing another.</p>
+
+        <p><a href="https://github.com/amkisko/grape-slack-bot.rb">grape-slack-bot</a> provides a framework that handles this complexity, allowing you to focus on what your bot does rather than how it verifies signatures or parses requests. It integrates with Grape's routing system in Rails applications, automatically handles signature verification, manages callback storage, and provides a declarative configuration system that makes bot behavior clear and extensible.</p>
+
+        <h2>The Signature as Proof</h2>
+
+        <p>Every request from Slack arrives with a signature—a cryptographic proof that the request is authentic. The signature is computed using HMAC-SHA256, combining the request timestamp, request body, and a secret key. If the signature doesn't match, the request is rejected. This verification must happen before any other processing, and it must be correct—a single mistake creates a security vulnerability.</p>
+
+        <p>grape-slack-bot handles this automatically. When you include <code>SlackBot::GrapeExtension</code> in your Grape API, signature verification happens before your code runs. Invalid signatures are rejected immediately. Valid signatures pass through to your handlers. You never write verification code—the framework handles it.</p>
+
+        <p>This automatic verification removes a common source of errors. Teams building Slack bots from scratch often forget signature verification or implement it incorrectly. The framework ensures it's always present, always correct, always applied before any other processing.</p>
+
+        <h2>The Command as Intention</h2>
+
+        <p>Slash commands arrive as form-encoded requests. The user types <code>/game start</code> and Slack sends the command text, user information, team information, channel information. Your bot must parse this text, extract arguments, identify the user, determine the team, understand the context.</p>
+
+        <p>grape-slack-bot provides a command class structure that handles this parsing automatically. You define a command class that inherits from <code>SlackBot::Command</code>, implement a <code>call</code> method that returns a response, and the framework handles everything else. Command text is parsed, arguments are extracted, user and team information is available, responses are formatted correctly.</p>
+
+        <p>The framework supports nested commands—<code>/game start</code> routes to a <code>StartCommand</code> class within a <code>Game</code> namespace. The configuration is declarative: you register command endpoints and their handlers, and the framework routes requests automatically. This structure makes bot behavior clear and extensible.</p>
+
+        <h2>The Interaction as Memory</h2>
+
+        <p>Interactive components—buttons, menus, modals—require state. When a user clicks a button, your bot needs to remember what that button represented. The callback might contain a game ID, a user ID, a context that was present when the button was created. This state must be stored when the component is created and retrieved when the interaction occurs.</p>
+
+        <p>grape-slack-bot provides callback storage that handles this automatically. In Rails applications, you typically configure <code>Rails.cache</code> as the storage backend, though Redis or any object that responds to <code>read</code> and <code>write</code> works equally well. The framework stores callbacks when components are created and retrieves them when interactions occur. The storage is abstracted—you don't write storage code, you configure storage behavior.</p>
+
+        <p>This abstraction enables workflows that would be difficult to implement manually. You can create buttons that remember their context across interactions. You can build multi-step flows where each step remembers the previous steps. The framework handles the storage and retrieval, and you focus on the bot's logic.</p>
+
+        <h2>The Event as Signal</h2>
+
+        <p>Slack events arrive as JSON payloads. A message is posted, an app home is opened, a user joins a channel. Each event type has different data, different requirements, different handling needs. Your bot must subscribe to events, parse event payloads, route events to handlers, respond appropriately.</p>
+
+        <p>grape-slack-bot provides event classes that handle this routing automatically. You define an event class for each event type you want to handle, implement a <code>call</code> method, and register the event in configuration. The framework routes events to the correct handler, parses the payload, provides access to event data.</p>
+
+        <p>This event handling integrates with the rest of the framework. Events can access the same user resolution, the same callback storage, the same logging infrastructure. The framework provides consistency across interaction types—commands, interactions, events, views all use the same patterns.</p>
+
+        <h2>The View as Interface</h2>
+
+        <p>Slack views—modals and home tabs—are built using Block Kit, Slack's UI framework. Blocks are composed into sections, sections into views, views into responses. The structure is hierarchical, the syntax is verbose, the possibilities are extensive.</p>
+
+        <p>grape-slack-bot provides view builders that simplify this construction. You build views using a DSL that feels natural, and the framework generates the correct Block Kit JSON. Views can be opened modally, updated in place, published to home tabs. The framework handles the API calls, the formatting, the error handling.</p>
+
+        <p>This view building integrates with callback storage. Views can contain interactive components that trigger callbacks, and those callbacks can update the view. The framework manages this flow—you define the view structure and the interaction handlers, and the framework connects them.</p>
+
+        <h2>The Error as Silence</h2>
+
+        <p>Slack requires 200 OK responses even for errors. If you return an error status code, Slack retries the request, creating unnecessary load and potential duplicate processing. This requirement is counterintuitive—most web frameworks return error status codes for errors—but Slack's architecture requires success responses even when processing fails.</p>
+
+        <p>grape-slack-bot handles this automatically. Errors are caught, logged, and responded to with 200 OK status codes. Error messages are included in the response body, but the status code is always success. This prevents Slack retries while still providing error information for debugging.</p>
+
+        <p>This error handling integrates seamlessly with Rails error reporting infrastructure. When using ActionReporter in Rails applications, errors are automatically reported to all configured services (Sentry, Honeybadger, Rails logger, etc.). When using grape-rails-logger, errors are logged with structured JSON that works with Rails' logging system. The framework ensures errors are visible even when responses are successful, maintaining observability in production Rails environments.</p>
+
+        <h2>The Configuration as Declaration</h2>
+
+        <p>grape-slack-bot uses a declarative configuration system. You register commands, interactions, and events in a single configuration block, and the framework sets up routing automatically. This configuration makes bot behavior clear—you can read the configuration and understand what the bot does without reading implementation code.</p>
+
+        <p>The configuration supports extensibility. You can add new commands by registering them. You can add new interactions by defining interaction classes. You can add new events by creating event handlers. The framework provides the infrastructure, and you provide the behavior.</p>
+
+        <p>This declarative approach reduces boilerplate. You don't write routing code, signature verification code, callback storage code, error handling code. You write command classes, interaction classes, event classes, and the framework handles everything else.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>Building Slack bots in Rails applications requires handling many low-level details: signature verification, request parsing, response formatting, callback storage, error handling. grape-slack-bot provides a framework that handles all of this complexity, allowing you to focus on what your bot does rather than how it handles Slack's requirements.</p>
+
+        <p>The framework integrates with Grape's routing system in Rails, automatically handles security requirements, manages state across interactions using Rails.cache or other storage backends, and provides a declarative configuration system that makes bot behavior clear and extensible. Whether you're building simple slash commands or complex interactive bots with modals and events, grape-slack-bot provides the foundation you need for Rails-based Slack bot development.</p>
+
+        <p>The complexity of Slack's API requirements disappears behind a simple interface. Commands become classes. Interactions become handlers. Events become processors. Views become builders. The framework handles the details, and you focus on the bot's functionality.</p>
+
+        <div class="references">
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://rubygems.org/gems/grape-slack-bot">grape-slack-bot on RubyGems</a></li>
+                <li><a href="https://github.com/amkisko/grape-slack-bot.rb">grape-slack-bot on GitHub</a></li>
+                <li><a href="https://github.com/ruby-grape/grape">Grape Framework</a></li>
+                <li><a href="https://rubyonrails.org">Ruby on Rails</a></li>
+                <li><a href="https://api.slack.com">Slack API Documentation</a></li>
+                <li><a href="https://api.slack.com/block-kit">Slack Block Kit</a></li>
+                <li><a href="https://github.com/amkisko/grape-rails-logger.rb">grape-rails-logger (logging integration)</a></li>
+            </ul>
+        </div>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

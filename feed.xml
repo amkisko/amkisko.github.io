@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Åndrei Makarov - Blog</title>
+  <subtitle>Technical blog posts about software development, DevOps, and technology</subtitle>
+  <link href="https://amkisko.github.io/feed.xml" rel="self"/>
+  <link href="https://amkisko.github.io/"/>
+  <id>https://amkisko.github.io/</id>
+  <updated>2025-11-06T14:00:00+00:00</updated>
+  <author>
+    <name>Åndrei Makarov</name>
+  </author>
+  
+  <entry>
+    <title>Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</title>
+    <link href="https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html"/>
+    <id>https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html</id>
+    <updated>2025-11-06T14:00:00+00:00</updated>
+    <published>2025-11-06T14:00:00+00:00</published>
+    <summary>How grape-slack-bot provides an extensible framework for building Slack bots with Grape, supporting slash commands, interactive components, events, and views.</summary>
+  </entry>
+  
+  <entry>
+    <title>Solving Grape API Logging: The Missing Piece for Structured Logs</title>
+    <link href="https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html"/>
+    <id>https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html</id>
+    <updated>2025-11-05T10:00:00+00:00</updated>
+    <published>2025-11-05T10:00:00+00:00</published>
+    <summary>Why existing Grape logging solutions fail to provide complete request logging and structured JSON output, and how grape-rails-logger and activesupport-json_logging solve this problem.</summary>
+  </entry>
+  
+  <entry>
+    <title>Unified Error Reporting: Managing Multiple Services with ActionReporter</title>
+    <link href="https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html"/>
+    <id>https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html</id>
+    <updated>2025-11-05T12:00:00+00:00</updated>
+    <published>2025-11-05T12:00:00+00:00</published>
+    <summary>How ActionReporter solves the problem of managing multiple error reporting services (Sentry, Honeybadger, Rails logger, etc.) with a single unified interface.</summary>
+  </entry>
+  
+  <entry>
+    <title>Organizing Seeds: From Single File to Structured Directory with SeedBuilder</title>
+    <link href="https://amkisko.github.io/posts/20251104130000_seed_builder_organized_seeds.html"/>
+    <id>https://amkisko.github.io/posts/20251104130000_seed_builder_organized_seeds.html</id>
+    <updated>2025-11-04T13:00:00+00:00</updated>
+    <published>2025-11-04T13:00:00+00:00</published>
+    <summary>How SeedBuilder extends ActiveRecord to organize seeds in a directory structure and generate them as migrations, solving the problem of managing seed data in Rails applications.</summary>
+  </entry>
+  
+  <entry>
+    <title>Schema and Data Migrations: Why They Should Be Separate</title>
+    <link href="https://amkisko.github.io/posts/20251103110000_data_migrations_separate.html"/>
+    <id>https://amkisko.github.io/posts/20251103110000_data_migrations_separate.html</id>
+    <updated>2025-11-03T11:00:00+00:00</updated>
+    <published>2025-11-03T11:00:00+00:00</published>
+    <summary>Why schema migrations and data migrations are fundamentally different and should be managed separately, with best practices for implementing data migrations in Rails.</summary>
+  </entry>
+  
+  <entry>
+    <title>Building Ruby on macOS ARM</title>
+    <link href="https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html"/>
+    <id>https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html</id>
+    <updated>2024-11-03T12:00:00+00:00</updated>
+    <published>2024-11-03T12:00:00+00:00</published>
+    <summary>A guide to building and configuring Ruby on Apple Silicon (ARM) Macs, including performance optimizations and common issues.</summary>
+  </entry>
+  
+  <entry>
+    <title>The Force Push Debate: When to Rewrite VCS History</title>
+    <link href="https://amkisko.github.io/posts/20250507114000_force_pushes.html"/>
+    <id>https://amkisko.github.io/posts/20250507114000_force_pushes.html</id>
+    <updated>2024-05-07T11:40:00+00:00</updated>
+    <published>2024-05-07T11:40:00+00:00</published>
+    <summary>A comprehensive guide to understanding Git force pushing, its risks, and when it's appropriate to use. Learn about force-with-lease, best practices, and team communication strategies.</summary>
+  </entry>
+  
+  <entry>
+    <title>iOS App Signing in CI Environment</title>
+    <link href="https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html"/>
+    <id>https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html</id>
+    <updated>2024-05-07T12:17:00+00:00</updated>
+    <published>2024-05-07T12:17:00+00:00</published>
+    <summary>A detailed guide on setting up and managing iOS app signing in continuous integration environments, including best practices and common pitfalls.</summary>
+  </entry>
+</feed>
+
