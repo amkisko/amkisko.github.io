@@ -1,0 +1,157 @@
+/* Navigation buttons container styles */
+#map-link {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 76px;
+    height: 76px;
+    padding: 2px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2c3e50, #34495e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+    z-index: 1000;
+    box-shadow:
+        0 4px 8px rgba(0,0,0,0.2),
+        inset 0 -2px 4px rgba(0,0,0,0.2),
+        inset 0 2px 4px rgba(255,255,255,0.1);
+    overflow: visible;
+}
+
+#map-link:hover {
+    box-shadow:
+        0 6px 12px rgba(0,0,0,0.3),
+        inset 0 -2px 4px rgba(0,0,0,0.2),
+        inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+#map-link svg {
+    width: 70px;
+    height: 70px;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+    transform-origin: center;
+}
+
+/* Compass elements */
+.compass-circle {
+    fill: none;
+    stroke: rgba(255,255,255,0.8);
+    stroke-width: 1.5;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+
+.compass-arrow {
+    transform-origin: center;
+    transition: transform 0.3s ease-out;
+}
+
+.compass-arrow-line {
+    stroke: white;
+    stroke-width: 1;
+    fill: none;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+}
+
+.compass-arrow-head {
+    fill: white;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+}
+
+.compass-pole-north {
+    fill: #ff4444;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+}
+
+.compass-pole-south {
+    fill: #4444ff;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+}
+
+.compass-text {
+    fill: rgba(255,255,255,0.9);
+    font-size: 4px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+
+.compass-marker {
+    stroke: rgba(255,255,255,0.6);
+    stroke-width: 0.8;
+}
+
+/* To top button */
+#to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+#to-top.visible {
+    opacity: 1;
+}
+
+#to-top svg {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+
+.lighthouse-base {
+    fill: #34495e;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.lighthouse-tower {
+    fill: url(#tower-gradient);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.lighthouse-top-platform {
+    fill: #34495e;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.lighthouse-top {
+    fill: #e74c3c;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.lighthouse-window {
+    fill: #f1c40f;
+    filter: drop-shadow(0 0 5px rgba(241,196,15,0.8));
+}
+
+.lighthouse-railing {
+    stroke: #34495e;
+    stroke-width: 0.5;
+    fill: none;
+}
+
+.lighthouse-light {
+    filter: drop-shadow(0 0 3px rgba(241,196,15,0.8));
+}
+
+.lighthouse-sea {
+    fill: url(#sea-gradient);
+    filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.2));
+}
+
+.lighthouse-light-beam {
+    fill: url(#light-beam-gradient);
+    opacity: 0.6;
+    filter: drop-shadow(0 0 5px rgba(241,196,15,0.5));
+}
