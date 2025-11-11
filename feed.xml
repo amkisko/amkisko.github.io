@@ -5,10 +5,46 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2025-11-06T14:00:00+00:00</updated>
+  <updated>2025-12-01T12:00:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+  
+  <entry>
+    <title>Recommendations on Collective Practices</title>
+    <link href="https://amkisko.github.io/posts/20251201120000_collective_practices_recommendations.html"/>
+    <id>https://amkisko.github.io/posts/20251201120000_collective_practices_recommendations.html</id>
+    <updated>2025-12-01T12:00:00+00:00</updated>
+    <published>2025-12-01T12:00:00+00:00</published>
+    <summary>Guidelines for creating safe, respectful, and inclusive spaces in collective activities and public events. Principles of mutual respect, privacy, and zero tolerance for discrimination.</summary>
+  </entry>
+  
+  <entry>
+    <title>Collective Awareness and the Era of Automated Production</title>
+    <link href="https://amkisko.github.io/posts/20251111170000_collective_awareness_automation.html"/>
+    <id>https://amkisko.github.io/posts/20251111170000_collective_awareness_automation.html</id>
+    <updated>2025-11-11T17:00:00+00:00</updated>
+    <published>2025-11-11T17:00:00+00:00</published>
+    <summary>Exploring collective awareness in software development, automation with background agents, and the shift from individual to collective responsibility in the age of AI-assisted coding.</summary>
+  </entry>
+  
+  <entry>
+    <title>LLMs as Probabilistic Medium: Between Imitation and Deviation</title>
+    <link href="https://amkisko.github.io/posts/20251111160000_llms_probabilistic_medium.html"/>
+    <id>https://amkisko.github.io/posts/20251111160000_llms_probabilistic_medium.html</id>
+    <updated>2025-11-11T16:00:00+00:00</updated>
+    <published>2025-11-11T16:00:00+00:00</published>
+    <summary>Exploring Large Language Models as probabilistic mediums rather than intelligence, examining the tension between fluency and meaning, and the essential role of human initiation and deviation.</summary>
+  </entry>
+  
+  <entry>
+    <title>ActiveRecord Model Versioning: A Proposal for activeversion</title>
+    <link href="https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html"/>
+    <id>https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html</id>
+    <updated>2025-11-11T15:08:25+00:00</updated>
+    <published>2025-11-11T15:08:25+00:00</published>
+    <summary>Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility for i18n, auditing, and draft management.</summary>
+  </entry>
   
   <entry>
     <title>Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</title>
@@ -20,21 +56,21 @@
   </entry>
   
   <entry>
-    <title>Solving Grape API Logging: The Missing Piece for Structured Logs</title>
-    <link href="https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html"/>
-    <id>https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html</id>
-    <updated>2025-11-05T10:00:00+00:00</updated>
-    <published>2025-11-05T10:00:00+00:00</published>
-    <summary>Why existing Grape logging solutions fail to provide complete request logging and structured JSON output, and how grape-rails-logger and activesupport-json_logging solve this problem.</summary>
-  </entry>
-  
-  <entry>
     <title>Unified Error Reporting: Managing Multiple Services with ActionReporter</title>
     <link href="https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html"/>
     <id>https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html</id>
     <updated>2025-11-05T12:00:00+00:00</updated>
     <published>2025-11-05T12:00:00+00:00</published>
     <summary>How ActionReporter solves the problem of managing multiple error reporting services (Sentry, Honeybadger, Rails logger, etc.) with a single unified interface.</summary>
+  </entry>
+  
+  <entry>
+    <title>Solving Grape API Logging: The Missing Piece for Structured Logs</title>
+    <link href="https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html"/>
+    <id>https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html</id>
+    <updated>2025-11-05T10:00:00+00:00</updated>
+    <published>2025-11-05T10:00:00+00:00</published>
+    <summary>Why existing Grape logging solutions fail to provide complete request logging and structured JSON output, and how grape-rails-logger and activesupport-json_logging solve this problem.</summary>
   </entry>
   
   <entry>
@@ -56,30 +92,57 @@
   </entry>
   
   <entry>
-    <title>Building Ruby on macOS ARM</title>
-    <link href="https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html"/>
-    <id>https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html</id>
-    <updated>2024-11-03T12:00:00+00:00</updated>
-    <published>2024-11-03T12:00:00+00:00</published>
-    <summary>A guide to building and configuring Ruby on Apple Silicon (ARM) Macs, including performance optimizations and common issues.</summary>
+    <title>iOS App Signing and Certificates Management in CI Environment</title>
+    <link href="https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html"/>
+    <id>https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html</id>
+    <updated>2025-05-07T12:17:00+00:00</updated>
+    <published>2025-05-07T12:17:00+00:00</published>
+    <summary>A detailed guide on setting up and managing iOS app signing in continuous integration environments, including best practices and common pitfalls.</summary>
   </entry>
   
   <entry>
     <title>The Force Push Debate: When to Rewrite VCS History</title>
     <link href="https://amkisko.github.io/posts/20250507114000_force_pushes.html"/>
     <id>https://amkisko.github.io/posts/20250507114000_force_pushes.html</id>
-    <updated>2024-05-07T11:40:00+00:00</updated>
-    <published>2024-05-07T11:40:00+00:00</published>
+    <updated>2025-05-07T11:40:00+00:00</updated>
+    <published>2025-05-07T11:40:00+00:00</published>
     <summary>A comprehensive guide to understanding Git force pushing, its risks, and when it's appropriate to use. Learn about force-with-lease, best practices, and team communication strategies.</summary>
   </entry>
   
   <entry>
-    <title>iOS App Signing in CI Environment</title>
-    <link href="https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html"/>
-    <id>https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html</id>
-    <updated>2024-05-07T12:17:00+00:00</updated>
-    <published>2024-05-07T12:17:00+00:00</published>
-    <summary>A detailed guide on setting up and managing iOS app signing in continuous integration environments, including best practices and common pitfalls.</summary>
+    <title>Troubleshooting Version Managers on macOS (Apple Silicon & Intel)</title>
+    <link href="https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html"/>
+    <id>https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html</id>
+    <updated>2024-11-03T12:00:00+00:00</updated>
+    <published>2024-11-03T12:00:00+00:00</published>
+    <summary>A comprehensive guide to troubleshooting Ruby and Node.js version managers on macOS, covering rbenv, RVM, nodenv, nvm, asdf, and mise. Learn about common issues and solutions for both Apple Silicon and Intel Macs.</summary>
+  </entry>
+  
+  <entry>
+    <title>Trunk-Based Releases: A Practical Guide</title>
+    <link href="https://amkisko.github.io/posts/20240902120000_trunk_based_releases.html"/>
+    <id>https://amkisko.github.io/posts/20240902120000_trunk_based_releases.html</id>
+    <updated>2024-09-02T12:00:00+00:00</updated>
+    <published>2024-09-02T12:00:00+00:00</published>
+    <summary>A comprehensive guide to trunk-based development and release management, including branching strategies, automation, and feature flag management.</summary>
+  </entry>
+  
+  <entry>
+    <title>Principles of Self-Organization and Collective Action</title>
+    <link href="https://amkisko.github.io/posts/20221223120000_self_organization_principles.html"/>
+    <id>https://amkisko.github.io/posts/20221223120000_self_organization_principles.html</id>
+    <updated>2022-12-23T12:00:00+00:00</updated>
+    <published>2022-12-23T12:00:00+00:00</published>
+    <summary>Exploring principles of self-organization, diversity and inclusion, transparency, and ethical guidelines for effective collective action and group decision-making.</summary>
+  </entry>
+  
+  <entry>
+    <title>Freedom, Consumerism, and the Price of Traces</title>
+    <link href="https://amkisko.github.io/posts/20221030120000_freedom_consumerism_traces.html"/>
+    <id>https://amkisko.github.io/posts/20221030120000_freedom_consumerism_traces.html</id>
+    <updated>2022-10-30T12:00:00+00:00</updated>
+    <published>2022-10-30T12:00:00+00:00</published>
+    <summary>Exploring the relationship between freedom, consumerism, personal boundaries, and the traces we leave in digital spaces. Reflections on autonomy, career, and the cost of visibility.</summary>
   </entry>
 </feed>
 

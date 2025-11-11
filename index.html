@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>amkisko.github.io</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Andrei Makarov - Ruby Gems Collection</title>
+    <meta name="description" content="Collection of 9 Ruby gems by Andrei Makarov including action_reporter, grape-slack-bot, seed_builder, data-migration, grape_rails_logger, and more." />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
@@ -11,8 +13,581 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="alternate" type="application/atom+xml" title="Åndrei Makarov - Blog" href="/feed.xml" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @keyframes sakura-fall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffeef0 50%, #fff9f0 100%);
+        min-height: 100vh;
+        padding: 1.5rem 1rem;
+        position: relative;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      .sakura {
+        position: fixed;
+        width: 15px;
+        height: 15px;
+        background: #ffb3d9;
+        border-radius: 50% 0 50% 0;
+        opacity: 0.6;
+        animation: sakura-fall linear infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .notebook {
+        background: #fffef9;
+        border-radius: 4px;
+        box-shadow:
+          0 1px 3px rgba(255, 182, 193, 0.15),
+          0 0 0 1px rgba(255, 192, 203, 0.08);
+        padding: 2rem 2.5rem;
+        position: relative;
+        border: 1px solid rgba(255, 182, 193, 0.25);
+      }
+
+      .notebook::before {
+        content: '';
+        position: absolute;
+        left: 2.5rem;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: linear-gradient(to bottom,
+          transparent 0%,
+          rgba(255, 182, 193, 0.25) 3%,
+          rgba(255, 182, 193, 0.25) 97%,
+          transparent 100%);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+        animation: float 3s ease-in-out infinite;
+        max-width: 100%;
+        padding: 0;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #d63384;
+        margin: 0 0 0.5rem 0;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-shadow: 0 1px 2px rgba(214, 51, 132, 0.08);
+      }
+
+      .header-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        color: #8b5a7a;
+        line-height: 1.6;
+      }
+
+      .header-info-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+      }
+
+      .header-info-item a {
+        color: #d63384;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+      }
+
+      .header-info-item a:hover {
+        color: #ffb3d9;
+        border-bottom-color: #ffb3d9;
+      }
+
+      .subtitle {
+        color: #c77d9e;
+        font-size: 1rem;
+        font-weight: 300;
+        margin: 0;
+      }
+
+      .gems-section {
+        margin-top: 2rem;
+      }
+
+      .blog-section {
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 182, 193, 0.25);
+      }
+
+      .blog-posts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0;
+      }
+
+      .blog-post-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.875rem 1rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 254, 249, 0.4) 100%);
+        border: 1px solid rgba(255, 182, 193, 0.25);
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .blog-post-item:hover {
+        transform: translateX(3px);
+        box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
+        border-color: rgba(255, 182, 193, 0.4);
+      }
+
+      .blog-post-date {
+        font-size: 0.8rem;
+        color: #c77d9e;
+        min-width: 85px;
+        font-weight: 300;
+        flex-shrink: 0;
+      }
+
+      .blog-post-title {
+        color: #8b5a7a;
+        font-size: 0.9rem;
+        font-weight: 400;
+        flex: 1;
+        line-height: 1.4;
+      }
+
+      .blog-post-item:hover .blog-post-title {
+        color: #d63384;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        color: #d63384;
+        margin: 0 0 1.25rem 0;
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        position: relative;
+        padding-bottom: 0.75rem;
+      }
+
+      .section-title::after {
+        content: '🌸';
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 1rem;
+        opacity: 0.5;
+      }
+
+      .gems-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-top: 0;
+      }
+
+      .gem-card {
+        background: linear-gradient(135deg, #fff 0%, #fffef9 100%);
+        border: 1px solid rgba(255, 182, 193, 0.3);
+        border-radius: 6px;
+        padding: 1.25rem;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gem-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg,
+          #ffb3d9 0%,
+          #ffc0cb 50%,
+          #ffb3d9 100%);
+        transform: scaleX(0);
+        transition: transform 0.2s ease;
+      }
+
+      .gem-card:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 4px 12px rgba(255, 182, 193, 0.2),
+          0 0 0 1px rgba(255, 192, 203, 0.15);
+      }
+
+      .gem-card:hover::before {
+        transform: scaleX(1);
+      }
+
+      .gem-name {
+        font-size: 1.15rem;
+        color: #d63384;
+        margin: 0 0 0.5rem 0;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .gem-name-emoji {
+        font-size: 1.15rem;
+        margin-right: 0.4rem;
+      }
+
+      .gem-description {
+        color: #8b5a7a;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin: 0 0 1rem 0;
+        min-height: 2.5rem;
+      }
+
+      .gem-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+      }
+
+      .gem-blog-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.35rem 0.75rem;
+        background: rgba(255, 182, 193, 0.08);
+        border: 1px solid rgba(255, 182, 193, 0.25);
+        border-radius: 12px;
+        color: #8b5a7a;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        font-weight: 300;
+        margin-top: 0.4rem;
+      }
+
+      .gem-blog-link:hover {
+        background: rgba(255, 182, 193, 0.15);
+        color: #d63384;
+        transform: translateY(-1px);
+      }
+
+      .gem-blog-link::before {
+        content: '📖';
+        font-size: 0.85rem;
+      }
+
+      .gem-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #ffeef0 0%, #fff5f5 100%);
+        border: 1px solid rgba(255, 182, 193, 0.4);
+        border-radius: 16px;
+        color: #d63384;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+        font-weight: 400;
+      }
+
+      .gem-link:hover {
+        background: linear-gradient(135deg, #ffb3d9 0%, #ffc0cb 100%);
+        color: #fff;
+        transform: scale(1.03);
+        box-shadow: 0 2px 8px rgba(214, 51, 132, 0.25);
+      }
+
+      .gem-link.github::before {
+        content: '🐙';
+      }
+
+      .gem-link.rubygems::before {
+        content: '💎';
+      }
+
+      @media (max-width: 768px) {
+        .notebook {
+          padding: 1.5rem 1.25rem;
+        }
+
+        .notebook::before {
+          left: 1.75rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        .header-info {
+          font-size: 0.875rem;
+          gap: 0.4rem;
+        }
+
+        .gems-grid {
+          grid-template-columns: 1fr;
+          gap: 0.875rem;
+        }
+
+        .gem-card {
+          padding: 1rem;
+        }
+
+        .blog-post-item {
+          padding: 0.75rem;
+          gap: 0.75rem;
+        }
+
+        .blog-post-date {
+          min-width: 70px;
+          font-size: 0.75rem;
+        }
+
+        .blog-post-title {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
   </head>
-  <body style="margin: 0">
+  <body>
+    <div class="sakura" style="left: 10%; animation-duration: 8s; animation-delay: 0s;"></div>
+    <div class="sakura" style="left: 20%; animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="sakura" style="left: 30%; animation-duration: 10s; animation-delay: 4s;"></div>
+    <div class="sakura" style="left: 40%; animation-duration: 14s; animation-delay: 1s;"></div>
+    <div class="sakura" style="left: 50%; animation-duration: 9s; animation-delay: 3s;"></div>
+    <div class="sakura" style="left: 60%; animation-duration: 11s; animation-delay: 5s;"></div>
+    <div class="sakura" style="left: 70%; animation-duration: 13s; animation-delay: 2.5s;"></div>
+    <div class="sakura" style="left: 80%; animation-duration: 10s; animation-delay: 4.5s;"></div>
+    <div class="sakura" style="left: 90%; animation-duration: 12s; animation-delay: 1.5s;"></div>
+
+    <div class="container">
+      <div class="notebook">
+        <div class="header">
+          <h1>amkisko</h1>
+          <div class="subtitle">Ruby Gems Collection</div>
+          <div class="header-info">
+            <div class="header-info-item">👋 Hi, I'm @amkisko</div>
+            <div class="header-info-item">👀 Available at <a href="https://kiskolabs.com" target="_blank" rel="noopener">@kiskolabs</a></div>
+            <div class="header-info-item">🌱 Digital gardening practices</div>
+            <div class="header-info-item">💞️ Enjoying flow and experience</div>
+            <div class="header-info-item">📫 Personal account at <a href="https://amaaov.github.io" target="_blank" rel="noopener">@amaaov</a></div>
+          </div>
+        </div>
+
+        <div class="gems-section">
+          <h2 class="section-title">My Gems</h2>
+          <div class="gems-grid">
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">📊</span>action_reporter</div>
+              <div class="gem-description">Ruby wrapper for multiple reporting services</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/action_reporter.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/action_reporter" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251105120000_action_reporter_unified_error_reporting.html" class="gem-blog-link">Unified Error Reporting</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">🤖</span>grape-slack-bot</div>
+              <div class="gem-description">Slack bot implementation for ruby-grape</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/grape-slack-bot.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/grape-slack-bot" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251106140000_grape_slack_bot_extensible.html" class="gem-blog-link">Building Extensible Slack Bots</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">🌱</span>seed_builder</div>
+              <div class="gem-description">Extension for ActiveRecord to organize seeds in a directory and generate them as migrations</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/seed_builder.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/seed_builder" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251104130000_seed_builder_organized_seeds.html" class="gem-blog-link">Organizing Seeds</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">🔄</span>data-migration</div>
+              <div class="gem-description">Data migrations kit for ActiveRecord and ActiveJob</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/data-migration.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/data-migration" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251103110000_data_migrations_separate.html" class="gem-blog-link">Schema and Data Migrations</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">📝</span>grape_rails_logger</div>
+              <div class="gem-description">Rails-compatible, ActiveSupport-integrated logging for Grape APIs, including request context and ActiveRecord timings</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/grape_rails_logger.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/grape_rails_logger" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251105100000_grape_logging_structured_json.html" class="gem-blog-link">Solving Grape API Logging</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">📋</span>activesupport-json_logging</div>
+              <div class="gem-description">Lightweight JSON logger and formatter integrating with Rails/ActiveSupport</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/activesupport-json_logging.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/activesupport-json_logging" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+              <a href="posts/20251105100000_grape_logging_structured_json.html" class="gem-blog-link">Solving Grape API Logging</a>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">⏰</span>timely-app</div>
+              <div class="gem-description">Ruby client for the Timely API</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/timely_app.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/timely-app" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">🔐</span>omniauth-slack-openid</div>
+              <div class="gem-description">An OmniAuth strategy for implementing Sign-in with Slack using OpenID Connect</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/omniauth-slack-openid.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/omniauth-slack-openid" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+            </div>
+
+            <div class="gem-card">
+              <div class="gem-name"><span class="gem-name-emoji">🔑</span>opdotenv</div>
+              <div class="gem-description">Load and export environment variables with 1Password CLI or Connect API</div>
+              <div class="gem-links">
+                <a href="https://github.com/amkisko/opdotenv.rb" class="gem-link github" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://rubygems.org/gems/opdotenv" class="gem-link rubygems" target="_blank" rel="noopener">RubyGems</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-section">
+          <h2 class="section-title">Other Blog Posts</h2>
+          <div class="blog-posts-list">
+            <a href="posts/20251201120000_collective_practices_recommendations.html" class="blog-post-item">
+              <div class="blog-post-date">Dec 2025</div>
+              <div class="blog-post-title">Recommendations on Collective Practices</div>
+            </a>
+            <a href="posts/20251111170000_collective_awareness_automation.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Collective Awareness and the Era of Automated Production</div>
+            </a>
+            <a href="posts/20251111160000_llms_probabilistic_medium.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">LLMs as Probabilistic Medium: Between Imitation and Deviation</div>
+            </a>
+            <a href="posts/20251111150825_activerecord_model_versioning.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">ActiveRecord Model Versioning: A Proposal for activeversion</div>
+            </a>
+            <a href="posts/20251106140000_grape_slack_bot_extensible.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</div>
+            </a>
+            <a href="posts/20251105120000_action_reporter_unified_error_reporting.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Unified Error Reporting: Managing Multiple Services with ActionReporter</div>
+            </a>
+            <a href="posts/20251105100000_grape_logging_structured_json.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Solving Grape API Logging: The Missing Piece for Structured Logs</div>
+            </a>
+            <a href="posts/20251104130000_seed_builder_organized_seeds.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Organizing Seeds: From Single File to Structured Directory with SeedBuilder</div>
+            </a>
+            <a href="posts/20251103110000_data_migrations_separate.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2025</div>
+              <div class="blog-post-title">Schema and Data Migrations: Why They Should Be Separate</div>
+            </a>
+            <a href="posts/20250507121700_ios_app_signing_in_ci_env.html" class="blog-post-item">
+              <div class="blog-post-date">May 2025</div>
+              <div class="blog-post-title">iOS App Signing and Certificates Management in CI Environment</div>
+            </a>
+            <a href="posts/20250507114000_force_pushes.html" class="blog-post-item">
+              <div class="blog-post-date">May 2025</div>
+              <div class="blog-post-title">The Force Push Debate: When to Rewrite VCS History</div>
+            </a>
+            <a href="posts/20241103120000_macos_arm_ruby_build.html" class="blog-post-item">
+              <div class="blog-post-date">Nov 2024</div>
+              <div class="blog-post-title">Troubleshooting Version Managers on macOS (Apple Silicon & Intel)</div>
+            </a>
+            <a href="posts/20240902120000_trunk_based_releases.html" class="blog-post-item">
+              <div class="blog-post-date">Sep 2024</div>
+              <div class="blog-post-title">Trunk-Based Releases: A Practical Guide</div>
+            </a>
+            <a href="posts/20221223120000_self_organization_principles.html" class="blog-post-item">
+              <div class="blog-post-date">Dec 2022</div>
+              <div class="blog-post-title">Principles of Self-Organization and Collective Action</div>
+            </a>
+            <a href="posts/20221030120000_freedom_consumerism_traces.html" class="blog-post-item">
+              <div class="blog-post-date">Oct 2022</div>
+              <div class="blog-post-title">Freedom, Consumerism, and the Price of Traces</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="index.js"></script>
   </body>
 </html>

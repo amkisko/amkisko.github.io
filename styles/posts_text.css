@@ -33,6 +33,26 @@ code {
     padding: 2px 4px;
     border-radius: 3px;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
+}
+
+pre {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid #e1e4e8;
+}
+
+pre code {
+    padding: 0;
+    background: none;
+    border-radius: 0;
+    font-size: 0.9em;
+    display: block;
+    white-space: pre;
+    word-wrap: normal;
 }
 
 .references {

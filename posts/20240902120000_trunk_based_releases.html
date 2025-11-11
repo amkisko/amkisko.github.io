@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trunk-Based Releases: A Practical Guide</title>
+    <meta name="description" content="A comprehensive guide to trunk-based development and release management, including branching strategies, automation, and feature flag management.">
+    <meta name="keywords" content="trunk-based development, git workflow, branching strategy, release management, feature flags, continuous integration, github flow">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Trunk-Based Releases: A Practical Guide">
+    <meta property="og:description" content="A comprehensive guide to trunk-based development and release management, including branching strategies, automation, and feature flag management.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20240902120000_trunk_based_releases.html">
+    <meta property="article:published_time" content="2024-09-02T12:00:00+00:00">
+    <meta property="article:modified_time" content="2024-09-02T12:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Trunk-Based Releases: A Practical Guide">
+    <meta name="twitter:description" content="A comprehensive guide to trunk-based development and release management, including branching strategies, automation, and feature flag management.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Trunk-Based Releases: A Practical Guide</h1>
+        <div class="date">2 September 2024, Helsinki, Åndrei Makarov</div>
+
+        <p>Trunk-based development is a source-control branching model where developers collaborate on code in a single branch called "trunk" (often <code>main</code> or <code>master</code>). This approach minimizes merge conflicts, reduces integration complexity, and enables continuous delivery. This guide outlines practical guidelines for implementing trunk-based releases in a team environment.</p>
+
+        <p>As sources of ideas, you might check out <a href="https://guides.github.com/introduction/flow/">GitHub flow</a> and <a href="https://trunkbaseddevelopment.com/">Trunk-based development</a>.</p>
+
+        <h2>Basic Guidelines</h2>
+
+        <ol>
+            <li><strong>Ticket tracking integration:</strong> The changes you implement should be reflected in the ticket tracking system as part of the ticket (description or task).</li>
+
+            <li><strong>Commit messages:</strong> Ensure that commit messages are understandable by the team. You can use lint-staged for automated checking of changes.</li>
+
+            <li><strong>Branch creation:</strong> Push your changes to a separate branch following the branching strategy for naming.</li>
+
+            <li><strong>Pull requests:</strong> Open a PR in GitHub using your working branch. Publish it as a draft if it's work-in-progress, and change the status when work is done.</li>
+
+            <li><strong>Ticket updates:</strong> Update ticket status, add or remove blockers, and write comments when there are changes in progress.</li>
+
+            <li><strong>Code quality:</strong> Ensure that code is automatically checked using <code>trunk-io</code>.</li>
+
+            <li><strong>Testing:</strong> Ensure that code is covered with tests using rspec (use <code>bin/rspec</code>).</li>
+
+            <li><strong>PR information:</strong> Ensure that PR has enough information and is understandable by the team.</li>
+
+            <li><strong>Review assignment:</strong> Assign reviewers to PR when done.</li>
+        </ol>
+
+        <h2>Branching Strategy</h2>
+
+        <p>The preferred branching strategy uses the following conventions:</p>
+
+        <ul>
+            <li><strong><code>main</code></strong> - for stable code</li>
+            <li><strong><code>feature/&lt;title&gt;</code></strong> - for feature story types</li>
+            <li><strong><code>patch/&lt;title&gt;</code></strong> - for bug and chore story types</li>
+            <li><strong><code>trunk/&lt;title&gt;</code></strong> - for release-candidate branches (planned releases)</li>
+        </ul>
+
+        <p>Feature and patch title examples: <code>feature/user-preferences-v2</code>, <code>patch/fix-analytics-caching</code>.</p>
+
+        <p>Trunk branch title examples: <code>trunk/2021w15</code>, <code>trunk/2021-august-pack</code>.</p>
+
+        <h2>Tracking Projects and Subprojects</h2>
+
+        <p>Use Epics for grouping smaller tasks and for detailed reporting. Create projects in your time tracking system with the same identifier and name as in the ticket tracking system, for example: <code>PROJECT-12345 User preferences and settings improvements</code>.</p>
+
+        <h2>Tracking Releases Within Schedule</h2>
+
+        <p>Use <code>%Yw%W</code> format for naming milestones which will include sprint (or scheduled internal) product increment. This format represents year and week number, making it easy to track releases chronologically.</p>
+
+        <h2>Release Process</h2>
+
+        <p>Smaller increments should be merged first, with larger increments going later as a possible place for resolving conflicts in one batch. This is not a strict rule and always depends on prioritization.</p>
+
+        <p>Trunk branches can first go to production and then be merged to the mainstream branch. This approach allows for testing in production while maintaining a clean main branch.</p>
+
+        <h2>Feature Flags</h2>
+
+        <p>Use <code>config/features.yml</code> for tracking the lifetime of feature flags and getting at least some description of each flag:</p>
+
+        <pre><code>---
+user_preferences_v2:
+  released_at:
+  expires_at: "2025-01-01"
+  description: "Enhanced user preferences system"
+
+analytics_dashboard:
+  released_at: "2023-11-22"
+  expires_at: "2025-01-01"
+  description: "Real-time analytics dashboard"</code></pre>
+
+        <p>A Flipper module extension can enforce feature flag definitions and check release dates:</p>
+
+        <pre><code>module Flipper
+  def self.features_config
+    @@features_config ||= YAML.load_file(Rails.root.join("config/features.yml"))
+  end
+
+  def self.feature_definition(name)
+    config = features_config.fetch(name.to_s)
+    check_release!(name, config)
+    config
+  rescue KeyError
+    message = "Feature `#{name}` not found in features.yml"
+    Rails.logger.error(message)
+    if Rails.env.production?
+      ActionReporter.notify(message)
+    else
+      raise KeyError, message
+    end
+  end
+
+  def self.check_release!(name, config)
+    return if ENV["DISABLE_FLIPPER_CHECKS"].present?
+
+    if config["released_at"]&.to_date&.past? && !Flipper._enabled?(name)
+      message = "Feature `#{name}` was released but is not enabled"
+      if Rails.env.production?
+        ActionReporter.notify(message, context: {name: name, released_at: config["released_at"]})
+      elsif Rails.env.development?
+        puts message
+        _enable(name)
+      end
+    end
+  end
+end</code></pre>
+
+        <h2>Automation</h2>
+
+        <p>GitHub Actions can automate trunk branch management. The workflow should:</p>
+
+        <ul>
+            <li>Check if a PR has a milestone with the correct format (<code>YYYYwWW</code>)</li>
+            <li>Create or update trunk branches based on milestone titles</li>
+            <li>Automatically merge approved PRs into the corresponding trunk branch</li>
+            <li>Create trunk pull requests when needed</li>
+            <li>Add labels and comments to track trunk integration</li>
+        </ul>
+
+        <p>The automation workflow monitors pull request reviews and milestones, automatically creating trunk branches named after milestones (e.g., <code>trunk/2024w36</code>). When a PR is approved and has a milestone, it merges into the corresponding trunk branch and creates or updates a trunk pull request.</p>
+
+        <h2>Benefits of Trunk-Based Development</h2>
+
+        <p>Trunk-based development offers several advantages:</p>
+
+        <ul>
+            <li><strong>Reduced merge conflicts:</strong> Frequent integration minimizes the divergence between branches</li>
+            <li><strong>Faster feedback:</strong> Code is integrated and tested continuously</li>
+            <li><strong>Simpler workflow:</strong> Less branching complexity means less cognitive overhead</li>
+            <li><strong>Better collaboration:</strong> Team members work on the same codebase, making collaboration easier</li>
+            <li><strong>Continuous delivery:</strong> Small, frequent changes enable continuous deployment</li>
+        </ul>
+
+        <h2>Best Practices</h2>
+
+        <ul>
+            <li>Keep branches short-lived (hours or days, not weeks)</li>
+            <li>Merge small, incremental changes frequently</li>
+            <li>Use feature flags to control feature rollout</li>
+            <li>Automate as much of the process as possible</li>
+            <li>Maintain clear communication through commit messages and PR descriptions</li>
+            <li>Ensure all code is tested before merging</li>
+        </ul>
+
+        <p>Trunk-based development requires discipline and good tooling, but when implemented correctly, it enables teams to deliver value faster and with higher quality.</p>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>
+

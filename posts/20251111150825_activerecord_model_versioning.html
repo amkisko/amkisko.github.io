@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ActiveRecord Model Versioning: A Proposal for ActiveVersion</title>
+    <meta name="description" content="Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility for i18n, auditing, and draft management.">
+    <meta name="keywords" content="rails, activerecord, versioning, i18n, auditing, soft-delete, drafts, postgresql, database design, schema">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="ActiveRecord Model Versioning: A Proposal for ActiveVersion">
+    <meta property="og:description" content="Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html">
+    <meta property="article:published_time" content="2025-11-11T15:08:25+00:00">
+    <meta property="article:modified_time" content="2025-11-11T15:08:25+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ActiveRecord Model Versioning: A Proposal for ActiveVersion">
+    <meta name="twitter:description" content="Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>ActiveRecord Model Versioning: A Proposal for ActiveVersion</h1>
+        <div class="date">11 November 2025, Helsinki, Åndrei Makarov</div>
+
+        <p>ActiveRecord versioning and internationalization have followed similar paths in the Ruby ecosystem: start simple with JSON or YAML storage in database columns, then struggle with the limitations. JSONB is fun at the start, but becomes painful when you need to query, maintain, or extend functionality. YAML has no native PostgreSQL support. Neither approach scales well for complex requirements like custom attributes, attachments, rich text, or versioning by platform or user role.</p>
+
+        <p>I'm proposing a new gem called <code>active_version</code> (with the <code>ActiveVersion</code> module) that takes a different approach: proper schema design with separate tables for versions, a DSL for building relations and automations, and extensibility as a first-class concern. This post explores the design, requirements, and seeks feedback from the community.</p>
+
+        <h2>The Core Problem</h2>
+
+        <p>Most versioning and i18n gems in Ruby store data as JSON, YAML, or hstore in database columns. This approach has fundamental limitations:</p>
+
+        <ul>
+            <li><strong>Query limitations:</strong> Searching and filtering across JSONB versions is complex and often inefficient</li>
+            <li><strong>Storage constraints:</strong> No way to version custom attributes like attachments or rich text fields properly</li>
+            <li><strong>Maintenance overhead:</strong> JSON/YAML storage makes it difficult to maintain and debug versions</li>
+            <li><strong>No PostgreSQL support for YAML:</strong> YAML requires application-level parsing, adding complexity</li>
+            <li><strong>Schema rigidity:</strong> Changes to versioned attributes require application-level migrations rather than database-level schema changes</li>
+        </ul>
+
+        <p>The better approach is to have a proper schema—a table schema copy to separate <code>_translations</code> or <code>_versions</code> tables. This provides:</p>
+
+        <ul>
+            <li>Native database queries and indexes</li>
+            <li>Support for custom attributes and associations</li>
+            <li>Proper foreign key relationships</li>
+            <li>Database-level constraints and validations</li>
+            <li>Easy maintenance through standard ActiveRecord patterns</li>
+        </ul>
+
+        <h2>Gem Proposal: ActiveVersion</h2>
+
+        <p>The <code>active_version</code> gem (with the <code>ActiveVersion</code> module) would provide a common pattern for versioning with a DSL for building relations and automations between the main record and version records. Extensions and specific functionality could be delivered as separate gems:</p>
+
+        <ul>
+            <li><code>active_version-i18n</code> - Locale-based versioning for translations</li>
+            <li><code>active_version-audit</code> - Audit logging and change tracking</li>
+            <li><code>active_version-draft</code> - Draft management and soft-delete functionality</li>
+        </ul>
+
+        <h2>Use Cases</h2>
+
+        <h3>1. Internationalization (i18n)</h3>
+        <p>Locale versions of models and attributes. Each translation is a version indexed by locale, allowing proper querying and maintenance of multilingual content.</p>
+
+        <h3>2. Versioning and Auditing</h3>
+        <p>Soft-delete, drafts, and logging changes. Versions can be indexed by time, user, or any other dimension. Full object tracking with support for associations and related records.</p>
+
+        <h3>3. Context-Based Versioning</h3>
+        <p>Different versions for different needs: versioning by platform (web, mobile, API), by user role, by A/B test variant, or any other contextual dimension.</p>
+
+        <h2>Requirements</h2>
+
+        <p>Any proposed solution must meet these requirements:</p>
+
+        <ul>
+            <li><strong>Easiness of extensibility:</strong> The code should be easy to extend and customize</li>
+            <li><strong>Easiness of setup:</strong> Simple configuration, either through code patching or documented configuration options</li>
+            <li><strong>Performance:</strong> Fewer performance problems to solve (than more)—design for performance from the start</li>
+            <li><strong>Separate tables:</strong> Support for partitioning and sharding of version tables</li>
+            <li><strong>Custom attributes:</strong> Support for attachments, rich text, and other custom attribute types</li>
+            <li><strong>PostgreSQL support:</strong> Fine if it works only with PostgreSQL—no need to support every database</li>
+            <li><strong>No serialization:</strong> No JSON, YAML, hstore, or serialization in the core implementation</li>
+            <li><strong>Versions of versions:</strong> (Optional) Ability to have versions of versions for complex scenarios</li>
+        </ul>
+
+        <h2>Current Solutions Analysis</h2>
+
+        <h3>audited</h3>
+        <p>Has a good codebase and clean schema, but:</p>
+        <ul>
+            <li>Associated audits feature fully blocks adding custom audit tables</li>
+            <li>Only tracks changes, not full objects</li>
+            <li>Has callbacks support</li>
+            <li>No support for custom models or multi-database setup</li>
+        </ul>
+
+        <h3>paper_trail</h3>
+        <p>Most used versioning gem, but:</p>
+        <ul>
+            <li>Uses <code>whodunnit</code> as a string (not ideal for relationships)</li>
+            <li>Not tracking associations and has no idea about related records affected</li>
+            <li>No callbacks support</li>
+            <li>Supports custom version tables</li>
+            <li>Lots of plugins that may not be needed</li>
+        </ul>
+
+        <h3>hoardable</h3>
+        <p>Also uses <code>whodunnit</code> (problematic), but:</p>
+        <ul>
+            <li>Has callbacks support</li>
+            <li>Fixed most JSONB issues by using a different approach</li>
+            <li>Customizable due to complete separate models for versions</li>
+            <li>Easy to use, but too fresh (new project)</li>
+        </ul>
+
+        <h2>Design Principles</h2>
+
+        <h3>Separate Tables, Not Columns</h3>
+        <p>Each versioned model gets a corresponding <code>_versions</code> table with the same schema as the main table, plus version-specific metadata (version number, index, timestamps, etc.). This allows:</p>
+
+        <ul>
+            <li>Native database queries and joins</li>
+            <li>Proper indexing on any attribute</li>
+            <li>Foreign key relationships to other tables</li>
+            <li>Support for custom attributes and associations</li>
+        </ul>
+
+        <h3>Index-Based Version Access</h3>
+        <p>Versions should be accessible by index—locale, datetime, string ID, or any other dimension. Console users should be able to fetch versions easily:</p>
+
+        <pre><code>article.version(locale: 'en')
+article.version(at: 1.week.ago)
+article.version(platform: 'mobile')</code></pre>
+
+        <h3>DSL for Relations and Automations</h3>
+        <p>A clean DSL for defining version relationships and automatic behaviors:</p>
+
+        <pre><code>class Article &lt; ApplicationRecord
+  has_versions do
+    index_by :locale
+    index_by :created_at
+    auto_create_draft: true
+    track_associations: [:comments, :tags]
+  end
+end</code></pre>
+
+        <h3>Extensibility Through Composition</h3>
+        <p>Core functionality in <code>active_version</code>, with extensions as separate gems that compose cleanly:</p>
+
+        <pre><code># Gemfile
+gem 'active_version'
+gem 'active_version-i18n'  # For locale-based versioning
+gem 'active_version-audit' # For audit logging</code></pre>
+
+        <h2>Questions for the Community</h2>
+
+        <p>I'm seeking feedback on several aspects:</p>
+
+        <ul>
+            <li><strong>What problems have you had with i18n gems?</strong> What features are missing? What's painful to use?</li>
+            <li><strong>What problems have you had with versioning/logging gems?</strong> What limitations have you hit?</li>
+            <li><strong>What would you like to improve or have control over?</strong> What customization do you need?</li>
+            <li><strong>What is the desired amount of time to spend on solving these problems?</strong> One day? Weeks? This helps prioritize features.</li>
+            <li><strong>How about maintenance and console interface?</strong> What tools would make working with versions easier?</li>
+        </ul>
+
+        <h2>Console Interface</h2>
+
+        <p>A good console interface is crucial for maintenance. Users should be able to:</p>
+
+        <ul>
+            <li>Fetch versions by index (locale, datetime, etc.)</li>
+            <li>Compare versions side-by-side</li>
+            <li>Revert to previous versions</li>
+            <li>Create new versions from existing ones</li>
+            <li>Query versions across models</li>
+            <li>Manage version metadata and relationships</li>
+        </ul>
+
+        <h2>Performance Considerations</h2>
+
+        <p>Designing for performance from the start:</p>
+
+        <ul>
+            <li>Separate tables allow for partitioning and sharding</li>
+            <li>Proper indexes on version metadata (locale, timestamp, etc.)</li>
+            <li>Lazy loading of version data</li>
+            <li>Support for read replicas for version queries</li>
+            <li>Efficient queries using native database features</li>
+        </ul>
+
+        <h2>Next Steps</h2>
+
+        <p>This is a proposal and a call for feedback. If you've struggled with versioning or i18n in ActiveRecord, I'd love to hear about:</p>
+
+        <ul>
+            <li>Your specific use cases and requirements</li>
+            <li>Pain points with existing solutions</li>
+            <li>Features you'd like to see</li>
+            <li>Design concerns or suggestions</li>
+        </ul>
+
+        <p>The goal is to build a solution that solves real problems with a clean, extensible design. Proper schema design, no JSON/YAML storage, and extensibility as a first-class concern.</p>
+
+        <p>If this resonates with your needs, or if you have feedback, please reach out. The best solutions come from understanding real-world problems.</p>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>
+
