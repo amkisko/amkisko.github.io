@@ -7,7 +7,7 @@
     height: 76px;
     padding: 2px;
     border-radius: 50%;
-    background: linear-gradient(145deg, #2c3e50, #34495e);
+    background: linear-gradient(145deg, #e8e6e0, #d4d2cc);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,32 +15,32 @@
     transition: box-shadow 0.3s;
     z-index: 1000;
     box-shadow:
-        0 4px 8px rgba(0,0,0,0.2),
-        inset 0 -2px 4px rgba(0,0,0,0.2),
-        inset 0 2px 4px rgba(255,255,255,0.1);
+        0 2px 8px rgba(139, 115, 85, 0.12),
+        inset 0 -1px 2px rgba(31, 29, 27, 0.08),
+        inset 0 1px 2px rgba(254, 252, 248, 0.6);
     overflow: visible;
 }
 
 #map-link:hover {
     box-shadow:
-        0 6px 12px rgba(0,0,0,0.3),
-        inset 0 -2px 4px rgba(0,0,0,0.2),
-        inset 0 2px 4px rgba(255,255,255,0.1);
+        0 4px 12px rgba(139, 115, 85, 0.16),
+        inset 0 -1px 2px rgba(31, 29, 27, 0.1),
+        inset 0 1px 2px rgba(254, 252, 248, 0.7);
 }
 
 #map-link svg {
     width: 70px;
     height: 70px;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
     transform-origin: center;
 }
 
 /* Compass elements */
 .compass-circle {
     fill: none;
-    stroke: rgba(255,255,255,0.8);
+    stroke: rgba(139, 115, 85, 0.3);
     stroke-width: 1.5;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 1px rgba(31, 29, 27, 0.1));
 }
 
 .compass-arrow {
@@ -49,38 +49,38 @@
 }
 
 .compass-arrow-line {
-    stroke: white;
+    stroke: #8b7355;
     stroke-width: 1;
     fill: none;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 1px 1px rgba(31, 29, 27, 0.2));
 }
 
 .compass-arrow-head {
-    fill: white;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    fill: #8b7355;
+    filter: drop-shadow(0 1px 1px rgba(31, 29, 27, 0.2));
 }
 
 .compass-pole-north {
-    fill: #ff4444;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    fill: #d32f2f;
+    filter: drop-shadow(0 1px 1px rgba(31, 29, 27, 0.2));
 }
 
 .compass-pole-south {
-    fill: #4444ff;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    fill: #1976d2;
+    filter: drop-shadow(0 1px 1px rgba(31, 29, 27, 0.2));
 }
 
 .compass-text {
-    fill: rgba(255,255,255,0.9);
+    fill: rgba(31, 29, 27, 0.8);
     font-size: 4px;
     font-weight: bold;
     text-anchor: middle;
     dominant-baseline: middle;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 1px rgba(254, 252, 248, 0.5));
 }
 
 .compass-marker {
-    stroke: rgba(255,255,255,0.6);
+    stroke: rgba(139, 115, 85, 0.4);
     stroke-width: 0.8;
 }
 
@@ -98,60 +98,73 @@
     opacity: 0;
     transition: opacity 0.3s;
     z-index: 1000;
+    background: linear-gradient(145deg, #e8e6e0, #d4d2cc);
+    border-radius: 50%;
+    box-shadow:
+        0 2px 8px rgba(139, 115, 85, 0.12),
+        inset 0 -1px 2px rgba(31, 29, 27, 0.08),
+        inset 0 1px 2px rgba(254, 252, 248, 0.6);
 }
 
 #to-top.visible {
     opacity: 1;
 }
 
+#to-top:hover {
+    box-shadow:
+        0 4px 12px rgba(139, 115, 85, 0.16),
+        inset 0 -1px 2px rgba(31, 29, 27, 0.1),
+        inset 0 1px 2px rgba(254, 252, 248, 0.7);
+}
+
 #to-top svg {
     width: 60px;
     height: 60px;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
 }
 
 .lighthouse-base {
-    fill: #34495e;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    fill: #8b7355;
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
 }
 
 .lighthouse-tower {
     fill: url(#tower-gradient);
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
 }
 
 .lighthouse-top-platform {
-    fill: #34495e;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    fill: #8b7355;
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
 }
 
 .lighthouse-top {
-    fill: #e74c3c;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    fill: #c49a6c;
+    filter: drop-shadow(0 1px 2px rgba(31, 29, 27, 0.2));
 }
 
 .lighthouse-window {
     fill: #f1c40f;
-    filter: drop-shadow(0 0 5px rgba(241,196,15,0.8));
+    filter: drop-shadow(0 0 3px rgba(241,196,15,0.6));
 }
 
 .lighthouse-railing {
-    stroke: #34495e;
+    stroke: #8b7355;
     stroke-width: 0.5;
     fill: none;
 }
 
 .lighthouse-light {
-    filter: drop-shadow(0 0 3px rgba(241,196,15,0.8));
+    filter: drop-shadow(0 0 2px rgba(241,196,15,0.6));
 }
 
 .lighthouse-sea {
     fill: url(#sea-gradient);
-    filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 -1px 2px rgba(31, 29, 27, 0.1));
 }
 
 .lighthouse-light-beam {
     fill: url(#light-beam-gradient);
-    opacity: 0.6;
-    filter: drop-shadow(0 0 5px rgba(241,196,15,0.5));
+    opacity: 0.5;
+    filter: drop-shadow(0 0 3px rgba(241,196,15,0.4));
 }

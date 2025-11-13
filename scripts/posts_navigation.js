@@ -57,8 +57,8 @@ class NavigationButtons {
                     <!-- Blue (south) side -->
                     <polygon points="35,13 35,35 31,35 35,57" fill="#1976d2"/>
                     <circle cx="35" cy="35" r="3" fill="#bfa76a" stroke="#7c5a2b" stroke-width="0.7"/>
-                    <text x="35" y="22" text-anchor="middle" font-size="4.5" font-weight="bold" fill="#fff" stroke="#7c5a2b" stroke-width="0.3">N</text>
-                    <text x="35" y="54" text-anchor="middle" font-size="4.5" font-weight="bold" fill="#fff" stroke="#7c5a2b" stroke-width="0.3">S</text>
+                    <text x="35" y="22" text-anchor="middle" font-size="4.5" font-weight="bold" fill="#fefcf8" stroke="#7c5a2b" stroke-width="0.3">N</text>
+                    <text x="35" y="54" text-anchor="middle" font-size="4.5" font-weight="bold" fill="#fefcf8" stroke="#7c5a2b" stroke-width="0.3">S</text>
                 </g>
             </svg>
         `;
