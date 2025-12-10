@@ -112,7 +112,7 @@
 
         <p>Making RuboCop work in isolation/sandbox is a good idea, but it might be a bit problematic to solve, and that&#39;s not the only point, as within an average project we have more languages than one and more environments.</p>
 
-        <p>trunk.io helps solve this problem by providing scripts and wrappers for various tools and linters.</p>
+        <p>trunk.io helps solve this problem by providing scripts and wrappers for various tools and linters. It gives capabilities for full isolation: <code>.rubocop.yml</code> can be fully moved under <code>.trunk/configs</code> and there is no need to add gems to the main Gemfile, keeping it clean from these dependencies. All linters run in isolated environments with their own version locks, completely separate from your project&#39;s runtime dependencies.</p>
 
         <p><strong>Rule of thumb:</strong> Formatting and linting are the developer&#39;s responsibility. It is only the developer (and team as a collective of individuals) who decides if code should be formatted or not before committing.</p>
 
@@ -121,6 +121,8 @@
         <p>Getting feedback faster is good, so let&#39;s tune RuboCop (based on Standard) to work with trunk.io and have it running in GitHub Actions right now!</p>
 
         <p>Start by tuning <code>.trunk/trunk.yaml</code> configuration and run <code>trunk check</code> and <code>trunk upgrade</code>. Keep an eye on <code>lint.definitions</code> configuration. Always monitor trunk activities and configure linters/tools depending on your needs; some tools might affect your computer performance quite heavily.</p>
+
+        <p>For the best developer experience, consider installing the <a href="https://marketplace.visualstudio.com/items?itemName=trunk-io.trunk">trunk.io VSCode extension</a>, which provides inline recommendations for fixing code issues directly in your editor. This gives you immediate feedback as you write code, without needing to run linters manually.</p>
 
         <p>For a quick setup, you can use the <a href="../patches/20251210071732_setup_trunk_rubocop.rb.txt" class="patch-link">setup script</a> to apply all the configurations mentioned in this article.</p>
 
@@ -218,9 +220,9 @@ actions:
   enabled:
     - trunk-upgrade-available</code></pre>
 
-        <h3>Gemfile</h3>
+        <h3>Gemfile (Optional)</h3>
 
-        <p>Then remember to add development gems to <code>Gemfile</code> and run <code>bundle install</code>.</p>
+        <p>With trunk.io&#39;s full isolation capabilities, you don&#39;t need to add these gems to your main Gemfile at all. trunk.io manages all linter dependencies in its own isolated environment. However, if you want to run RuboCop manually outside of trunk.io, you can optionally add development gems to <code>Gemfile</code> and run <code>bundle install</code>.</p>
 
         <pre><code>gem "standard", require: false
 gem "standard-custom", require: false
@@ -233,7 +235,7 @@ gem "rubocop-thread_safety", require: false</code></pre>
 
         <h3>.rubocop.yml</h3>
 
-        <p>Keep a single <code>.rubocop.yml</code> configuration file in your project. Do not use <code>.yml</code> extensions as it won&#39;t work with trunk.io sandbox.</p>
+        <p>You can keep a single <code>.rubocop.yml</code> configuration file in your project root, or move it to <code>.trunk/configs/.rubocop.yml</code> for complete isolation. Do not use additional <code>.yml</code> configurations as it won&#39;t work with trunk.io sandbox. When placed in <code>.trunk/configs/</code>, the configuration is completely isolated from your project and managed by trunk.io.</p>
 
         <pre><code>inherit_mode:
   merge:
