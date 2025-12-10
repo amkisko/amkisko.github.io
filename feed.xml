@@ -5,10 +5,19 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2025-12-10T05:17:32+00:00</updated>
+  <updated>2025-12-11T00:00:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>Post for Reddit: Robots don't need police: Constraints vs Enforcement and Why linters and formatters shouldn't be in your Gemfile (or how to isolate it)</title>
+    <link href="https://amkisko.github.io/posts/20251211000000_reddit_post_formatting_linting.html"/>
+    <id>https://amkisko.github.io/posts/20251211000000_reddit_post_formatting_linting.html</id>
+    <updated>2025-12-11T00:00:00+00:00</updated>
+    <published>2025-12-11T00:00:00+00:00</published>
+    <summary>A Reddit-style post discussing the distinction between formatters and linters, and how moving tools out of project dependencies changes the development workflow.</summary>
+  </entry>
 
   <entry>
     <title>Robots don't need police!</title>
