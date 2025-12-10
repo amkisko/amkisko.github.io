@@ -21,6 +21,10 @@ puts "Project root: #{project_root}"
 trunk_dir = project_root.join('.trunk')
 FileUtils.mkdir_p(trunk_dir)
 
+# Create .trunk/configs directory for isolated configuration
+trunk_configs_dir = trunk_dir.join('configs')
+FileUtils.mkdir_p(trunk_configs_dir)
+
 # Create .github/workflows directory if it doesn't exist
 github_workflows_dir = project_root.join('.github', 'workflows')
 FileUtils.mkdir_p(github_workflows_dir)
@@ -121,7 +125,8 @@ else
   puts "✓ Created #{trunk_yaml_path}"
 end
 
-# Write .rubocop.yml
+# Write .trunk/configs/.rubocop.yml (for complete isolation)
+# You can also place this in project root as .rubocop.yml if preferred
 rubocop_yml_content = <<~YAML
   inherit_mode:
     merge:
@@ -230,7 +235,7 @@ rubocop_yml_content = <<~YAML
     Exclude: []
 YAML
 
-rubocop_yml_path = project_root.join('.rubocop.yml')
+rubocop_yml_path = trunk_configs_dir.join('.rubocop.yml')
 if rubocop_yml_path.exist?
   print "File #{rubocop_yml_path} already exists. Overwrite? (y/N): "
   response = $stdin.gets.chomp.downcase
@@ -282,88 +287,11 @@ else
   puts "✓ Created #{github_workflow_path}"
 end
 
-# Check for Gemfile and add gems if needed
-gemfile_path = project_root.join('Gemfile')
-if gemfile_path.exist?
-  gemfile_content = File.read(gemfile_path)
-  gemfile_lines = gemfile_content.lines
-
-  # Define required gems with their full lines
-  required_gems_map = {
-    'standard' => '  gem "standard", require: false',
-    'standard-custom' => '  gem "standard-custom", require: false',
-    'standard-performance' => '  gem "standard-performance", require: false',
-    'standard-rails' => '  gem "standard-rails", require: false',
-    'standard-rspec' => '  gem "standard-rspec", require: false',
-    'rubocop-rails' => '  gem "rubocop-rails", require: false',
-    'rubocop-rspec' => '  gem "rubocop-rspec", require: false',
-    'rubocop-thread_safety' => '  gem "rubocop-thread_safety", require: false'
-  }
-
-  # Check which gems are missing
-  missing_gems = required_gems_map.select do |gem_name, _|
-    !gemfile_content.match?(/gem\s+["']#{Regexp.escape(gem_name)}/)
-  end
-
-  if missing_gems.any?
-    # Find or create group :development, :test do block
-    group_pattern = /group\s+:development,\s*:test\s+do/i
-    group_start_index = gemfile_lines.index { |line| line.match?(group_pattern) }
-
-    if group_start_index
-      # Group exists, find where to insert (right after the group line)
-      insert_index = group_start_index + 1
-
-      # Add only missing gems
-      gems_to_add = missing_gems.values.map { |g| g + "\n" }
-      gemfile_lines.insert(insert_index, *gems_to_add)
-
-      File.write(gemfile_path, gemfile_lines.join)
-      puts "✓ Added #{missing_gems.size} missing gem(s) to existing group :development, :test in Gemfile"
-    else
-      # Group doesn't exist, create it
-      # Find a good place to insert (before the end of file, or after other groups)
-      insert_index = gemfile_lines.length
-
-      # Try to find the end of the file or after other group blocks
-      gemfile_lines.each_with_index do |line, idx|
-        if line.strip == 'end' && idx > 0 && gemfile_lines[idx - 1].match?(/group\s+:/)
-          insert_index = idx + 1
-          break
-        end
-      end
-
-      # Add all required gems (since group is new, we add all of them)
-      gems_to_add = required_gems_map.values.map { |g| g + "\n" }
-      group_block = ["\n", "group :development, :test do\n"] + gems_to_add + ["end\n"]
-      gemfile_lines.insert(insert_index, *group_block)
-
-      File.write(gemfile_path, gemfile_lines.join)
-      puts "✓ Created group :development, :test and added required gems to Gemfile"
-    end
-  else
-    puts "✓ All required gems are already in Gemfile"
-  end
-else
-  puts "\n⚠ Gemfile not found. Please create a Gemfile and add the following:"
-  puts <<~GEMS
-    group :development, :test do
-      gem "standard", require: false
-      gem "standard-custom", require: false
-      gem "standard-performance", require: false
-      gem "standard-rails", require: false
-      gem "standard-rspec", require: false
-      gem "rubocop-rails", require: false
-      gem "rubocop-rspec", require: false
-      gem "rubocop-thread_safety", require: false
-    end
-  GEMS
-end
-
 puts "\n✓ Setup complete!"
 puts "\nNext steps:"
-puts "  1. Add the required gems to your Gemfile (if not already present)"
-puts "  2. Run: bundle install"
-puts "  3. Run: trunk check"
-puts "  4. Run: trunk upgrade"
+puts "  1. Run: trunk check"
+puts "  2. Run: trunk upgrade"
+puts "\nNote: With trunk.io's full isolation, you don't need to add RuboCop gems"
+puts "      to your Gemfile. trunk.io manages all linter dependencies in its"
+puts "      own isolated environment."
 puts "\nFor more information, see: https://docs.trunk.io/cli"
