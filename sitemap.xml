@@ -8,9 +8,15 @@
   </url>
   <url>
     <loc>https://amkisko.github.io/posts.html</loc>
-    <lastmod>2025-12-01</lastmod>
+    <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amkisko.github.io/posts/20251210071732_robots_dont_need_police.html</loc>
+    <lastmod>2025-12-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20251201120000_collective_practices_recommendations.html</loc>
@@ -103,4 +109,3 @@
     <priority>0.8</priority>
   </url>
 </urlset>
-
