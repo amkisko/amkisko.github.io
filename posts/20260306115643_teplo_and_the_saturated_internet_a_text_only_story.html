@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teplo and the Saturated Internet: A Text-Only Story</title>
+    <meta name="description" content="Why Teplo matters in LLM-amplified workflows: text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.">
+    <meta name="keywords" content="teplo, text-only browser, llm workflows, bot-driven development, security research, mobile, multi-platform, multilingual">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Teplo and the Saturated Internet: A Text-Only Story">
+    <meta property="og:description" content="Why Teplo matters in LLM-amplified workflows: text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html">
+    <meta property="article:published_time" content="2026-03-06T09:56:43+00:00">
+    <meta property="article:modified_time" content="2026-03-06T09:56:43+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Teplo and the Saturated Internet: A Text-Only Story">
+    <meta name="twitter:description" content="Why Teplo matters in LLM-amplified workflows: text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        :root {
+            --bg: #0f1114;
+            --bg-soft: #171a1f;
+            --ink: #e7edf5;
+            --ink-soft: #b4c0cf;
+            --accent: #66d89a;
+            --accent-2: #7ec7ff;
+            --line: #29313c;
+        }
+
+        body {
+            font-family: "IBM Plex Mono", "Cascadia Mono", "SFMono-Regular", ui-monospace, monospace;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 90% 10%, rgba(126, 199, 255, 0.12), transparent 22%),
+                radial-gradient(circle at 15% 18%, rgba(102, 216, 154, 0.10), transparent 28%),
+                linear-gradient(180deg, #0d1013 0%, #11151b 55%, #0e1117 100%);
+            max-width: 860px;
+            text-shadow: 0 0 0 transparent;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
+            position: static;
+            overflow: visible;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "IBM Plex Mono", "Cascadia Mono", ui-monospace, monospace;
+        }
+
+        h1 {
+            color: #eaf4ff;
+            border-bottom: 1px solid var(--line);
+            font-size: 2rem;
+            line-height: 1.2;
+            padding-bottom: 0.6rem;
+        }
+
+        h1::before {
+            content: "$ ";
+            color: var(--accent);
+        }
+
+        h2 {
+            color: var(--accent-2);
+            font-size: 1.02rem;
+            margin-top: 2rem;
+            border: none;
+            padding-left: 0;
+            text-transform: lowercase;
+        }
+
+        h2::before {
+            content: "## ";
+            color: var(--accent);
+        }
+
+        h3 {
+            color: #9fd8b8;
+            font-size: 0.95rem;
+            text-transform: lowercase;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+
+        .lead {
+            font-size: 1.06rem;
+            color: #f3f7ff;
+        }
+
+        .not-postman {
+            margin-top: 0.9rem;
+            padding: 0.85rem 0.9rem;
+            font-size: 0.95rem;
+            color: #c8f1da;
+            font-style: normal;
+            border: 1px dashed #3a5f4a;
+            border-radius: 0.45rem;
+            background: rgba(102, 216, 154, 0.08);
+        }
+
+        code {
+            background: #1c232d;
+            border: 1px solid #334153;
+            color: #a4d8ff;
+        }
+
+        pre {
+            background: #101823;
+            border: 1px solid #2a3648;
+            border-radius: 0.5rem;
+            color: #dde9f8;
+        }
+
+        a {
+            color: #9fd2ff;
+            text-underline-offset: 0.16em;
+        }
+
+        ul li::marker {
+            color: var(--accent);
+        }
+
+        .date {
+            color: var(--ink-soft);
+            font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+                line-height: 1.72;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Teplo and the Saturated Internet: A Text-Only Story</h1>
+        <div class="date">6 March 2026, Helsinki, Åndrei Makarov</div>
+
+        <p class="lead">The internet has become noisy for both humans and automated systems, with layers of overlays, tracking scripts, and dynamic wrappers around simple content, so Teplo introduces an intentional constraint: start from text and structure before everything else.</p>
+        <p><strong>Name note:</strong> <code>Teplo</code> comes from <em>Text + Explorer</em>. It also resonates with the Slavic word <code>тепло</code> (Ukrainian, Polish, Belarusian, Russian), meaning “heat” or “warmth,” which fits the project’s goal of making web exploration feel direct and human-readable again. Reference: <a href="https://en.wiktionary.org/wiki/тепло">Wiktionary</a>.</p>
+        <h2>Why It Matters Now</h2>
+        <p>LLM-based services and bot-driven workflows amplified an old problem, namely signal-to-noise ratio, because most automation tasks do not need CSS layout, animation, or JavaScript execution but instead require reliable text, links, forms, domains, and predictable request behavior.</p>
+        <p>Teplo treats pages as analysis and navigation input rather than visual theater, extracting plain text, structured links, forms (including hidden values), domains, and assets in a format that remains stable enough for CLI workflows, GUI workflows, and automation pipelines.</p>
+
+        <h2>Correlation with LLM and Bot Workflows</h2>
+        <p>Agentic workflows perform best when extraction is deterministic, and Teplo provides a compact textual surface that can be consumed by humans, scripts, and LLM-based pipelines without requiring a full browser runtime.</p>
+        <ul>
+            <li>Use Teplo output as clean context for LLM prompts.</li>
+            <li>Run crawl/discovery tasks in CI or scheduled jobs.</li>
+            <li>Track content drift with per-URL diff and cache.</li>
+            <li>Combine links, domains, and discovery endpoints into one operational map.</li>
+        </ul>
+
+        <h2>In a Saturated Internet</h2>
+        <p>When every page tries to behave like an application, text-only mode becomes a practical form of observability, because Teplo can surface what matters first: what is said, where links point, what forms submit, which domains are referenced, and which assets are fetched.</p>
+        <p>This is useful for fast understanding, audits, and triage, especially in cases where visual rendering hides important details behind delayed scripts or client-side state changes.</p>
+
+        <h2>Keeping Inner Formation Clean and Sane</h2>
+        <p>There is also a philosophical and cognitive reason for text-first tooling: the internet is increasingly polluted with generated artifacts that imitate meaning while carrying little responsibility, context, or care, and this surrogate layer gradually reshapes how we read, think, and communicate with each other.</p>
+        <p>Keeping inner formation clean and sane means resisting passive consumption of polished synthetic output as final truth, then returning to sources, structure, and verifiable signals so that attention is not captured by noise and communication does not collapse into recursive imitation.</p>
+        <p>In that sense, Teplo is not only a utility for extraction; it is also a small hygiene practice for thought, helping users stay grounded in readable evidence when public space is saturated by fast, persuasive, and often disposable machine-made text.</p>
+
+        <h2>Security Researchers and Web Developers</h2>
+        <h3>Security Research</h3>
+        <p>Teplo supports recon-style workflows through scan, relations, discovery extras (OpenAPI, GraphQL, OAuth/OIDC well-known, RSS, sitemap), and domain tracing in one coherent extraction path.</p>
+        <p>It also reduces inspection risk by avoiding JavaScript execution and layout-engine runtime behavior, which keeps the tool focused on parsing and transport rather than browser-like code execution.</p>
+
+        <h3>Ordinary Web Development</h3>
+        <p>Teplo is useful even when you are not doing security work:</p>
+        <ul>
+            <li>verify links/forms after content changes</li>
+            <li>inspect redirect and cookie behavior quickly</li>
+            <li>debug docs and content-heavy pages from terminal/mobile</li>
+            <li>build test fixtures and snapshots from real pages</li>
+        </ul>
+
+        <h2>Why Teplo Is Not Postman or Bruno</h2>
+        <p>Postman and Bruno are API clients, while Teplo is a text-only internet explorer that begins from real documents and navigation surfaces and only then allows request interaction where needed.</p>
+        <div class="not-postman">
+            Teplo is not replacing API clients. It solves a different layer: understanding and traversing web surfaces as text and structure, including links/forms/domains/assets and protocol discovery, with browser-like navigation constraints.
+        </div>
+
+        <h2>Why It Is Useful on Mobile</h2>
+        <p>On a phone, both bandwidth and attention are limited, so Teplo’s text-first approach reduces payload and cognitive load while still preserving actionable structure; Swift and Kotlin GUI implementations make this practical on iOS and Android rather than limiting usage to desktop terminals.</p>
+        <p>For incident response, field diagnostics, and quick verification outside a laptop environment, this creates a direct operational advantage.</p>
+
+        <h2>Multilingual and Multi-Platform Build as a Strategy</h2>
+        <p>Teplo is intentionally not tied to one runtime philosophy, with core and clients across Rust, Swift, JS, Zig, Kotlin, and Ruby, backed by shared test vectors and platform-specific interfaces.</p>
+        <p>This is not language tourism but resilience strategy:</p>
+        <ul>
+            <li>same extraction logic tested across ecosystems</li>
+            <li>native fit for different environments and teams</li>
+            <li>editor/plugin integrations for real workflows</li>
+            <li>experimentation without locking the project to one stack</li>
+        </ul>
+
+        <h2>Final Note</h2>
+        <p>In a saturated web, text-only behavior is not nostalgia but an engineering choice, and Teplo is useful precisely because it removes unnecessary layers while keeping the internet inspectable for both humans and machines.</p>
+
+        <section class="references">
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://github.com/amkisko/textplorer">textplorer (Teplo) repository</a></li>
+                <li><a href="https://github.com/amkisko/textplorer/blob/main/README.md">Teplo README: capabilities and implementations</a></li>
+                <li><a href="https://github.com/amkisko/textplorer/blob/main/docs/distribution/README.md">Teplo distribution and local run guide</a></li>
+                <li><a href="https://github.com/amkisko/textplorer/blob/main/docs/SECURITY.md">Teplo security considerations</a></li>
+            </ul>
+        </section>
+
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

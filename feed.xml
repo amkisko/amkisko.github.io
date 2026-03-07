@@ -5,10 +5,46 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2025-12-11T00:00:00+00:00</updated>
+  <updated>2026-03-06T11:00:50+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>Inner Formation in the Age of Bots</title>
+    <link href="https://amkisko.github.io/posts/20260306130050_inner_formation_in_the_age_of_bots.html"/>
+    <id>https://amkisko.github.io/posts/20260306130050_inner_formation_in_the_age_of_bots.html</id>
+    <updated>2026-03-06T11:00:50+00:00</updated>
+    <published>2026-03-06T11:00:50+00:00</published>
+    <summary>An essay on bot-driven development and LLM dopamine loops, with practical criteria for distinguishing professional practice from gambling-like behavior.</summary>
+  </entry>
+
+  <entry>
+    <title>Teplo and the Saturated Internet: A Text-Only Story</title>
+    <link href="https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html"/>
+    <id>https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html</id>
+    <updated>2026-03-06T09:56:43+00:00</updated>
+    <published>2026-03-06T09:56:43+00:00</published>
+    <summary>Why Teplo matters in LLM-amplified workflows: text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.</summary>
+  </entry>
+
+  <entry>
+    <title>ActiveVersion Before Release: A Story from the Build Room</title>
+    <link href="https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html"/>
+    <id>https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html</id>
+    <updated>2026-03-06T09:52:09+00:00</updated>
+    <published>2026-03-06T09:52:09+00:00</published>
+    <summary>A release-week story of active_version.rb: from proposal to implementation, what is stable, and how Rails multi-db patterns shape the next steps.</summary>
+  </entry>
+
+  <entry>
+    <title>Tiny story PostgreSQL partitioning and Rails</title>
+    <link href="https://amkisko.github.io/posts/20260306112539_tiny_story_postgresql_partitioning_and_rails.html"/>
+    <id>https://amkisko.github.io/posts/20260306112539_tiny_story_postgresql_partitioning_and_rails.html</id>
+    <updated>2026-03-06T09:25:39+00:00</updated>
+    <published>2026-03-06T09:25:39+00:00</published>
+    <summary>A tiny story about PostgreSQL partitioning in Rails, including how it fits with sharding, clustering, replication, and multi-shard operations.</summary>
+  </entry>
 
   <entry>
     <title>Post for Reddit: Robots don't need police: Constraints vs Enforcement and Why linters and formatters shouldn't be in your Gemfile (or how to isolate it)</title>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny story PostgreSQL partitioning and Rails</title>
+    <meta name="description" content="A tiny dramatic detective story about PostgreSQL partitioning in Rails, including how it fits with sharding, clustering, replication, and multi-shard operations.">
+    <meta name="keywords" content="postgresql partitioning, rails, table partitioning, database performance, ruby on rails, partition maintenance, composite primary key">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Tiny story PostgreSQL partitioning and Rails">
+    <meta property="og:description" content="A tiny dramatic detective story about PostgreSQL partitioning in Rails, including how it fits with sharding, clustering, replication, and multi-shard operations.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260306112539_tiny_story_postgresql_partitioning_and_rails.html">
+    <meta property="article:published_time" content="2026-03-06T09:25:39+00:00">
+    <meta property="article:modified_time" content="2026-03-06T09:25:39+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tiny story PostgreSQL partitioning and Rails">
+    <meta name="twitter:description" content="A tiny dramatic detective story about PostgreSQL partitioning in Rails, including how it fits with sharding, clustering, replication, and multi-shard operations.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        :root {
+            --bg: #fcfcfb;
+            --ink: #1f2227;
+            --muted: #5e6470;
+            --rule: #d7dbe2;
+            --accent: #2d5f8b;
+            --quote-bg: #f4f7fb;
+            --code-bg: #eef3f8;
+            --code-ink: #103a62;
+            --pre-bg: #131822;
+            --pre-ink: #e9f0ff;
+            --pre-border: #2a3447;
+        }
+
+        body {
+            font-family: "Atkinson Hyperlegible", "Source Serif 4", "Noto Serif", Georgia, serif;
+            background: var(--bg);
+            color: var(--ink);
+            max-width: 760px;
+            letter-spacing: 0;
+            font-size: 100%;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            position: static;
+            overflow: visible;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Atkinson Hyperlegible", "Inter", "Segoe UI", system-ui, sans-serif;
+            letter-spacing: 0.01em;
+            line-height: 1.2;
+        }
+
+        h1 {
+            color: #172331;
+            font-size: 2rem;
+            margin-bottom: 0.65rem;
+            text-transform: none;
+            border-bottom: 1px solid var(--rule);
+            padding-bottom: 0.7rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 0.6rem;
+            color: #1f3e5a;
+            border: none;
+            padding: 0;
+            display: block;
+            border-top: 1px solid var(--rule);
+            padding-top: 1rem;
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            margin-top: 1.3rem;
+            margin-bottom: 0.45rem;
+            color: #2d4f6f;
+            text-transform: none;
+        }
+
+        p,
+        li {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .lead {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: #1f2f40;
+            background: #f7f9fc;
+            border: 1px solid #dee6ef;
+            border-radius: 0.5rem;
+            padding: 0.8rem 0.95rem;
+        }
+
+        p.lead::first-letter {
+            float: none;
+            font-size: inherit;
+            line-height: inherit;
+            margin: 0;
+            color: inherit;
+            font-family: inherit;
+            font-weight: inherit;
+        }
+
+        .quote-block {
+            margin: 1.2rem 0;
+            padding: 0.8rem 1rem;
+            font-style: italic;
+            color: #274762;
+            background: var(--quote-bg);
+            border-left: 3px solid var(--accent);
+            border-radius: 0.35rem;
+        }
+
+        code {
+            background: var(--code-bg);
+            border: 1px solid #cfdae6;
+            color: var(--code-ink);
+            border-radius: 0.28rem;
+            padding: 0.08rem 0.3rem;
+            font-family: "IBM Plex Mono", "Cascadia Mono", "SFMono-Regular", ui-monospace, monospace;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background: var(--pre-bg);
+            color: var(--pre-ink);
+            border: 1px solid var(--pre-border);
+            border-radius: 0.55rem;
+            font-size: 0.92rem;
+            line-height: 1.62;
+            padding: 0.85rem 1rem;
+            overflow-x: auto;
+        }
+
+        pre code {
+            background: transparent;
+            border: none;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+            margin-top: 0.4rem;
+            margin-bottom: 1rem;
+        }
+
+        ul li::marker {
+            color: #44698f;
+        }
+
+        .date {
+            color: var(--muted);
+            font-style: normal;
+            font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+            font-size: 0.875rem;
+            margin-bottom: 1.45rem;
+        }
+
+        .final-note {
+            margin-top: 1.9rem;
+            padding: 0.75rem 0.9rem;
+            font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+            font-size: 0.9375rem;
+            color: #203f5b;
+            background: #f2f6fb;
+            border: 1px solid #d6e2ef;
+            border-radius: 0.5rem;
+            font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.375rem;
+            }
+
+            p,
+            li {
+                font-size: 1rem;
+                line-height: 1.68;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Tiny story PostgreSQL partitioning and Rails</h1>
+        <div class="date">6 March 2026, Helsinki, Åndrei Makarov</div>
+
+        <p class="lead">A customer enters a library and tries to describe a book without knowing its full title or author name; after a short conversation, we finally get one reliable clue: the author’s last name starts with <strong>D</strong>. That single signal narrows the search from an entire building to one shelf range between <code>CA</code> and <code>EA</code>, and the book appears quickly because the lookup path is constrained from the start.</p>
+
+        <p>The mechanic version of the same story is equally familiar: when tools are stored by size ranges, finding one key and one screw no longer means searching the whole workshop. This is exactly the intuition behind table partitioning, where the goal is not to invent a new database behavior but to organize lookup space so reads and writes touch only the smallest necessary slice.</p>
+
+        <p>Under the hood, this can always be built manually with separate tables, constraints, triggers, and routing logic in application code, but modern databases such as PostgreSQL provide declarative partitioning features that remove a large amount of repetitive operational work and reduce the chance of human mistakes in production.</p>
+
+        <h2>Disclamer</h2>
+        <p>Partitioning is not a universal cure for performance problems, because real bottlenecks still need an involved engineer who understands workload, schema, and query behavior; however, partitioning deserves a permanent place in the toolbox because it reliably reduces search scope when data access follows stable keys.</p>
+        <p>In many incidents, the database is less the original source of failure and more the place where design weaknesses become visible under concurrency, which is why reducing contention and index pressure can prevent small issues from escalating into service-wide instability.</p>
+
+        <h2>Motivation</h2>
+        <p>The typical pain pattern is predictable: read latency starts drifting, writes queue behind locks, and the pressure propagates through the application, while deleting historical data is not an option because those records remain part of business logic and compliance requirements.</p>
+        <p>Indexes bloat, random lookups in the middle of a huge table become expensive, maintenance windows get longer, and every operation feels like crossing a frozen river in spring.</p>
+        <p>For many teams, trouble becomes visible around rough thresholds such as <code>1 GB</code> for hot tables and around <code>1,000,000</code> rows, and although these numbers are not universal limits, they are useful warning lights that often correlate with rising maintenance and lock costs.</p>
+
+        <h2>Intention</h2>
+        <p>The intention is simple: split hot data into smaller physical partitions so reads and writes operate on tighter ranges, partition-local indexes stay compact, and latency remains predictable even while the total dataset continues to grow.</p>
+        <div class="quote-block">The goal is not to remove data; the goal is to narrow how much data each query has to touch.</div>
+
+        <h2>Requirements</h2>
+        <h3>1. Stable Separation Key</h3>
+        <p>Partitioning works when records can always be routed by explicit and predictable values, such as first letter, item number range, or event date, because both write paths and read predicates must carry the same key semantics.</p>
+        <pre><code>Event.create!(date: params[:date])</code></pre>
+        <p>If reads also follow date windows (today, calendar pages, cursor by date), this is a strong candidate; if the product frequently requires full scans of all records, partitioning can become a liability because planning and coordination costs grow without giving pruning benefits.</p>
+
+        <h3>2. Maintenance Discipline</h3>
+        <p>Like ordinary tables, partitions evolve through migrations, but production comfort usually requires scheduled maintenance jobs that create future partitions, monitor gaps, and keep routing state aligned with expected input ranges.</p>
+        <p>A <code>default</code> partition should always exist as a controlled sink for records that do not match named partitions at insert time, with a scheduled reconciliation step that moves those orphan rows into proper ranges before they silently accumulate.</p>
+
+        <h3>3. Monitoring</h3>
+        <p>Treat monitoring as mandatory, not optional:</p>
+        <ul>
+            <li>count of partitions</li>
+            <li>rows per partition</li>
+            <li>size per partition</li>
+            <li>rows in <code>default</code> partition</li>
+        </ul>
+
+        <h2>Limitations</h2>
+        <ul>
+            <li>Full scans get more expensive as partition count grows.</li>
+            <li>Manual partition operations are possible in small systems, but automation is the norm in production.</li>
+            <li>Composite primary keys must still be globally unique.</li>
+            <li>Each partition is an independent table with its own indexes and naming overhead.</li>
+            <li>The default partition can silently accumulate debt unless monitored and drained.</li>
+        </ul>
+
+        <h2>Abilities</h2>
+        <ul>
+            <li>Create partitions in advance using your chosen factor and retention horizon.</li>
+            <li>Detach a partition quickly when archive workflows permit it: <code>DETACH PARTITION</code>.</li>
+            <li>Run maintenance faster on smaller units with <code>VACUUM</code> and index work per partition.</li>
+            <li>Keep model usage close to ordinary tables while letting the engine route to the correct physical partition.</li>
+        </ul>
+
+        <h2>State Within Rails</h2>
+        <p>Current practical stack in many teams looks like this:</p>
+        <ul>
+            <li><code>pg_party</code> can help, but often needs project-specific extensions.</li>
+            <li>Custom <code>PartitionsMaintenanceJob</code> is usually required.</li>
+            <li>Migration from ordinary tables to partitioned tables is scriptable.</li>
+            <li>ActiveRecord support around composite keys continues to improve.</li>
+            <li>You are still responsible for designing efficient key usage in reads and writes.</li>
+            <li>Schema dump exclusions for partition-managed tables are often configured explicitly.</li>
+        </ul>
+
+        <h2>Sharding, Clustering, Replication</h2>
+        <p>Partitioning and sharding should be seen as complementary layers: partitioning organizes data physically inside one logical database, while sharding distributes storage and traffic across multiple databases or clusters.</p>
+        <p>In multi-shard systems, partitioning typically exists inside each shard, so request flow should route by shard key first and then rely on partition pruning within that shard to keep query scope narrow and costs predictable.</p>
+        <ul>
+            <li><strong>Sharding:</strong> horizontal split across shards; partitioning can still be used per shard.</li>
+            <li><strong>Clustering:</strong> multiple nodes for availability/performance; partitions remain regular tables managed by the primary node.</li>
+            <li><strong>Replication:</strong> read replicas copy partitioned tables like ordinary tables; pruning still helps read queries when predicates are shard- and partition-aware.</li>
+        </ul>
+        <p>The practical rule is that queries must carry both routing signals, shard key and partition key, because losing either one immediately pushes the system toward broad scans and cross-node inefficiency.</p>
+        <p>On the Rails side, this usually means explicit connection roles and shard routing through <code>connects_to</code> and <code>connected_to</code>, while on the PostgreSQL side it means choosing partition keys that genuinely match real <code>WHERE</code> patterns so pruning can happen in practice, not only in theory.</p>
+
+        <h2>Final Scene</h2>
+        <p>You can partition almost anything, including designs like <code>id + JSONB</code>, but permissibility is not the same as wisdom, and architecture debt is usually paid later through slower operations and harder maintenance.</p>
+        <p>The real detective work in engineering is not writing clever SQL fragments; it is choosing data boundaries that reflect product behavior and then maintaining those boundaries with discipline as workload evolves.</p>
+        <p class="final-note">Keep the notes close to your workload, inspect behavior in production telemetry, and validate assumptions before scaling partition count.</p>
+
+        <section class="references">
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://www.postgresql.org/docs/current/ddl-partitioning.html">PostgreSQL Documentation: Table Partitioning</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/ddl-partitioning.html#DDL-PARTITION-PRUNING">PostgreSQL Documentation: Partition Pruning</a></li>
+                <li><a href="https://guides.rubyonrails.org/active_record_multiple_databases.html">Rails Guides: Multiple Databases with Active Record</a></li>
+                <li><a href="https://guides.rubyonrails.org/active_record_multiple_databases.html#horizontal-sharding">Rails Guides: Horizontal Sharding</a></li>
+                <li><a href="https://guides.rubyonrails.org/active_record_multiple_databases.html#using-manual-connection-switching">Rails Guides: Manual Connection Switching</a></li>
+                <li><a href="https://guides.rubyonrails.org/active_record_composite_primary_keys.html">Rails Guides: Composite Primary Keys</a></li>
+                <li><a href="https://github.com/rkrage/pg_party">pg_party</a></li>
+                <li><a href="https://github.com/rails/rails/pull/56709">Rails Pull Request: Composite primary key improvements</a></li>
+            </ul>
+        </section>
+
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>
