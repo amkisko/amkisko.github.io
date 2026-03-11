@@ -31,7 +31,7 @@
         <h2>Common Issues with Version Managers</h2>
         <p>Version managers on macOS often face several challenges:</p>
         <ul>
-            <li><strong>Architecture mismatches:</strong> Apple Silicon Macs use ARM architecture. While older software was built for Intel (x86_64), it's recommended to use native ARM versions whenever possible rather than relying on emulation.</li>
+            <li><strong>Architecture mismatches:</strong> Apple Silicon Macs use ARM architecture. While older software was built for Intel (x86_64), it's recommended to use native ARM versions whenever possible and avoid relying on emulation.</li>
             <li><strong>OpenSSL dependencies:</strong> Ruby and Node builds often need specific OpenSSL versions, which can be tricky to configure correctly.</li>
             <li><strong>Compilation flags:</strong> Older versions may need special compiler flags to build on modern macOS.</li>
             <li><strong>Homebrew paths:</strong> Different paths for ARM (<code>/opt/homebrew</code>) vs Intel (<code>/usr/local</code>) can cause confusion.</li>
@@ -169,7 +169,7 @@ export CPPFLAGS="-I$(brew --prefix libffi)/include"</code></pre>
             <li><strong>Document configuration:</strong> Maintain team documentation about required environment setup.</li>
             <li><strong>Version pinning:</strong> Use version files (<code>.ruby-version</code>, <code>.nvmrc</code>, <code>.tool-versions</code>) in projects.</li>
             <li><strong>CI/CD consideration:</strong> Ensure CI/CD pipelines use ARM runners when deploying to ARM environments.</li>
-            <li><strong>Upgrade legacy projects:</strong> If working with older projects, prioritize upgrading to versions with native ARM support rather than using emulation.</li>
+            <li><strong>Upgrade legacy projects:</strong> If working with older projects, prioritize upgrading to versions with native ARM support and keep emulation as a fallback only.</li>
         </ul>
 
         <h2>Conclusion</h2>

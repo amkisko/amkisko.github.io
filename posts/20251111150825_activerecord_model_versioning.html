@@ -39,7 +39,7 @@
             <li><strong>Storage constraints:</strong> No way to version custom attributes like attachments or rich text fields properly</li>
             <li><strong>Maintenance overhead:</strong> JSON/YAML storage makes it difficult to maintain and debug versions</li>
             <li><strong>No PostgreSQL support for YAML:</strong> YAML requires application-level parsing, adding complexity</li>
-            <li><strong>Schema rigidity:</strong> Changes to versioned attributes require application-level migrations rather than database-level schema changes</li>
+            <li><strong>Schema rigidity:</strong> Changes to versioned attributes require application-level migrations, with database-level schema changes intentionally avoided here</li>
         </ul>
 
         <p>The better approach is to have a proper schema—a table schema copy to separate <code>_translations</code> or <code>_versions</code> tables. This provides:</p>
@@ -222,4 +222,3 @@ gem 'active_version-audit' # For audit logging</code></pre>
     <script src="../scripts/posts_navigation.js"></script>
 </body>
 </html>
-

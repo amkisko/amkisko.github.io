@@ -164,8 +164,8 @@
         <p class="lead">The internet has become noisy for both humans and automated systems, with layers of overlays, tracking scripts, and dynamic wrappers around simple content, so Teplo introduces an intentional constraint: start from text and structure before everything else.</p>
         <p><strong>Name note:</strong> <code>Teplo</code> comes from <em>Text + Explorer</em>. It also resonates with the Slavic word <code>тепло</code> (Ukrainian, Polish, Belarusian, Russian), meaning “heat” or “warmth,” which fits the project’s goal of making web exploration feel direct and human-readable again. Reference: <a href="https://en.wiktionary.org/wiki/тепло">Wiktionary</a>.</p>
         <h2>Why It Matters Now</h2>
-        <p>LLM-based services and bot-driven workflows amplified an old problem, namely signal-to-noise ratio, because most automation tasks do not need CSS layout, animation, or JavaScript execution but instead require reliable text, links, forms, domains, and predictable request behavior.</p>
-        <p>Teplo treats pages as analysis and navigation input rather than visual theater, extracting plain text, structured links, forms (including hidden values), domains, and assets in a format that remains stable enough for CLI workflows, GUI workflows, and automation pipelines.</p>
+        <p>LLM-based services and bot-driven workflows amplified an old problem, namely signal-to-noise ratio, because most automation tasks primarily need reliable text, links, forms, domains, and predictable request behavior, with layout animation and JavaScript execution treated as secondary layers.</p>
+        <p>Teplo treats pages as analysis and navigation input and extracts plain text, structured links, forms (including hidden values), domains, and assets in a format that remains stable enough for CLI workflows, GUI workflows, and automation pipelines.</p>
 
         <h2>Correlation with LLM and Bot Workflows</h2>
         <p>Agentic workflows perform best when extraction is deterministic, and Teplo provides a compact textual surface that can be consumed by humans, scripts, and LLM-based pipelines without requiring a full browser runtime.</p>
@@ -183,12 +183,12 @@
         <h2>Keeping Inner Formation Clean and Sane</h2>
         <p>There is also a philosophical and cognitive reason for text-first tooling: the internet is increasingly polluted with generated artifacts that imitate meaning while carrying little responsibility, context, or care, and this surrogate layer gradually reshapes how we read, think, and communicate with each other.</p>
         <p>Keeping inner formation clean and sane means resisting passive consumption of polished synthetic output as final truth, then returning to sources, structure, and verifiable signals so that attention is not captured by noise and communication does not collapse into recursive imitation.</p>
-        <p>In that sense, Teplo is not only a utility for extraction; it is also a small hygiene practice for thought, helping users stay grounded in readable evidence when public space is saturated by fast, persuasive, and often disposable machine-made text.</p>
+        <p>In that sense, Teplo works as a utility for extraction and as a small hygiene practice for thought, helping users stay grounded in readable evidence when public space is saturated by fast, persuasive, and often disposable machine-made text.</p>
 
         <h2>Security Researchers and Web Developers</h2>
         <h3>Security Research</h3>
         <p>Teplo supports recon-style workflows through scan, relations, discovery extras (OpenAPI, GraphQL, OAuth/OIDC well-known, RSS, sitemap), and domain tracing in one coherent extraction path.</p>
-        <p>It also reduces inspection risk by avoiding JavaScript execution and layout-engine runtime behavior, which keeps the tool focused on parsing and transport rather than browser-like code execution.</p>
+        <p>It also reduces inspection risk by avoiding JavaScript execution and layout-engine runtime behavior, which keeps the tool focused on parsing and transport and away from browser-like code execution.</p>
 
         <h3>Ordinary Web Development</h3>
         <p>Teplo is useful even when you are not doing security work:</p>
@@ -199,19 +199,17 @@
             <li>build test fixtures and snapshots from real pages</li>
         </ul>
 
-        <h2>Why Teplo Is Not Postman or Bruno</h2>
+        <h2>Teplo and API Clients</h2>
         <p>Postman and Bruno are API clients, while Teplo is a text-only internet explorer that begins from real documents and navigation surfaces and only then allows request interaction where needed.</p>
-        <div class="not-postman">
-            Teplo is not replacing API clients. It solves a different layer: understanding and traversing web surfaces as text and structure, including links/forms/domains/assets and protocol discovery, with browser-like navigation constraints.
-        </div>
+        <p>Teplo works at a different layer: understanding and traversing web surfaces as text and structure, including links/forms/domains/assets and protocol discovery, with browser-like navigation constraints.</p>
 
         <h2>Why It Is Useful on Mobile</h2>
-        <p>On a phone, both bandwidth and attention are limited, so Teplo’s text-first approach reduces payload and cognitive load while still preserving actionable structure; Swift and Kotlin GUI implementations make this practical on iOS and Android rather than limiting usage to desktop terminals.</p>
+        <p>On a phone, both bandwidth and attention are limited, so Teplo’s text-first approach reduces payload and cognitive load while still preserving actionable structure; Swift and Kotlin GUI implementations make this practical on iOS and Android and keep it usable beyond desktop terminals.</p>
         <p>For incident response, field diagnostics, and quick verification outside a laptop environment, this creates a direct operational advantage.</p>
 
         <h2>Multilingual and Multi-Platform Build as a Strategy</h2>
         <p>Teplo is intentionally not tied to one runtime philosophy, with core and clients across Rust, Swift, JS, Zig, Kotlin, and Ruby, backed by shared test vectors and platform-specific interfaces.</p>
-        <p>This is not language tourism but resilience strategy:</p>
+        <p>This is resilience strategy in practice:</p>
         <ul>
             <li>same extraction logic tested across ecosystems</li>
             <li>native fit for different environments and teams</li>
@@ -220,7 +218,7 @@
         </ul>
 
         <h2>Final Note</h2>
-        <p>In a saturated web, text-only behavior is not nostalgia but an engineering choice, and Teplo is useful precisely because it removes unnecessary layers while keeping the internet inspectable for both humans and machines.</p>
+        <p>In a saturated web, text-only behavior remains an engineering choice, and Teplo is useful precisely because it removes unnecessary layers while keeping the internet inspectable for both humans and machines.</p>
 
         <section class="references">
             <h3>References</h3>

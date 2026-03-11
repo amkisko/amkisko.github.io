@@ -30,7 +30,7 @@
 
         <p>Building this responsiveness requires handling signatures that prove authenticity, parsing requests that arrive in different formats, storing callbacks that preserve state, formatting responses that satisfy Slack's requirements. The complexity accumulates like layers of sediment—each requirement building on the last, each edge case revealing another.</p>
 
-        <p><a href="https://github.com/amkisko/grape-slack-bot.rb">grape-slack-bot</a> provides a framework that handles this complexity, allowing you to focus on what your bot does rather than how it verifies signatures or parses requests. It integrates with Grape's routing system in Rails applications, automatically handles signature verification, manages callback storage, and provides a declarative configuration system that makes bot behavior clear and extensible.</p>
+        <p><a href="https://github.com/amkisko/grape-slack-bot.rb">grape-slack-bot</a> provides a framework that handles this complexity, allowing you to focus on what your bot does while signature verification and request parsing are handled consistently. It integrates with Grape's routing system in Rails applications, automatically handles signature verification, manages callback storage, and provides a declarative configuration system that makes bot behavior clear and extensible.</p>
 
         <h2>The Signature as Proof</h2>
 
@@ -90,7 +90,7 @@
 
         <h2>Conclusion</h2>
 
-        <p>Building Slack bots in Rails applications requires handling many low-level details: signature verification, request parsing, response formatting, callback storage, error handling. grape-slack-bot provides a framework that handles all of this complexity, allowing you to focus on what your bot does rather than how it handles Slack's requirements.</p>
+        <p>Building Slack bots in Rails applications requires handling many low-level details: signature verification, request parsing, response formatting, callback storage, error handling. grape-slack-bot provides a framework that handles all of this complexity, allowing you to focus on what your bot does while Slack-specific requirements stay in one predictable layer.</p>
 
         <p>The framework integrates with Grape's routing system in Rails, automatically handles security requirements, manages state across interactions using Rails.cache or other storage backends, and provides a declarative configuration system that makes bot behavior clear and extensible. Whether you're building simple slash commands or complex interactive bots with modals and events, grape-slack-bot provides the foundation you need for Rails-based Slack bot development.</p>
 

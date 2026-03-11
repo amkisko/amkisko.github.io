@@ -188,13 +188,13 @@
         <p>Versioning logic is no longer confined to one storage mode, because the gem supports both JSONB and table-based audit strategies while keeping revisions and translations schema-aligned for predictable querying and maintenance.</p>
 
         <h3>2. Operability</h3>
-        <p>Generators create repeatable structures, setup documentation covers existing projects, and migration guides provide realistic paths from previous gems so teams can evolve incrementally instead of rewriting everything by hand.</p>
+        <p>Generators create repeatable structures, setup documentation covers existing projects, and migration guides provide realistic paths from previous gems so teams can evolve incrementally without rewriting everything by hand.</p>
 
         <h3>3. Scale Readiness</h3>
         <p>The architecture is intentionally compatible with partitioning and sharding strategies, which matters most when version tables become the busiest and fastest-growing part of a production system.</p>
 
         <h2>How It Fits Rails Multi-DB Reality</h2>
-        <p>Most real systems eventually split concerns across writers, replicas, and shards, so ActiveVersion is designed for that reality instead of assuming that one default connection remains sufficient forever.</p>
+        <p>Most real systems eventually split concerns across writers, replicas, and shards, so ActiveVersion is designed for that reality without assuming that one default connection remains sufficient forever.</p>
         <p>Rails provides the primitives through <code>connects_to</code>, <code>connected_to</code>, role switching, and shard-aware routing, and ActiveVersion builds on these mechanisms so version records can be routed explicitly and observed predictably.</p>
 
         <pre><code>class Post &lt; ApplicationRecord
@@ -202,14 +202,14 @@
   has_audits shard: :audit_db
 end</code></pre>
 
-        <p>When this model is combined with PostgreSQL partition pruning and explicit retention policies, teams get a practical operating path where history remains available, query paths stay narrow, and storage costs remain visible rather than surprising.</p>
+        <p>When this model is combined with PostgreSQL partition pruning and explicit retention policies, teams get a practical operating path where history remains available, query paths stay narrow, and storage costs remain visible and predictable.</p>
 
         <h2>Why This Release Matters</h2>
         <p>The release matters because versioning is where product promises meet database pressure, and legal history, editorial workflow, localization, moderation trails, rollback safety, and support diagnostics all tend to converge in the same data layer.</p>
         <p>Designing this layer correctly early removes a class of future emergencies, while weak decisions here usually become long-term friction that is expensive to unwind later.</p>
 
         <h2>And the Elixir Thought</h2>
-        <p>There is also interest in a similar approach for the Elixir ecosystem later, not as a copy-paste port but as the same set of principles translated into Ecto-native conventions:</p>
+        <p>There is also interest in a similar approach for the Elixir ecosystem later, carrying the same principles translated into Ecto-native conventions:</p>
         <ul>
             <li>schema-first version storage</li>
             <li>clear separation of revisions, translations, and audits</li>
@@ -219,7 +219,7 @@ end</code></pre>
         <p>The Ruby release is the proving ground, and if an Elixir branch is built it should inherit operational lessons, not merely surface-level code shape.</p>
 
         <h2>Final Scene Before Tagging</h2>
-        <p>Release is not a finish line but a contract moment, because behavior becomes expectation and expectation becomes maintenance duty for the whole lifecycle that follows.</p>
+        <p>Release is a contract moment, because behavior becomes expectation and expectation becomes maintenance duty for the whole lifecycle that follows.</p>
         <p class="release-note">ActiveVersion is moving from proposal energy to release discipline; if the first story asked what should exist, this one documents what already works and what must remain reliable when other teams depend on it in production.</p>
 
         <section class="references">

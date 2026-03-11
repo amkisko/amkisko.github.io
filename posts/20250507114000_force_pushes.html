@@ -39,7 +39,7 @@
         </ul>
 
         <h2>The Force-with-lease Alternative</h2>
-        <p><code>--force-with-lease</code> is essentially <code>--force</code> with a seatbelt on. It only proceeds if the remote branch is still exactly in the state you expect (i.e., you have the latest commits). If someone has pushed new commits upstream since your last fetch, <code>--force-with-lease</code> will reject the push instead of silently overwriting them.</p>
+        <p><code>--force-with-lease</code> is essentially <code>--force</code> with a seatbelt on. It only proceeds if the remote branch is still exactly in the state you expect (i.e., you have the latest commits). If someone has pushed new commits upstream since your last fetch, <code>--force-with-lease</code> will reject the push and prevent silent overwrites.</p>
 
         <p>Most authorities now recommend using <code>--force-with-lease</code> by default. It's considered a safer alternative that ensures you don't overwrite someone else's work.</p>
 
@@ -91,7 +91,7 @@
 
         <p>These tools often implement safety features like:</p>
         <ul>
-            <li>Automatic use of <code>--force-with-lease</code> instead of raw force push</li>
+            <li>Automatic use of <code>--force-with-lease</code> over raw force push</li>
             <li>Clear visualization of what will be overwritten</li>
             <li>Confirmation dialogs with detailed explanations</li>
             <li>Integration with team policies and branch protection rules</li>
