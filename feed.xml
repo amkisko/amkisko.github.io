@@ -5,10 +5,19 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2026-03-06T11:00:50+00:00</updated>
+  <updated>2026-03-11T12:00:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>Manual Gravity in the Probability Storm</title>
+    <link href="https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html"/>
+    <id>https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html</id>
+    <updated>2026-03-11T12:00:00+00:00</updated>
+    <published>2026-03-11T12:00:00+00:00</published>
+    <summary>A futuristic story about LLM-era review discipline where constrained generation, manual acceptance, tests-first reading, and UAT keep delivery aligned with intent.</summary>
+  </entry>
 
   <entry>
     <title>Inner Formation in the Age of Bots</title>

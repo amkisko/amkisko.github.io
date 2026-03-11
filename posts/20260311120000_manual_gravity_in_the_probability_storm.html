@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Gravity in the Probability Storm</title>
+    <meta name="description" content="A futuristic story about code review in the LLM era: quality guards, manual acceptance, tests-first reading, staged validation, and intent alignment through demos and UAT.">
+    <meta name="keywords" content="llm, code review, manual testing, acceptance testing, rspec, uat, staging, software quality, futuristic story">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Manual Gravity in the Probability Storm">
+    <meta property="og:description" content="A futuristic story about code review in the LLM era: quality guards, manual acceptance, tests-first reading, staged validation, and intent alignment through demos and UAT.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html">
+    <meta property="article:published_time" content="2026-03-11T12:00:00+00:00">
+    <meta property="article:modified_time" content="2026-03-11T12:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Manual Gravity in the Probability Storm">
+    <meta name="twitter:description" content="A futuristic story about code review in the LLM era: quality guards, manual acceptance, tests-first reading, staged validation, and intent alignment through demos and UAT.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        :root {
+            --ink: #f4efe5;
+            --ink-soft: #d7cfc2;
+            --bg-1: #12100f;
+            --bg-2: #1f1814;
+            --bg-3: #2a1d16;
+            --accent: #ffbc6b;
+            --accent-soft: #ffd9aa;
+            --line: rgba(255, 212, 158, 0.36);
+        }
+
+        body {
+            font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+            background:
+                radial-gradient(120% 65% at 50% 0%, rgba(255, 188, 107, 0.17), transparent 58%),
+                radial-gradient(80% 52% at 18% 14%, rgba(255, 167, 87, 0.11), transparent 62%),
+                linear-gradient(180deg, var(--bg-3) 0%, var(--bg-2) 35%, var(--bg-1) 100%);
+            color: var(--ink);
+            max-width: 920px;
+            letter-spacing: 0.002em;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        article::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(255, 242, 225, 0.03) 1px, transparent 1px);
+            background-size: 100% 3px;
+            opacity: 0.35;
+            mix-blend-mode: soft-light;
+        }
+
+        h1 {
+            font-family: "Baskerville", "Didot", "Iowan Old Style", serif;
+            font-size: 3rem;
+            line-height: 1.07;
+            letter-spacing: 0.02em;
+            color: #fff7ea;
+            border: none;
+            margin-bottom: 0.75rem;
+            text-wrap: balance;
+        }
+
+        h2 {
+            font-family: "Baskerville", "Didot", "Iowan Old Style", serif;
+            color: var(--accent-soft);
+            border: none;
+            font-size: 1.42rem;
+            margin-top: 2.4rem;
+            margin-bottom: 0.85rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        h2::before {
+            content: "◦ ";
+            color: var(--accent);
+        }
+
+        p {
+            font-size: 1.14rem;
+            line-height: 1.8;
+            color: var(--ink);
+            text-wrap: pretty;
+            max-width: 76ch;
+        }
+
+        p + p {
+            margin-top: 1.05rem;
+        }
+
+        .lead {
+            font-size: 1.28rem;
+            line-height: 1.74;
+            color: #fff5e4;
+            max-width: 72ch;
+        }
+
+        .lead::first-letter {
+            font-size: 2.9em;
+            line-height: 0.82;
+            float: left;
+            margin-right: 0.1em;
+            margin-top: 0.08em;
+            color: var(--accent);
+            font-family: "Baskerville", "Didot", serif;
+        }
+
+        .date {
+            color: var(--ink-soft);
+            font-style: normal;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-size: 0.84rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .anchor-line {
+            width: 9.5rem;
+            height: 1px;
+            background: var(--line);
+            margin: 1.2rem 0 1.6rem;
+        }
+
+        .closing {
+            margin-top: 2rem;
+            color: #ffe8c8;
+            font-size: 1.2rem;
+            line-height: 1.75;
+        }
+
+        code {
+            background: rgba(255, 212, 158, 0.12);
+            border: 1px solid rgba(255, 212, 158, 0.35);
+            color: #ffe7c7;
+        }
+
+        a {
+            color: #ffd39a;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.2em;
+        }
+
+        @media (max-width: 860px) {
+            body {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            p {
+                font-size: 1.05rem;
+                line-height: 1.74;
+                max-width: 100%;
+            }
+
+            .lead {
+                font-size: 1.15rem;
+                line-height: 1.68;
+                max-width: 100%;
+            }
+
+            .lead::first-letter {
+                font-size: 2.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Manual Gravity in the Probability Storm</h1>
+        <div class="date">11 March 2026, Helsinki, Åndrei Makarov</div>
+        <div class="anchor-line" aria-hidden="true"></div>
+
+        <p class="lead">When the city switched to generated engineering, people celebrated speed, then celebrated volume, and only much later, when repositories began to glow with elegant wrongness, did anyone admit that a machine can manufacture confidence faster than a team can manufacture understanding, so the review rooms changed temperature and became places where every diff looked plausible, every commit looked clean, and every passing check looked like truth until real users touched a feature and the fiction cracked under a small human movement that no dashboard had ever seen.</p>
+
+        <p>I learned to move through that weather with a ritual shaped like crossing water at night, starting from generation inside hard guardrails where the model is free to suggest and unable to roam, while test suites, linters, formatters, syntax gates, and semantic scanners stand at the edge like old border posts, allowing the branch to pass when it can survive first contact and sending it back when the shine is only surface.</p>
+
+        <p>Then comes the part I trust with my hands, because the branch has to be run, clicked, stalled, pushed into awkward corners, and watched under delay, under impatience, under ordinary confusion, where behavior starts showing its real face and theory loses its theater, and this is usually the moment when the room gets quieter, as if everyone can hear a deeper layer opening under the polished text.</p>
+
+        <p>From there I walk into tests first, moving through RSpec files like shoreline markers after tide, finding what the branch believes about itself, adding missing traces where the sand is blank, and committing that map before touching deeper implementation, so the next descent has at least one rope back to the surface when the cave splits into too many convincing paths.</p>
+
+        <p>The implementation review that follows is where the cognitive weight really arrives, with branches inside branches inside branches, with new ideas appearing faster than they can be named, with creativity behaving as load-bearing labor, and I keep returning line by line until movement slows enough for shape to appear, then push, then pull again, and keep circling until the artifact stops performing and starts holding.</p>
+
+        <p>After that we carry the same branch into demo, staging, and UAT, and every environment bends the narrative a little differently, so intent turns into a moving sky, and the useful signals come from tiny things that are easy to miss in documents: a pause before clicking, a look exchanged across a table, a sentence corrected mid-air, a hesitation that reveals what nobody wrote but everyone expected.</p>
+
+        <p>Sometimes a consultant knows the product's hidden corridors better than the people who paid for the construction, and sometimes that knowledge really helps, yet the meaning of the build still has to be discovered with those who will live inside it after release, so confidence remains a tool for the next step, and the work continues in loops that leave traces across shared memory.</p>
+
+        <p class="closing">I still do not know whether this method is shelter, bridge, or only one temporary geometry for surviving probability storms, yet each time noise thickens we return to the same motion and find enough gravity to continue: generate under constraints, test the branch by hand, read the traces, descend into code, surface with others, revise, and return, until release carries a path that can be walked backward when night comes again.</p>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>
