@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When Reading Costs More Than Writing</title>
+    <meta name="description" content="An observation from 2023-2026: generated commit messages and review artifacts can become cheaper to produce than to read, shifting software practice toward local generation, manual verification, and selective trust.">
+    <meta name="keywords" content="commit messages, code review, llm, software workflow, cognitive load, verification, 2023 2026">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="When Reading Costs More Than Writing">
+    <meta property="og:description" content="An observation from 2023-2026: generated commit messages and review artifacts can become cheaper to produce than to read, shifting software practice toward local generation, manual verification, and selective trust.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html">
+    <meta property="article:published_time" content="2026-03-13T10:30:00+00:00">
+    <meta property="article:modified_time" content="2026-03-13T10:30:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="When Reading Costs More Than Writing">
+    <meta name="twitter:description" content="An observation from 2023-2026: generated commit messages and review artifacts can become cheaper to produce than to read, shifting software practice toward local generation, manual verification, and selective trust.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        :root {
+            --bg: #f6f3ec;
+            --ink: #1f1f1f;
+            --muted: #66625d;
+            --accent: #31506f;
+        }
+
+        body {
+            font-family: "IBM Plex Sans", "Inter", "Source Sans 3", system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            max-width: 860px;
+            letter-spacing: 0.002em;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            display: block;
+        }
+
+        .entry-meta {
+            position: static;
+            padding-right: 0;
+            border-right: none;
+            margin-bottom: 1.1rem;
+        }
+
+        .entry-main {
+            min-width: 0;
+        }
+
+        h1 {
+            border: none;
+            color: #22201d;
+            font-size: 2.62rem;
+            line-height: 1.14;
+            margin-bottom: 1rem;
+            text-wrap: balance;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            margin-top: 0.9rem;
+            width: 7rem;
+            border-top: 1px solid #d1c8b9;
+        }
+
+        p {
+            font-size: 1.11rem;
+            line-height: 1.78;
+            text-wrap: pretty;
+        }
+
+        p + p {
+            margin-top: 1rem;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            line-height: 1.74;
+            color: #252320;
+        }
+
+        .date {
+            color: var(--muted);
+            font-style: normal;
+            font-size: 0.82rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
+            font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Menlo", monospace;
+        }
+
+        .signal {
+            font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Menlo", monospace;
+            font-size: 0.82rem;
+            color: #4f6375;
+            letter-spacing: 0.04em;
+            text-transform: lowercase;
+            border-left: none;
+            padding-left: 0;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .observation {
+            color: #495d70;
+            font-style: italic;
+            margin-top: 1.6rem;
+            border-top: none;
+            padding-top: 0;
+        }
+
+        code {
+            background: #1d2732;
+            border: 1px solid #314456;
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 2.02rem;
+            }
+
+            p {
+                font-size: 1.02rem;
+                line-height: 1.69;
+            }
+
+            .lead {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <aside class="entry-meta">
+            <div class="date">13 March 2026, Helsinki, Åndrei Makarov</div>
+            <p class="signal">read_cost &gt; write_cost<br>verify_attention == scarce</p>
+        </aside>
+        <section class="entry-main">
+            <h1>When Reading Costs More Than Writing</h1>
+
+            <p class="lead">I started treating this as a minor annoyance and ended up recording it as a workflow event: generated commit messages often look acceptable from a distance and expensive up close, so expensive that if I have to read them carefully I can usually write a better one by hand in less time than it takes to verify the generated version.</p>
+
+            <p>At first this showed up only in occasional commits, then it became a stable branch in daily practice where the decision tree stopped being ideological and became practical, because according to the shape of the diff I either use a free commit message generator, or write it manually, or in rare cases ask the chatbot window for a draft, and every branch of that tree is now chosen by reading cost, not by novelty or tool preference.</p>
+
+            <p>The stranger part came later when the same pattern started appearing in review, where the old assumption said production should be expensive and consumption should be cheap, yet in LLM-heavy workflows production became almost free while reading stayed cognitively expensive, which means that in some sessions it feels cheaper to regenerate and inspect locally on your own machine than to parse someone else's generated explanation line by line, read-by-read.</p>
+
+            <p>This sounds irrational until you watch it for long enough across real projects, because once artifact generation is abundant the bottleneck moves to verification attention, and verification attention is still human, still finite, still metabolically costly, so the center of gravity shifts from "can we produce" to "can we trust what we produced without paying more to read it than to make another candidate".</p>
+
+            <p>In that landscape commit messages become a small laboratory for a larger transition, with readable truth gradually separating from fluent output, and the practical response becomes selective trust where machines can draft aggressively but humans keep final authorship at the points where intent and accountability must stay legible.</p>
+
+            <p class="observation">Observation window: this behavior has repeated across multiple projects from 2023 to 2026, and the pattern keeps strengthening as generation speed rises faster than reading reliability.</p>
+        </section>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

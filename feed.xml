@@ -5,10 +5,37 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2026-03-11T12:00:00+00:00</updated>
+  <updated>2026-03-13T14:20:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>The Distance Grows</title>
+    <link href="https://amkisko.github.io/posts/20260313142000_the_distance_grows.html"/>
+    <id>https://amkisko.github.io/posts/20260313142000_the_distance_grows.html</id>
+    <updated>2026-03-13T14:20:00+00:00</updated>
+    <published>2026-03-13T14:20:00+00:00</published>
+    <summary>A story about hallucinations, dreams, definitions, and why outsourced language creates distance between words and lived experience.</summary>
+  </entry>
+
+  <entry>
+    <title>Playing Computer, Playing Music</title>
+    <link href="https://amkisko.github.io/posts/20260313130000_playing_computer_playing_music.html"/>
+    <id>https://amkisko.github.io/posts/20260313130000_playing_computer_playing_music.html</id>
+    <updated>2026-03-13T13:00:00+00:00</updated>
+    <published>2026-03-13T13:00:00+00:00</published>
+    <summary>A philosophical story about intention, effort, and distance: when sound machines play, when humans play, and how juggling helps redraw the line.</summary>
+  </entry>
+
+  <entry>
+    <title>When Reading Costs More Than Writing</title>
+    <link href="https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html"/>
+    <id>https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html</id>
+    <updated>2026-03-13T10:30:00+00:00</updated>
+    <published>2026-03-13T10:30:00+00:00</published>
+    <summary>Observation record from 2023-2026: generated commit and review artifacts can become cheaper to produce than to read, shifting practice toward selective trust and local verification.</summary>
+  </entry>
 
   <entry>
     <title>Manual Gravity in the Probability Storm</title>
