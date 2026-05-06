@@ -5,10 +5,19 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2026-03-13T14:20:00+00:00</updated>
+  <updated>2026-05-06T21:57:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>Reality-Driven Development</title>
+    <link href="https://amkisko.github.io/posts/20260506215700_reality_driven_development.html"/>
+    <id>https://amkisko.github.io/posts/20260506215700_reality_driven_development.html</id>
+    <updated>2026-05-06T21:57:00+00:00</updated>
+    <published>2026-05-06T21:57:00+00:00</published>
+    <summary>A novella about a river, a bridge, and specification as media about a solution—with riverbank notes on verification, sessions, and weight.</summary>
+  </entry>
 
   <entry>
     <title>The Distance Grows</title>

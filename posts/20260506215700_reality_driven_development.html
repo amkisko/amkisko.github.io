@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality-Driven Development</title>
+    <meta name="description" content="A novella about a river, a bridge, a speaking box, and why a specification compresses contact with the world, or mere noise when no crossing had weight.">
+    <meta name="keywords" content="specification, engineering, verification, juggling, direct action, LLM, pull request, product development">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Reality-Driven Development">
+    <meta property="og:description" content="A novella about a river, a bridge, a speaking box, and why a specification compresses contact with the world, or mere noise when no crossing had weight.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260506215700_reality_driven_development.html">
+    <meta property="article:published_time" content="2026-05-06T21:57:00+00:00">
+    <meta property="article:modified_time" content="2026-05-06T21:57:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Reality-Driven Development">
+    <meta name="twitter:description" content="A novella about a river, a bridge, a speaking box, and why a specification compresses contact with the world, or mere noise when no crossing had weight.">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        /*
+          Theme: river-ledger. Calm neutral field, system typography stack, blog accent links.
+          Aims for comfortable measure, WCAG-friendly contrast, visible focus, reduced motion respect.
+        */
+        :root {
+            --page-bg: #f5f5f7;
+            --page-bg-end: #ebebed;
+            --ink: #1d1d1f;
+            --muted: #6e6e73;
+            --hairline: #d2d2d7;
+            --note-bg: #ffffff;
+            --note-border: #c7c7cc;
+            --link: #7a6348;
+            --link-hover: #6b5a42;
+            --focus-ring: #0071e3;
+        }
+
+        body {
+            font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+            background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-end) 100%);
+            color: var(--ink);
+            max-width: 40rem;
+            letter-spacing: 0.001em;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        h1 {
+            border: none;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: clamp(1.85rem, 5vw, 2.45rem);
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: -0.022em;
+            margin-bottom: 0.65rem;
+            text-wrap: balance;
+        }
+
+        h1::after {
+            content: "";
+            display: block;
+            margin: 0.75rem 0 0;
+            width: 6.5rem;
+            border-top: 1px solid var(--hairline);
+        }
+
+        .subtitle {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 400;
+            line-height: 1.45;
+            color: var(--muted);
+            margin: 0 0 1rem;
+            text-wrap: pretty;
+        }
+
+        .date {
+            color: var(--muted);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.8125rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 1.35rem;
+        }
+
+        p {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            text-wrap: pretty;
+            max-width: none;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        p + p {
+            margin-top: 1rem;
+        }
+
+        .lead {
+            font-size: 1.125rem;
+            line-height: 1.65;
+            text-indent: 0;
+            color: var(--ink);
+        }
+
+        a {
+            color: var(--link);
+            text-underline-offset: 0.18em;
+        }
+
+        a:hover {
+            color: var(--link-hover);
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--focus-ring);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
+        .live-notes {
+            margin-top: 2.75rem;
+            padding: 1.25rem 1.25rem 1.1rem;
+            background: var(--note-bg);
+            border: 1px solid var(--note-border);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .live-notes-intro {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin: 0 0 1rem;
+            line-height: 1.5;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .live-notes h2 {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 0.85rem;
+            border: none;
+            padding: 0;
+        }
+
+        .live-notes dl {
+            margin: 0;
+        }
+
+        .live-notes dt {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8125rem;
+            color: var(--muted);
+            margin-top: 0.85rem;
+        }
+
+        .live-notes dt:first-child {
+            margin-top: 0;
+        }
+
+        .live-notes dd {
+            margin: 0.35rem 0 0;
+            font-size: 0.9375rem;
+            line-height: 1.55;
+            color: var(--ink);
+        }
+
+        .closing {
+            margin-top: 1.6rem;
+            font-style: italic;
+            color: #3a3a3c;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-left: 1.15rem;
+                padding-right: 1.15rem;
+            }
+
+            p {
+                font-size: 1.02rem;
+                line-height: 1.68;
+            }
+
+            .lead {
+                font-size: 1.05rem;
+            }
+
+            .live-notes {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            a {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <article>
+        <h1>Reality-Driven Development</h1>
+        <p class="subtitle">Or why specification is media about a solution, not the solution itself.</p>
+        <div class="date">6 May 2026, Helsinki, Åndrei Makarov</div>
+
+        <p class="lead">The elders kept the old bridge in drawings, unfolded them every morning on a long table in the hall, weighed the corners with brass cups, and spoke in low voices as if the paper were sleeping; on that paper the bridge wore clean ribs, obedient arches, a measured belly over water where no rain bent it, no cart broke it, no child ran too early, no winter entered the joints, so it became the safest bridge in the town, safest because nobody had ever stepped on it.</p>
+
+        <p>Beyond the hall the river moved with brown shoulders under the mist, taking branches, foam, dead leaves, once a goat, once half a shed roof, and carrying all of it past the market with the same dull patience, while people still came to the bank and looked across at the mill, the orchard, the road to the northern stones: everything visible, near enough for the eye, too far for the foot.</p>
+
+        <p>A mason named Yrjö lived by the kiln and slept badly, hearing at night the river knock stones together like teeth, then in the morning going to the hall to stand near the door and watch the elders slide little wooden markers across the drawings where every future plank had a name, where a support that did not yet exist already had a disputed angle, where sealed jars held river mud labelled by season and mood.</p>
+
+        <p>Yrjö said nothing and went to the bank with a rope, three stakes, and a plank from his own shed.</p>
+
+        <p>Before noon the first stake slipped, the second split under the hammer, and the wet plank twisted and threw him waist-deep into the river while boys laughed from the grass and an old woman crossed herself; he came out coughing, one shoe gone, blood on his thumb, and dragged the plank back up through the mud until, evening by evening, the bank near the willow taught him false ground, the stone under the reeds taught him good bearing, and by the third day a rope held.</p>
+
+        <p>After supper the hall heard of it in fragments: one elder muttered about a disturbed sequence, another about a crossing not approved, a third about work that could not be recognized until it had been named. When morning came he was on the bank again with two apprentices at his heels.</p>
+
+        <p>The river took a hammer and returned a lesson, took a badly cut brace and returned a better angle, took pride each day and left a darker knowledge behind, while the bridge climbed its stages: a wound in the mud, a crooked line, a trembling strip a dog could cross, a narrow way for one person holding breath, and each evening Yrjö scarred the drawings with soot and knife scratches because the paper changed only after the wood had changed, the words trailing the bruises.</p>
+
+        <p>In spring a stranger brought a speaking box with a glass face and a voice like a clerk, a priest, and a flute played under ice, a thing that could read the elders’ drawings, remember old floods, count loads, compare knots, list weak beams, and suggest where the next support might stand, until the elders feared it, loved it, and began asking for more drawings than any hand could copy.</p>
+
+        <p>Yrjö carried the box to the river, set it on a dry stone, and when it spoke of the northern current he checked the water, when it spoke of rot he opened the beam, when it proposed three braces he built the smallest first and listened to it complain under weight, useful sometimes and fog sometimes, treating both the same, mallet within reach.</p>
+
+        <p>By midsummer the town had changed its disease but not its hunger: the hall filled with scrolls brighter than the old ones, the box lending language for courage not yet earned, and its descriptions of the finished bridge grew so beautiful that people began to speak as if they had already crossed, praising future timber, imagined railings, the communal promise of a road still ending in mud, while the drawings multiplied like pale mushrooms.</p>
+
+        <p>Yrjö stopped visiting the hall because it had turned into a warm room where the town’s nervous system could rehearse order without paying in weight, whereas on the bank that nervous system narrowed to a foot, a board, water, and consequence; two honest rooms, though only one fed flour across the river.</p>
+
+        <p>He stayed where the river could interrupt him, where rain loosened a joint, a cart cracked a plank, a child found a gap too wide for a small foot, a horse refused the sound of hollow boards, each trouble arriving without ceremony and staying until the bridge changed; the apprentices learned the note of a beam under load, a low truth in a good piece, a thin lie in a bad one, then tink, tonk, särö, a quiet ring, the hand ahead of the mouth.</p>
+
+        <p>One evening Maaria, the youngest apprentice, found Yrjö by the unfinished rail juggling three river stones he threw badly, as if arguing with gravity, dropping one and then another, laughing without softness and starting again from the catch.</p>
+
+        <p>“You build like that,” she said.</p>
+
+        <p>Yrjö kept the stones moving. “That builds like us.”</p>
+
+        <p>In the air the stones were never quite owned, neither part of the hand nor yet lost nor yet caught, living in order only through timing, where too much fear dropped them and too much confidence launched them past reach, each throw correcting the last and accusing the next until Maaria saw the bridge inside the pattern: body, object, weather, mistake, return.</p>
+
+        <p>The pattern wore an old blunt name: juggling, the creation, maintenance, and control of an unstable state inside the body–object–environment system, where the object stays free of a permanent rigid grip and control runs on rhythm, impulse, balance, a phase of free movement, and continuous correction; locomotion steadies the body’s instability for movement’s sake, juggling steadies the object’s instability through the deliberate break in holding, and when instability is performed by a living body in real time you may call it juggling, whereas when instability is only represented by a steady machine you have media about juggling.</p>
+
+        <p>The speaking box could trace a juggler’s arc with tender precision, yet it could not catch the town’s stone.</p>
+
+        <p>At summer’s end the elders descended in formal coats, the stranger behind them with the speaking box wrapped in blue cloth, and they carried the final specification in red ink with the town’s seal pressed deep in wax, which the oldest elder offered toward Yrjö like a relic while he wiped his hands on his trousers, read, and the apprentices closed around him and the river held its old animal patience below.</p>
+
+        <p>The document was serious, full of true things drawn partly from the box, partly from the elders, partly from older bridges, and largely from the marks Yrjö had cut into the working drawings after the river had hurt him, a handsome corpse of many living moments.</p>
+
+        <p>He folded it once, laid it under a stone against the wind, and lifted the next beam.</p>
+
+        <p>Silence held even among the elders while the beam settled and the low note ran through wood, rope, and mud, agreement of the kind wood understands.</p>
+
+        <p>The first full crossing came before dawn, without ribbon or speech: Maaria crossed with a sack of flour while Yrjö watched from the bank, and halfway over she stopped when the mist opened and the orchard rose on the far side, wet and silver, close as a hand, the boards trembling under her like something alive enough to answer weight rather than like a drawing or a promise.</p>
+
+        <p>When she came back the town was waking with smoke, opening doors, a shout on the air, elders hurrying down too late with ceremony, the speaking box humming inside its cloth, and the river passing beneath them all unchanged in hunger except that people could now cross.</p>
+
+        <p>That night by the kiln Yrjö wrote one sentence on the back of the sealed specification, not for the elders, nor the box, nor the apprentices who would find it later: <em>Reality came before the plan; planning without contact was a painted door on a wall.</em></p>
+
+        <p class="closing">He slept while the next river was already speaking in his sleep.</p>
+
+        <section class="live-notes" aria-labelledby="riverbank-notes-heading">
+            <h2 id="riverbank-notes-heading">Riverbank notes</h2>
+            <p class="live-notes-intro">Fragments for later posts: ledger entries, not promises.</p>
+            <dl>
+                <dt>2026-05-01</dt>
+                <dd>Pull request as capsule: intent, diff, checks, demo, risk note. What changed in the product, not what calmed the author.</dd>
+                <dt>2026-05-03</dt>
+                <dd>Tool-calling models widen inspection; trust follows verification, not fluency. The chat surface only routes work.</dd>
+                <dt>2026-05-04</dt>
+                <dd>When the patient in the room is the planner’s inner weather, the customer’s crossing waits in the mist. Name which session it is.</dd>
+                <dt>2026-05-06</dt>
+                <dd>Specification after contact: compress the bruises. Specification before contact: sometimes scaffold, sometimes theater, and weight tells.</dd>
+            </dl>
+        </section>
+    </article>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>
