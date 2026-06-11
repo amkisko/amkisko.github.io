@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slop Is a Lazy Word</title>
+    <meta name="description" content="A stand-up story about generic culture, Suno overload, commit messages, lunch under a generated wall, and why touch matters more than purity.">
+    <meta name="keywords" content="slop, generated culture, suno, sound, authorship, care, demoscene, touch">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Slop Is a Lazy Word">
+    <meta property="og:description" content="A stand-up story about generic culture, Suno overload, commit messages, lunch under a generated wall, and why touch matters more than purity.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html">
+    <meta property="article:published_time" content="2026-06-04T12:00:00+00:00">
+    <meta property="article:modified_time" content="2026-06-05T18:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Slop Is a Lazy Word">
+    <meta name="twitter:description" content="A stand-up story about generic culture, Suno overload, commit messages, lunch under a generated wall, and why touch matters more than purity.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        /* LaTeX article (11pt) on screen + A4 print; demoscene plasma stays outside the sheet */
+        :root {
+            --tex-size: 11pt;
+            --tex-baseline: 13.6pt;
+            --tex-parindent: 1.5em;
+            --tex-textwidth: 42em;
+            --tex-margin-outer: clamp(1rem, 4vw, 2.54cm);
+            --tex-margin-inner-v: clamp(1.75rem, 5vh, 2.54cm);
+            --tex-margin-inner-h: clamp(1.35rem, 4vw, 2cm);
+            --tex-ink: #0c0c0c;
+            --tex-ink-muted: #3a3a3a;
+            --tex-paper: #fbfaf7;
+            --tex-paper-edge: #d8d4cb;
+            --tex-mono: "IBM Plex Mono", "Latin Modern Mono", "Courier New", monospace;
+            --tex-serif: "STIX Two Text", "Latin Modern Roman", "Computer Modern Unicode", "Times New Roman", serif;
+            --fax-line: rgba(0, 0, 0, 0.035);
+        }
+
+        html {
+            background: #08090c;
+        }
+
+        body.tex-page {
+            position: relative;
+            max-width: none;
+            margin: 0;
+            padding: var(--tex-margin-outer);
+            padding-bottom: calc(var(--tex-margin-outer) + 3rem);
+            font-family: var(--tex-serif);
+            font-size: var(--tex-size);
+            line-height: var(--tex-baseline);
+            color: var(--tex-ink);
+            background: transparent !important;
+            font-weight: 400;
+            letter-spacing: 0;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1, "liga" 1;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body.tex-page h1 {
+            font-family: var(--tex-serif);
+            font-size: inherit;
+            font-weight: 500;
+            border: none;
+            padding: 0;
+            margin: 0;
+            letter-spacing: 0;
+            line-height: inherit;
+        }
+
+        #plasma-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.38;
+        }
+
+        body.tex-page::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                var(--fax-line) 2px,
+                var(--fax-line) 3px
+            );
+            opacity: 0.4;
+        }
+
+        #map-link,
+        #to-top {
+            z-index: 10;
+        }
+
+        .sheet {
+            position: relative;
+            z-index: 3;
+            box-sizing: border-box;
+            width: min(100%, calc(var(--tex-textwidth) + 2 * var(--tex-margin-inner-h)));
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: var(--tex-margin-inner-v) var(--tex-margin-inner-h);
+            background: var(--tex-paper);
+            color: var(--tex-ink);
+            border: 1px solid var(--tex-paper-edge);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.65) inset,
+                0 12px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        .tex-doc {
+            max-width: var(--tex-textwidth);
+            margin: 0 auto;
+        }
+
+        .maketitle {
+            text-align: center;
+            margin: 0 0 1.75em;
+            padding-bottom: 1.25em;
+            border-bottom: 0.4pt solid var(--tex-ink);
+        }
+
+        .doc-class {
+            font-family: var(--tex-mono);
+            font-size: 8pt;
+            line-height: 1.35;
+            color: var(--tex-ink-muted);
+            text-align: left;
+            margin: 0 0 1.25em;
+            white-space: pre-wrap;
+        }
+
+        .maketitle h1 {
+            font-size: 1.45em;
+            font-weight: 500;
+            line-height: 1.22;
+            margin: 0 0 0.65em;
+            text-wrap: balance;
+        }
+
+        .doc-author,
+        .doc-date {
+            font-size: 1em;
+            line-height: var(--tex-baseline);
+            margin: 0.2em 0 0;
+            color: var(--tex-ink-muted);
+        }
+
+        body.tex-page p {
+            margin-bottom: 0;
+        }
+
+        .doc-body p {
+            margin: 0;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            hyphenate-limit-chars: 6 3 3;
+            text-wrap: pretty;
+            orphans: 3;
+            widows: 3;
+        }
+
+        .doc-body p + p:not(.tape):not(.end-strip) {
+            text-indent: var(--tex-parindent);
+        }
+
+        .doc-body .tape,
+        .doc-body .end-strip {
+            text-indent: 0;
+        }
+
+        .doc-body p.lead {
+            text-indent: 0;
+        }
+
+        .doc-body p.lead + p {
+            text-indent: var(--tex-parindent);
+        }
+
+        em {
+            font-style: italic;
+            font-weight: 400;
+            color: inherit;
+        }
+
+        .tape {
+            font-family: var(--tex-mono);
+            font-size: 9pt;
+            line-height: 1.45;
+            color: var(--tex-ink-muted);
+            margin: 1em 0 1em 2em;
+            padding: 0.35em 0 0.35em 1em;
+            border-left: 1.2pt solid #999;
+            text-align: left;
+            text-indent: 0;
+            hyphens: none;
+        }
+
+        .tape-label {
+            display: block;
+            font-size: 7pt;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.35em;
+            color: #666;
+        }
+
+        .end-strip {
+            margin-top: 2em;
+            padding-top: 0.75em;
+            border-top: 0.4pt solid #bbb;
+            font-family: var(--tex-mono);
+            font-size: 8pt;
+            color: var(--tex-ink-muted);
+            text-align: center;
+            text-indent: 0;
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                --tex-textwidth: 100%;
+            }
+
+            body.tex-page {
+                padding: 0.75rem;
+                padding-bottom: 3rem;
+            }
+
+            .sheet {
+                padding: 1.35rem 1.1rem 1.5rem;
+            }
+
+            .doc-body p {
+                text-align: left;
+                hyphens: auto;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #plasma-canvas {
+                display: none;
+            }
+
+            html {
+                background: #1a2230;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 2.54cm 2cm 2.54cm 2cm;
+        }
+
+        @media print {
+            html {
+                background: #fff;
+            }
+
+            body.tex-page {
+                padding: 0;
+                background: #fff !important;
+            }
+
+            body.tex-page::before,
+            #plasma-canvas,
+            #map-link,
+            #to-top {
+                display: none !important;
+            }
+
+            .sheet {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+                border: none;
+                box-shadow: none;
+                background: #fff;
+            }
+
+            .tex-doc {
+                max-width: none;
+            }
+
+            .maketitle {
+                page-break-after: avoid;
+            }
+
+            .doc-body p {
+                text-align: justify;
+            }
+
+            .tape {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="tex-page">
+    <canvas id="plasma-canvas" aria-hidden="true"></canvas>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <div class="sheet">
+        <article class="tex-doc">
+            <header class="maketitle">
+                <p class="doc-class">\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{stix}</p>
+                <h1>Slop Is a Lazy Word</h1>
+                <p class="doc-author">Åndrei Makarov</p>
+                <p class="doc-date">4 June 2026, Helsinki</p>
+            </header>
+
+            <div class="doc-body">
+        <p class="lead">A friend said <em>slop</em> across the table the way you say a smell, chin lifted, plate untouched, and I felt the word try to put him outside the thing he was naming while keeping the rest of us clean; later I decided the word was too lazy for what I actually fear, because the fear is older than the current machines and stranger than “bad quality.”</p>
+
+        <p>Television, newspapers, radio, cinema, the early internet: mass media already taught the same appetite long before anyone posted “stop slop”; recycled plots, catchphrases, stock photos, jingles, B-roll, trailer grammar, comment-section tone, all of it was hybrid long ago, spliced from very small fragments with direct re-use, a line lifted here, a gesture pasted there, a face, a sting, a transition everyone recognises, and pop culture never apologised because DJing, sampling, templating, remix, and productised comfort are the normal engine, not a new plague.</p>
+
+        <p>Generic material, templating, remixing: I do not treat these as dangers in themselves; my first serious listening was radio glue and DJ tension, folk melodies surviving because mouths misremembered them on purpose, design languages becoming visible only after repetition made them boring enough to see; people productise things I would never productise, without justification I can share, and still it is what it is.</p>
+
+        <p>What changed in the first weeks of extensive Suno use was psycho before aesthetics: overload arrived as sound built from a huge count of tiny known portions, micro-fragments directly re-used until the ear heard one smooth hybrid object; that was the mystical part, uncanny and bodily, a Frankenstein effect where recognition piled up faster than meaning, and I marked that as the hazard while the cultural machinery around it stayed familiar.</p>
+
+        <p class="tape"><span class="tape-label">verbatim</span>suno / micro-fragments / hybrid smooth / chest overload</p>
+
+        <p>On a tram with headphones the volume was ordinary; the overload was recognition; vocal curves, fake swells, genre memory, platform memory, radio memory, all liquid at once; my ear filed it as music while something lower filed it as a séance of references speaking in unison, comme une machine douce, а внутри шорох костей; I still cannot name the effect cleanly, but I trust the body’s report.</p>
+
+        <p>Sound reaches the nervous system before opinion; it occupies duration, becomes weather; I can skim text, look away from an image, close a tab, yet I swallow enormous visual volume daily and survive better, as if filters and guards and the habit of looking with half-attention protect me there while audio enters with fewer doors; sound stays the sharper warning, touch-sensitive even when people “play computers,” modular walls with quantisation and automation still posing as hands.</p>
+
+        <p>Text can approach the same mysticism, but it costs more labour: stacked philosophical fog, therapy cadence, manifesto thunder, academic rhythm, internet confession, political posture, poetic wound, technical certainty, arranged until the page glows; I have pushed text far enough to see a very specific psycho effect, interference that mimics depth, and I keep that topic narrow because the mechanism is not identical to sound even when the family resemblance is real.</p>
+
+        <p>Code is text in a rational prison: we are taught patterns, frameworks, “best practices,” seldom taught style as a living memory of how others write; I do not remember colleagues’ handwriting in code the way I remember a player’s timing; formatters run, authorship thins, signatures disappear, and generated code meets a field already trained to accept anonymous output; the lack of art in coding is not a moral lecture, it is an observed vacancy.</p>
+
+        <p>Helsinki already has lunch places where owners used chat tools to spawn interior images, printed them, mounted them as environment; I want to boycott that kind of visual noise, the niche is tiny, most people come to eat and experience the wall as decoration; if friends suggest one of those rooms I will probably go anyway, shrug included, hunger and company winning over purity theatre.</p>
+
+        <p class="tape"><span class="tape-label">verbatim</span>pöly / прах / poussière — less care, same meal</p>
+
+        <p>Most customers do not weigh commit messages, do not hear formatting debates, do not treat the merge thread as historical trace; distancing spreads the same way through food, sound, software, public surfaces, owners who do not see the image as image, developers who do not see style as handwriting, listeners who do not ask whether a song needed its own pulse; typical consumerism, accelerated, smoother, cheaper to produce carelessness.</p>
+
+        <p>At this point I see little use in calling particular materials <em>slop</em>; the phenomenon is cultural, ambient, already inside TV habits and feeds and walls and repos; the sharper questions stay sensory: does this hybrid compress too many familiar micro-pieces into one narcotic object, does it train numbness, does it leave room for interpretation, does it carry attention, does it know why it exists.</p>
+
+        <p>I still want remix, template, automation, generated culture as culture; I want criticism without the lazy word; in sound I listen for breath, wrong notes, tension, silence; in text I watch for stacked mystic resonance; in code I try to leave traces a future reader can feel; in daily contradiction I eat under the printed mural and hope the noticing stays, small, unheroic, real, because the last loss I fear is the loss of the difference itself, not the presence of fragments, but the disappearance of touch across the whole route from making to public trace.</p>
+
+        <p class="end-strip">\hfill touch remains \hfill</p>
+            </div>
+        </article>
+    </div>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+    <script>
+        (function () {
+            var canvas = document.getElementById("plasma-canvas");
+            if (!canvas) return;
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+            var ctx = canvas.getContext("2d", { alpha: true });
+            var w = 0;
+            var h = 0;
+            var time = 0;
+            var imageData;
+            var data;
+
+            function resize() {
+                w = Math.floor(window.innerWidth / 2);
+                h = Math.floor(window.innerHeight / 2);
+                canvas.width = w;
+                canvas.height = h;
+                canvas.style.width = "100%";
+                canvas.style.height = "100%";
+                imageData = ctx.createImageData(w, h);
+                data = imageData.data;
+            }
+
+            function palette(t) {
+                var r = Math.sin(t * 0.11 + 0.0) * 80 + 48;
+                var g = Math.sin(t * 0.11 + 2.1) * 90 + 40;
+                var b = Math.sin(t * 0.11 + 4.2) * 110 + 72;
+                return [r | 0, g | 0, b | 0];
+            }
+
+            function frame() {
+                var i = 0;
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var v =
+                            Math.sin(x * 0.02 + time) +
+                            Math.sin(y * 0.025 + time * 1.1) +
+                            Math.sin((x + y) * 0.018 - time * 0.7) +
+                            Math.sin(Math.sqrt(x * x + y * y) * 0.04 + time * 0.5);
+                        var c = palette(v * 1.7 + time * 2.0);
+                        data[i++] = c[0];
+                        data[i++] = c[1];
+                        data[i++] = c[2];
+                        data[i++] = 255;
+                    }
+                }
+                ctx.putImageData(imageData, 0, 0);
+                time += 0.045;
+                requestAnimationFrame(frame);
+            }
+
+            resize();
+            window.addEventListener("resize", resize);
+            requestAnimationFrame(frame);
+        })();
+    </script>
+</body>
+</html>

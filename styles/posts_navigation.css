@@ -168,3 +168,38 @@
     opacity: 0.5;
     filter: drop-shadow(0 0 3px rgba(241,196,15,0.4));
 }
+
+/* Mobile compass: intro → tuck off-screen → peek on scroll → expand on interaction */
+@media (max-width: 767px) {
+    #map-link {
+        top: 12px;
+        right: 0;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    #map-link.compass-tucked {
+        transform: translateX(calc(100% - 22px));
+    }
+
+    #map-link.compass-scroll-peek {
+        transform: translateX(calc(100% - 44px));
+    }
+
+    #map-link.compass-expanded,
+    #map-link:hover,
+    #map-link:focus-visible,
+    #map-link.hover {
+        transform: translateX(-12px);
+    }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+    #map-link {
+        transition: none;
+    }
+
+    #map-link.compass-tucked {
+        transform: translateX(calc(100% - 28px));
+    }
+}

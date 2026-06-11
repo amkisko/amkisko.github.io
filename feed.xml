@@ -5,10 +5,37 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2026-05-06T21:57:00+00:00</updated>
+  <updated>2026-06-06T12:00:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
+
+  <entry>
+    <title>Before the Dashboard</title>
+    <link href="https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html"/>
+    <id>https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html</id>
+    <updated>2026-06-06T12:00:00+00:00</updated>
+    <published>2026-06-06T12:00:00+00:00</published>
+    <summary>After the DAW-less evening: tape, green tea, verification culture, platforms, and music before the dashboard takes the origin.</summary>
+  </entry>
+
+  <entry>
+    <title>A DAW-less Evening</title>
+    <link href="https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html"/>
+    <id>https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html</id>
+    <updated>2026-06-05T12:00:00+00:00</updated>
+    <published>2026-06-05T12:00:00+00:00</published>
+    <summary>A fairy-tale story about hardware jams, green tea, the severe DAW-less club, and publishing sound without the glowing rectangle.</summary>
+  </entry>
+
+  <entry>
+    <title>Slop Is a Lazy Word</title>
+    <link href="https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html"/>
+    <id>https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html</id>
+    <updated>2026-06-04T12:00:00+00:00</updated>
+    <published>2026-06-04T12:00:00+00:00</published>
+    <summary>A stand-up story about generic culture, Suno overload, commit messages, lunch under a generated wall, and why touch matters more than purity.</summary>
+  </entry>
 
   <entry>
     <title>Reality-Driven Development</title>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Before the Dashboard</title>
+    <meta name="description" content="After the DAW-less evening: tape, green tea, verification culture, platforms, and music before the dashboard takes the origin.">
+    <meta name="keywords" content="daw-less, spotify, music, platform, verification, tape, helsinki, attention">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Before the Dashboard">
+    <meta property="og:description" content="After the DAW-less evening: tape, green tea, verification culture, platforms, and music before the dashboard takes the origin.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html">
+    <meta property="article:published_time" content="2026-06-06T12:00:00+00:00">
+    <meta property="article:modified_time" content="2026-06-06T20:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Before the Dashboard">
+    <meta name="twitter:description" content="After the DAW-less evening: tape, green tea, verification culture, platforms, and music before the dashboard takes the origin.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        /*
+         * Layout tokens aligned with Helsinki Design System (hds.hel.fi):
+         * colour, spacing, focus — reference only, not a full HDS bundle.
+         */
+        :root {
+            --color-coat-of-arms: #0072c6;
+            --color-coat-of-arms-dark: #005799;
+            --color-coat-of-arms-light: #e6f4ff;
+            --color-coat-of-arms-medium-light: #b5daf7;
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-black-5: #f2f2f2;
+            --color-black-10: #e6e6e6;
+            --color-black-20: #cccccc;
+            --color-black-30: #b3b3b3;
+            --color-black-60: #666666;
+            --color-black-80: #333333;
+            --color-black-90: #1a1a1a;
+            --color-focus-outline: #0072c6;
+            --spacing-2-xs: 0.5rem;
+            --spacing-xs: 0.75rem;
+            --spacing-s: 1rem;
+            --spacing-m: 1.5rem;
+            --spacing-l: 2rem;
+            --spacing-xl: 2.5rem;
+            --spacing-2-xl: 3rem;
+            --tex-size: 11pt;
+            --tex-baseline: 13.6pt;
+            --tex-parindent: 1.5em;
+            --tex-textwidth: 40em;
+            --tex-serif: "STIX Two Text", "Latin Modern Roman", "Computer Modern Unicode", "Times New Roman", serif;
+            --tex-ink: #0c0c0c;
+            --tex-ink-muted: #4a4a4a;
+            --tex-paper: #fffdf9;
+        }
+
+        html {
+            background: var(--color-black-90);
+        }
+
+        body.tex-page {
+            position: relative;
+            max-width: none;
+            margin: 0;
+            padding: var(--spacing-m);
+            padding-bottom: calc(var(--spacing-2-xl) + 3rem);
+            font-family: var(--tex-serif);
+            font-size: var(--tex-size);
+            line-height: var(--tex-baseline);
+            color: var(--tex-ink);
+            background: transparent !important;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1, "liga" 1;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body.tex-page h1 {
+            font-family: var(--tex-serif);
+            font-size: 1.5em;
+            font-weight: 500;
+            line-height: 1.2;
+            border: none;
+            padding: 0;
+            margin: 0 0 0.35em;
+            color: var(--tex-ink);
+            letter-spacing: 0;
+        }
+
+        #plasma-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.32;
+        }
+
+        #map-link,
+        #to-top {
+            z-index: 10;
+        }
+
+        #map-link:focus-visible,
+        #to-top:focus-visible {
+            outline: 3px solid var(--color-focus-outline);
+            outline-offset: 2px;
+        }
+
+        .hds-surface {
+            position: relative;
+            z-index: 3;
+            box-sizing: border-box;
+            width: min(100%, calc(var(--tex-textwidth) + 2 * var(--spacing-xl)));
+            max-width: 21cm;
+            margin: 0 auto;
+            background: var(--tex-paper);
+            border: 1px solid var(--color-black-20);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sheet {
+            padding: clamp(1.75rem, 5vh, 2.54cm) clamp(1.35rem, 4vw, 2cm);
+        }
+
+        .tex-doc {
+            max-width: var(--tex-textwidth);
+            margin: 0 auto;
+            font-family: var(--tex-serif);
+            font-size: var(--tex-size);
+            line-height: var(--tex-baseline);
+            color: var(--tex-ink);
+        }
+
+        .article-head {
+            text-align: center;
+            margin: 0 0 1.75em;
+            padding-bottom: 1.1em;
+            border-bottom: 0.4pt solid var(--tex-ink);
+        }
+
+        .article-head h1 {
+            text-wrap: balance;
+        }
+
+        .article-meta {
+            font-family: var(--tex-serif);
+            font-size: 1em;
+            line-height: var(--tex-baseline);
+            color: var(--tex-ink-muted);
+            margin: 0.45em 0 0;
+        }
+
+        body.tex-page p {
+            margin-bottom: 0;
+        }
+
+        .doc-body p {
+            margin: 0;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            hyphenate-limit-chars: 6 3 3;
+            text-wrap: pretty;
+            orphans: 3;
+            widows: 3;
+            color: var(--tex-ink);
+        }
+
+        .doc-body p + p:not(.note):not(.end-strip) {
+            text-indent: var(--tex-parindent);
+        }
+
+        .doc-body .note,
+        .doc-body .end-strip {
+            text-indent: 0;
+        }
+
+        .doc-body p + .note {
+            margin-top: 1.65em;
+        }
+
+        .doc-body .note + p {
+            margin-top: 1.65em;
+        }
+
+        .doc-body p.lead {
+            text-indent: 0;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        .note {
+            font-family: var(--tex-serif);
+            font-size: 10pt;
+            font-style: italic;
+            line-height: 1.55;
+            color: var(--tex-ink-muted);
+            margin: 1.65em 0 1.65em 2em;
+            padding: 0.75em 1em 0.75em 1.15em;
+            border-left: 0.8pt solid var(--color-black-30);
+            text-align: left;
+            hyphens: none;
+        }
+
+        .end-strip {
+            margin-top: 1.75em;
+            padding-top: 0.75em;
+            border-top: 0.4pt solid var(--color-black-20);
+            font-family: var(--tex-serif);
+            font-size: 10pt;
+            font-style: italic;
+            color: var(--tex-ink-muted);
+            text-align: center;
+        }
+
+        @media (max-width: 767px) {
+            :root {
+                --tex-textwidth: 100%;
+            }
+
+            body.tex-page {
+                padding: var(--spacing-2-xs);
+                padding-bottom: calc(var(--spacing-2-xl) + 2rem);
+            }
+
+            .sheet {
+                padding: var(--spacing-m) var(--spacing-s);
+            }
+
+            .doc-body p {
+                text-align: left;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #plasma-canvas {
+                display: none;
+            }
+
+            html {
+                background: var(--color-coat-of-arms-dark);
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 2.54cm 2cm;
+        }
+
+        @media print {
+            html {
+                background: #fff;
+            }
+
+            body.tex-page {
+                padding: 0;
+            }
+
+            #plasma-canvas,
+            #map-link,
+            #to-top {
+                display: none !important;
+            }
+
+            .hds-surface {
+                border: none;
+                box-shadow: none;
+                max-width: none;
+            }
+
+            .sheet {
+                padding: 0;
+            }
+
+            .tex-doc {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="tex-page">
+    <canvas id="plasma-canvas" aria-hidden="true"></canvas>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <div class="hds-surface">
+        <div class="sheet">
+            <article class="tex-doc">
+                <header class="article-head">
+                    <h1>Before the Dashboard</h1>
+                    <p class="article-meta">Åndrei Makarov · 6 June 2026, Helsinki</p>
+                </header>
+
+                <div class="doc-body">
+                    <p class="lead">The DAW-less evening had already passed through its first comic severity, no laptop, no phone, no hidden workstation behind the ritual, and still I heard a second noise under the joke: the computer gone from the table but present in the posture of the hands, in the expected route of the recording, in the habit of turning an event into a link before the event has finished breathing.</p>
+
+                    <p>The room looked almost childish; a tape recorder waited near the mixer, the synthesizer ran slightly warm, a cable touched the floor in a lazy arc, someone made green tea and left the cup close enough to be dangerous, because this kind of evening always needs one foolish object to remind the machines that life is not an installation; outside, everything preferred a format, track to file, file to post, post to platform signal, platform to a small statistical whisper, and inside, before all that, only the question of whether the sound had weight while it was still here.</p>
+
+                    <p>Most are computer users, someone said, and the phrase stayed in the air too crude to dismiss; it named a mode of relation, search, store, compare, adjust, name, upload, check, revise, return to the dashboard, while the musical player repeats a phrase until the phrase finds the body; the two persons live in one nervous system and change places during the same hour, one reaching for the screen to solve uncertainty, the other staying with uncertainty until it becomes timing.</p>
+
+                    <p>Behind that sits an older habit: reality becoming real only after passing through verification, rating, tournament, school, army, office, KPI, certificate, hierarchy, procedure, scoreboard, badge, ranking table, some external form saying who is above, who is admitted, who is normal enough to continue; for such a mind simply playing, trying, listening, failing, making, returning may feel too soft, almost suspicious, as if the human act required a machine above it because without the machine the act floats without permission.</p>
+
+                    <p>The machine speaks beautiful words, development, discipline, civilization, professionalism, progress, and sometimes they are honest, a form can protect, a rule can make practice possible, yet inside the same language hides a smaller faith that the human alone is unreliable and must be inserted into structure before meaning can be trusted; support becomes judge, judge becomes god, and the jam becomes real when posted, practice when counted, song when streamed, player when ranked, artist when selected.</p>
+
+                    <p class="note">take tape to studio · no computer allowed · cucumber on the table · wet green crack under the knife</p>
+
+                    <p>Once a favourite composition often entered the home through a piano; you misread, repeated, slowed down, disturbed the family, discovered the known melody was not known by the body; now a link arrives before anyone asks what relation is being offered, sharing stands in for playing, receiving for listening, and “Spotify kills the music” feels too hot and not entirely foolish: the platform supports catalogues, campaigns, archival access, media labour, yet the musical event grows faint when the system rewards the surrounding machinery more reliably than the fragile act, release legible, session raw material, person a small operator of their own circulation.</p>
+
+                    <p>Successful systems promise protection from chaos and produce another chaos, bureaucratic, competitive, internally dead, almost polite; not knowing what to play becomes metrics, reach, playlist position, retention, upload rhythm, anxiety formatted, one passes through levels instead of playing, monitors signs instead of listening, tries to land inside someone else’s march; advertising, patronage, radio, television, labels, grants, scenes did similar work earlier at other scales, art has always needed bread and compromise, telecommunications made distance cheap, platforms made circulation continuous, and the maker often gains a third occupation: becoming readable to systems that prefer rhythm, identity, consistency, measurable response.</p>
+
+                    <p>Money shifts the center of gravity, hunger shifts it too, professional form can protect or suffocate, studio can deepen or polish away the event, market can carry music to someone who needs it or teach music to behave like inventory; the route leaves marks even when the file sounds identical, and the stricter DAW-less instinct makes sense as delay of that conversion, tape asking for duration, studio asking for listening, absence of the personal computer removing escape hatches, endless correction, immediate comparison, cosmetic rescue, premature publishing, administrative work arriving when the music itself becomes uncertain.</p>
+
+                    <p>The recorder button presses harder than expected, the level meter forces a manual check, first playback exposes a hum nobody noticed while playing, someone marks the take with tape because there is no project browser, later the question is whether the room returns when the sound comes back; in software the mask changes, demo is not product, UAT is not belief, ticket is not understanding, commit message is not only metadata when a future reader must recover intention from ruins, manual checks catch where abstraction lied politely, a system passes tests and still feels wrong in the hands meant to use it.</p>
+
+                    <p>Rules, tests, standards, review are not enemies; the danger begins when the form matters more than the living person it was meant to serve, effort becomes proof of obedience, discipline a polite name for submission; AI and computers cover the professional shell with remarkable appetite, format, polish, distribute, summarize, master, tag, classify, and a person with direction may use them as pipes, yet the smoother the surface the easier to mistake covered work for the lived act, a release looking complete before anyone discovered whether there was music in the room.</p>
+
+                    <p class="note">älä anna äänen muuttua vain kauppatieksi · не отдавай песню стеклянному приказчику · que le son ne soit mie seulement marchandise · anna soiton hengittää omalla tiellä</p>
+
+                    <p>No authority settles this from outside; market rewards, platform distributes, scene recognizes, critic sharpens attention, maker deceives self as part of making; the useful boundary may arrive first as embarrassment, reaching for the computer too quickly to fix and present, or publishing without listening back to turn rawness into virtue too early; between those mistakes a slower path, playback, waiting, another person listening, hearing what they actually say, checking whether the sound survives outside the private mood that produced it.</p>
+
+                    <p>If music travels as media, publishing becomes part of the instrument; a device that records and sends without a personal computer would not guarantee depth, yet narrow pipes, prior intention, no carnival of feeds, Unix-way small tools each limited enough to avoid becoming master, recorder records, publisher publishes, archive receives, person returns to sound instead of clerking its online life; whether that can be built without smuggling old habits back remains unknown, many liberation tools become miniature bureaucracies after enough features.</p>
+
+                    <p>The desire says music as experience has been crowded by music as administrated media, performance, creation, documentation, distribution, promotion pressed into one workflow until attentions contaminate each other; the household piano, tape recorder, cucumber, no-computer studio rule, suspicion toward DAW-less videos that secretly return to the laptop, all signal the same need, feel where music leaves the body and becomes managed material, sometimes necessary, sometimes generous, sometimes where the work dies politely.</p>
+
+                    <p>I will still use the computer, stream, edit, master, send links, enter the market for survival, curiosity, vanity, love; the sharper practice is to notice the shift while it happens, when playing becomes operating, listening browsing, sharing proof, polishing fear, distribution the secret composer, structure demanding kneeling; the next loop is quieter than forbidden devices, it watches attention from hand to sound, sound to recorder, recorder to review, review to another person, response back into the next session, allows media but refuses to let media claim the origin.</p>
+
+                    <p>If someone asks for proof, the easy answer is still a link; the harder answer stays in the room, record when the hand has become responsible, play badly enough to find where sound resists, listen back without rushing to repair the wound, ask what survived; the file may travel later, the platform receive its shadow, but where tea cools near the mixer and the tape turns with its modest hiss, music has already happened or has not, and no dashboard, ranking, certificate, tournament, KPI, or glowing system can rescue that difference.</p>
+
+                    <p class="end-strip">before the dashboard</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+    <script>
+        (function () {
+            var canvas = document.getElementById("plasma-canvas");
+            if (!canvas) return;
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+            var ctx = canvas.getContext("2d", { alpha: true });
+            var w = 0;
+            var h = 0;
+            var time = 0;
+            var imageData;
+            var data;
+
+            function resize() {
+                w = Math.floor(window.innerWidth / 2);
+                h = Math.floor(window.innerHeight / 2);
+                canvas.width = w;
+                canvas.height = h;
+                canvas.style.width = "100%";
+                canvas.style.height = "100%";
+                imageData = ctx.createImageData(w, h);
+                data = imageData.data;
+            }
+
+            function palette(t) {
+                var r = Math.sin(t * 0.11 + 0.0) * 70 + 40;
+                var g = Math.sin(t * 0.11 + 2.1) * 80 + 50;
+                var b = Math.sin(t * 0.11 + 4.2) * 100 + 90;
+                return [r | 0, g | 0, b | 0];
+            }
+
+            function frame() {
+                var i = 0;
+                for (var y = 0; y < h; y++) {
+                    for (var x = 0; x < w; x++) {
+                        var v =
+                            Math.sin(x * 0.02 + time) +
+                            Math.sin(y * 0.025 + time * 1.1) +
+                            Math.sin((x + y) * 0.018 - time * 0.7) +
+                            Math.sin(Math.sqrt(x * x + y * y) * 0.04 + time * 0.5);
+                        var c = palette(v * 1.7 + time * 2.0);
+                        data[i++] = c[0];
+                        data[i++] = c[1];
+                        data[i++] = c[2];
+                        data[i++] = 255;
+                    }
+                }
+                ctx.putImageData(imageData, 0, 0);
+                time += 0.045;
+                requestAnimationFrame(frame);
+            }
+
+            resize();
+            window.addEventListener("resize", resize);
+            requestAnimationFrame(frame);
+        })();
+    </script>
+</body>
+</html>

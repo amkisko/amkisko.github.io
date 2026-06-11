@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A DAW-less Evening</title>
+    <meta name="description" content="A fairy-tale story about hardware jams, green tea, the severe DAW-less club, and what it would mean to publish sound without the glowing rectangle.">
+    <meta name="keywords" content="daw-less, hardware jam, music, publishing, attention, unix tools, green tea">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="A DAW-less Evening">
+    <meta property="og:description" content="A fairy-tale story about hardware jams, green tea, the severe DAW-less club, and what it would mean to publish sound without the glowing rectangle.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html">
+    <meta property="article:published_time" content="2026-06-05T12:00:00+00:00">
+    <meta property="article:modified_time" content="2026-06-05T12:00:00+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A DAW-less Evening">
+    <meta name="twitter:description" content="A fairy-tale story about hardware jams, green tea, the severe DAW-less club, and what it would mean to publish sound without the glowing rectangle.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        /* LaTeX article inside a fairy-tale storybook sheet */
+        :root {
+            --tex-size: 11.5pt;
+            --tex-baseline: 15pt;
+            --tex-parindent: 1.5em;
+            --tex-textwidth: 38em;
+            --tex-margin-outer: clamp(1rem, 5vw, 2.2cm);
+            --tex-margin-inner-v: clamp(1.85rem, 5vh, 2.4cm);
+            --tex-margin-inner-h: clamp(1.5rem, 4.5vw, 2.1cm);
+            --tex-ink: #2a241c;
+            --tex-ink-muted: #5c5348;
+            --tex-paper: #fffdf8;
+            --tex-frame: #c9b8e8;
+            --tex-frame-soft: #e8ddf8;
+            --tex-accent: #6b8f71;
+            --tex-mono: "IBM Plex Mono", "Latin Modern Mono", "Courier New", monospace;
+            --tex-serif: "STIX Two Text", "Latin Modern Roman", "Computer Modern Unicode", "Times New Roman", serif;
+            --sky-top: #e8f2ff;
+            --sky-bottom: #f5efe8;
+        }
+
+        html {
+            background: linear-gradient(165deg, var(--sky-top) 0%, var(--sky-bottom) 55%, #efe8f5 100%);
+            background-attachment: fixed;
+            min-height: 100%;
+        }
+
+        body.tex-page {
+            position: relative;
+            max-width: none;
+            margin: 0;
+            padding: var(--tex-margin-outer);
+            padding-bottom: calc(var(--tex-margin-outer) + 3rem);
+            font-family: var(--tex-serif);
+            font-size: var(--tex-size);
+            line-height: var(--tex-baseline);
+            color: var(--tex-ink);
+            background: transparent !important;
+            font-weight: 400;
+            text-rendering: optimizeLegibility;
+            font-feature-settings: "kern" 1, "liga" 1;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body.tex-page h1 {
+            font-family: var(--tex-serif);
+            font-size: inherit;
+            font-weight: 500;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #map-link,
+        #to-top {
+            z-index: 10;
+        }
+
+        .storybook {
+            position: relative;
+            z-index: 2;
+            box-sizing: border-box;
+            width: min(100%, calc(var(--tex-textwidth) + 2 * var(--tex-margin-inner-h) + 2.4rem));
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: 0.85rem;
+            background: var(--tex-frame-soft);
+            border-radius: 18px;
+            box-shadow: 0 10px 32px rgba(90, 70, 120, 0.12);
+        }
+
+        .storybook::before {
+            content: "✦";
+            position: absolute;
+            top: 0.55rem;
+            left: 1.1rem;
+            font-size: 0.75rem;
+            color: var(--tex-accent);
+            opacity: 0.7;
+        }
+
+        .storybook::after {
+            content: "☽";
+            position: absolute;
+            top: 0.5rem;
+            right: 1.15rem;
+            font-size: 0.85rem;
+            color: var(--tex-frame);
+            opacity: 0.85;
+        }
+
+        .sheet {
+            box-sizing: border-box;
+            padding: var(--tex-margin-inner-v) var(--tex-margin-inner-h);
+            background: var(--tex-paper);
+            border: 2px solid var(--tex-frame);
+            border-radius: 12px;
+            outline: 3px dotted rgba(201, 184, 232, 0.55);
+            outline-offset: -10px;
+        }
+
+        .tex-doc {
+            max-width: var(--tex-textwidth);
+            margin: 0 auto;
+        }
+
+        .maketitle {
+            text-align: center;
+            margin: 0 0 1.6em;
+            padding: 0 0.5em 1.1em;
+            border-bottom: 0.5pt solid rgba(107, 143, 113, 0.45);
+        }
+
+        .maketitle::before {
+            content: "— · —";
+            display: block;
+            font-size: 0.85em;
+            letter-spacing: 0.35em;
+            color: var(--tex-accent);
+            margin-bottom: 0.65em;
+        }
+
+        .doc-class {
+            font-family: var(--tex-mono);
+            font-size: 7.5pt;
+            line-height: 1.4;
+            color: var(--tex-ink-muted);
+            text-align: left;
+            margin: 0 0 1.1em;
+            white-space: pre-wrap;
+            opacity: 0.9;
+        }
+
+        .maketitle h1 {
+            font-size: 1.55em;
+            font-weight: 500;
+            line-height: 1.2;
+            margin: 0 0 0.5em;
+            color: #3d3428;
+            text-wrap: balance;
+        }
+
+        .doc-author,
+        .doc-date {
+            font-size: 0.95em;
+            line-height: var(--tex-baseline);
+            margin: 0.15em 0 0;
+            color: var(--tex-ink-muted);
+        }
+
+        body.tex-page p {
+            margin-bottom: 0;
+        }
+
+        .doc-body p {
+            margin: 0;
+            text-align: justify;
+            text-justify: inter-word;
+            hyphens: auto;
+            hyphenate-limit-chars: 6 3 3;
+            text-wrap: pretty;
+            orphans: 3;
+            widows: 3;
+        }
+
+        .doc-body p + p:not(.margin-note):not(.end-strip) {
+            text-indent: var(--tex-parindent);
+        }
+
+        .doc-body .margin-note,
+        .doc-body .end-strip {
+            text-indent: 0;
+        }
+
+        .doc-body p.lead {
+            text-indent: 0;
+            font-size: 1.02em;
+        }
+
+        em {
+            font-style: italic;
+            color: inherit;
+        }
+
+        .margin-note {
+            font-family: var(--tex-mono);
+            font-size: 9pt;
+            line-height: 1.5;
+            color: var(--tex-ink-muted);
+            margin: 1.1em 0 1.1em 1.5em;
+            padding: 0.5em 0.75em;
+            background: rgba(107, 143, 113, 0.08);
+            border-radius: 6px;
+            border-left: 2px solid var(--tex-accent);
+            text-align: left;
+            hyphens: none;
+        }
+
+        .margin-note-label {
+            display: block;
+            font-size: 7pt;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--tex-accent);
+            margin-bottom: 0.3em;
+        }
+
+        .end-strip {
+            margin-top: 1.85em;
+            padding-top: 0.85em;
+            border-top: 0.5pt dashed rgba(107, 143, 113, 0.5);
+            font-size: 0.92em;
+            font-style: italic;
+            color: var(--tex-ink-muted);
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            :root {
+                --tex-textwidth: 100%;
+            }
+
+            body.tex-page {
+                padding: 0.65rem;
+                padding-bottom: 3rem;
+            }
+
+            .storybook {
+                padding: 0.55rem;
+                border-radius: 14px;
+            }
+
+            .sheet {
+                padding: 1.25rem 1rem 1.4rem;
+            }
+
+            .doc-body p {
+                text-align: left;
+            }
+        }
+
+        @page {
+            size: A4;
+            margin: 2.54cm 2cm 2.54cm 2cm;
+        }
+
+        @media print {
+            html {
+                background: #fff;
+            }
+
+            body.tex-page {
+                padding: 0;
+            }
+
+            .storybook {
+                padding: 0;
+                background: transparent;
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .storybook::before,
+            .storybook::after {
+                display: none;
+            }
+
+            #map-link,
+            #to-top {
+                display: none !important;
+            }
+
+            .sheet {
+                border: none;
+                outline: none;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .tex-doc {
+                max-width: none;
+            }
+
+            .maketitle {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="tex-page">
+    <a href="../posts.html" id="map-link" title="Map"></a>
+    <div class="storybook">
+        <div class="sheet">
+            <article class="tex-doc">
+                <header class="maketitle">
+                    <p class="doc-class">\documentclass[11pt,twoside]{book}
+\usepackage{fancyhdr}
+\title{A DAW-less Evening}</p>
+                    <h1>A DAW-less Evening</h1>
+                    <p class="doc-author">Åndrei Makarov</p>
+                    <p class="doc-date">5 June 2026, Helsinki</p>
+                </header>
+
+                <div class="doc-body">
+                    <p class="lead">On a mellow evening I made ambient beside green tea while boxes blinked like a small secular altar, and I called the night DAW-less because my hands touched knobs while the grid stayed elsewhere; the claim felt true until the take travelled into the laptop to be trimmed, named, mastered, uploaded, and fed to the same platforms that love thumbnails more than rooms.</p>
+
+                    <p>Synthesizers, samplers, grooveboxes, pedals, wooden side panels: the photograph is persuasive, it promises physical sound and direct hands, yet if the performance only becomes real after the computer baptizes it, the word describes the jam and no longer the whole act, and that slip matters because it shows how easily we misplace where music begins.</p>
+
+                    <p>I have heard people use DAW-less as a production label and I have heard it used as a stricter climate: the personal computer is not the center, the screen is not the master clock, the session is not waiting for infinite undo; in that version even my phone counts as a pocket command center with worse manners, recording on a laptop is out, editing on a laptop is out, publishing through the usual rectangle is suspicious, and Slack talk about purity already spoils the joke while the joke keeps going.</p>
+
+                    <p class="margin-note"><span class="margin-note-label">aside</span>no pc · no iphone · posers mocked with love · purity known impossible</p>
+
+                    <p>A medium is the whole route from intention to public trace; if sound is born on hardware but becomes authoritative only inside the computer, the computer stays in the authorship as editor, judge, archive, distributor, normalizer, even when it stays silent in the mix.</p>
+
+                    <p>The stricter idea asks for infrastructure instead of nostalgia: Unix-way devices that do one thing, connect cleanly, and refuse to become a parliament of interruptions; a recorder that records, a publisher that publishes, a camera that captures, a transfer box that sends material to a defined place, digital innards allowed, general-purpose abstraction refused.</p>
+
+                    <p>A screen computer can become anything, which is why it dissolves ritual; email, tabs, metrics, plug-ins, cloud drives, second thoughts arrive together; the severe question is how little interface a work needs to leave the room without collapsing back into the screen-world, buttons and meters and lights instead of previews and optimize and tag and regret.</p>
+
+                    <p>I notice what flexibility does to attention: the alive take opens into trimming, noise removal, compression, mastering, thumbnails, descriptions, loudness checks, analytics, each step reasonable alone, together turning an event into a negotiable file; when correction is infinite the hand listens differently, when publishing is a dedicated pipe the warmth has fewer cosmetic layers to shed.</p>
+
+                    <p class="margin-note"><span class="margin-note-label">whisper</span>tuopa soitto ilman näyttöä · дай звук без стеклянного царя · point de grand miroir lumineux · hil’lalleh, anna äänen mennä omin jaloin</p>
+
+                    <p>Gear posing photographs authenticity on the table while decision-making may still live in the laptop before, during, and after; a small chain can be more severe than a modular wall if gesture, room, recorder, and irreversible take stay bound together.</p>
+
+                    <p>The anti-screen jam still becomes screen content: camera angle, title, tags, algorithmic legibility; I upload too, I am inside the contradiction, and the platform plays as instrument whether I admit it or not.</p>
+
+                    <p>So I keep the severe club as useful fiction: closed ritual with open output, computation hidden in instruments and pipes, more software perhaps, less cockpit; mockery marks the boundary with comic violence, green tea keeps the room quiet, the machines ask for touch, the recorder asks for commitment, and the open question stays where I like it: what to build so sound can travel outward without making me a content operator in the same breath that ends the song.</p>
+
+                    <p class="end-strip">the real club is a design problem, not a nostalgia club</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <a href="#" id="to-top" title="To the top"></a>
+
+    <script src="../scripts/posts_navigation.js"></script>
+</body>
+</html>

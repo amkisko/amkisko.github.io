@@ -5,6 +5,11 @@ class NavigationButtons {
         this.hideTimeout = null;
         this.rotationAngle = 0;
         this.animationFrame = null;
+        this.compassIntroTimeout = null;
+        this.compassScrollTimeout = null;
+        this.compassTouchCollapseTimeout = null;
+        this.compassMobileMq = window.matchMedia('(max-width: 767px)');
+        this.compassReducedMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         this.init();
     }
@@ -13,6 +18,7 @@ class NavigationButtons {
         this.renderCompass();
         this.renderToTopButton();
         this.setupEventListeners();
+        this.setupMobileCompassBehavior();
         this.updateCompassDirection();
         this.animateLighthouse();
     }
@@ -172,17 +178,133 @@ class NavigationButtons {
         this.animationFrame = requestAnimationFrame(updateBeam);
     }
 
+    isMobileCompass() {
+        return this.compassMobileMq.matches;
+    }
+
+    expandCompass() {
+        if (!this.isMobileCompass()) return;
+        clearTimeout(this.compassTouchCollapseTimeout);
+        this.mapLink.classList.add('compass-expanded');
+        this.mapLink.classList.remove('compass-tucked', 'compass-scroll-peek');
+    }
+
+    collapseCompass() {
+        if (!this.isMobileCompass() || !this.mapLink.classList.contains('compass-expanded')) {
+            return;
+        }
+        if (this.mapLink.matches(':hover') || this.mapLink === document.activeElement) {
+            return;
+        }
+        this.mapLink.classList.remove('compass-expanded', 'compass-scroll-peek');
+        this.mapLink.classList.add('compass-tucked');
+    }
+
+    tuckCompassAfterIntro() {
+        if (!this.isMobileCompass() || this.mapLink.classList.contains('compass-expanded')) {
+            return;
+        }
+        this.mapLink.classList.remove('compass-scroll-peek');
+        this.mapLink.classList.add('compass-tucked');
+    }
+
+    setupMobileCompassBehavior() {
+        const onMobileChange = () => {
+            clearTimeout(this.compassIntroTimeout);
+            clearTimeout(this.compassScrollTimeout);
+            clearTimeout(this.compassTouchCollapseTimeout);
+            this.mapLink.classList.remove(
+                'compass-tucked',
+                'compass-scroll-peek',
+                'compass-expanded'
+            );
+
+            if (!this.isMobileCompass()) return;
+
+            if (this.compassReducedMotionMq.matches) {
+                this.mapLink.classList.add('compass-tucked');
+                return;
+            }
+
+            this.compassIntroTimeout = setTimeout(() => {
+                this.tuckCompassAfterIntro();
+            }, 2400);
+        };
+
+        onMobileChange();
+        this.compassMobileMq.addEventListener('change', onMobileChange);
+        this.compassReducedMotionMq.addEventListener('change', onMobileChange);
+    }
+
+    handleCompassScroll() {
+        if (!this.isMobileCompass() || this.mapLink.classList.contains('compass-expanded')) {
+            return;
+        }
+
+        this.mapLink.classList.remove('compass-tucked');
+        this.mapLink.classList.add('compass-scroll-peek');
+
+        clearTimeout(this.compassScrollTimeout);
+        this.compassScrollTimeout = setTimeout(() => {
+            if (!this.mapLink.classList.contains('compass-expanded')) {
+                this.mapLink.classList.remove('compass-scroll-peek');
+                this.mapLink.classList.add('compass-tucked');
+            }
+        }, 450);
+    }
+
     setupEventListeners() {
         this.mapLink.addEventListener('mouseenter', () => {
             this.mapLink.classList.add('hover');
+            this.expandCompass();
         });
 
         this.mapLink.addEventListener('mouseleave', () => {
             this.mapLink.classList.remove('hover');
+            if (this.isMobileCompass()) {
+                this.mapLink.classList.remove('compass-expanded');
+                this.mapLink.classList.add('compass-tucked');
+            }
+        });
+
+        this.mapLink.addEventListener('focus', () => {
+            this.expandCompass();
+        });
+
+        this.mapLink.addEventListener('blur', () => {
+            if (this.isMobileCompass()) {
+                this.compassTouchCollapseTimeout = setTimeout(() => {
+                    this.collapseCompass();
+                }, 100);
+            }
+        });
+
+        this.mapLink.addEventListener('touchstart', () => {
+            this.expandCompass();
+        }, {passive: true});
+
+        this.mapLink.addEventListener('touchend', () => {
+            if (!this.isMobileCompass()) return;
+            clearTimeout(this.compassTouchCollapseTimeout);
+            this.compassTouchCollapseTimeout = setTimeout(() => {
+                this.collapseCompass();
+            }, 2200);
+        }, {passive: true});
+
+        this.mapLink.addEventListener('click', (e) => {
+            if (
+                this.isMobileCompass() &&
+                (this.mapLink.classList.contains('compass-tucked') ||
+                    this.mapLink.classList.contains('compass-scroll-peek'))
+            ) {
+                e.preventDefault();
+                this.expandCompass();
+            }
         });
 
         window.addEventListener('scroll', () => {
             this.updateCompassDirection();
+            this.handleCompassScroll();
 
             if (window.scrollY > 300) {
                 this.toTopButton.classList.add('visible');
@@ -193,7 +315,7 @@ class NavigationButtons {
             } else {
                 this.toTopButton.classList.remove('visible');
             }
-        });
+        }, {passive: true});
 
         this.toTopButton.addEventListener('click', (e) => {
             e.preventDefault();
