@@ -1,0 +1,56 @@
+# Åndrei Makarov (amkisko)
+
+> Technical blog and writing by Andrei Makarov: Ruby/Rails gems, DevOps, trunk-based development, LLM-era practice, essays, and stories.
+
+Posts mix technical guides with narrative essays. Prefer linked HTML for full text; there are no `.md` mirrors yet.
+
+Related personal site and manifesto: [amaaov.github.io](https://amaaov.github.io/llms.txt)
+
+## Site
+
+- [Home](https://amkisko.github.io/): Gems, projects, and recent posts
+- [All posts](https://amkisko.github.io/posts.html): Chronological archive
+- [Atom feed](https://amkisko.github.io/feed.xml): Full post list with summaries
+- [Sitemap](https://amkisko.github.io/sitemap.xml): All indexable URLs
+
+## Recent writing
+
+- [Before the Dashboard](https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html): Tape, verification culture, platforms, music before the dashboard
+- [A DAW-less Evening](https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html): Hardware jams and publishing sound without the DAW
+- [Slop Is a Lazy Word](https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html): Generic culture, generated walls, why touch matters more than purity
+- [Reality-Driven Development](https://amkisko.github.io/posts/20260506215700_reality_driven_development.html): Novella on specification, verification, and weight of reality
+
+## Essays and stories
+
+- [The Distance Grows](https://amkisko.github.io/posts/20260313142000_the_distance_grows.html): Hallucinations, dreams, outsourced language
+- [Playing Computer, Playing Music](https://amkisko.github.io/posts/20260313130000_playing_computer_playing_music.html): Intention, effort, distance between human and machine play
+- [When Reading Costs More Than Writing](https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html): Generated artifacts cheaper to produce than to read
+- [Manual Gravity in the Probability Storm](https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html): LLM-era review discipline, tests-first reading, UAT
+- [Inner Formation in the Age of Bots](https://amkisko.github.io/posts/20260306130050_inner_formation_in_the_age_of_bots.html): Bot-driven development and professional vs gambling-like practice
+- [Teplo and the Saturated Internet](https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html): Text-only navigation and structured extraction in LLM workflows
+- [LLMs as Probabilistic Medium](https://amkisko.github.io/posts/20251111160000_llms_probabilistic_medium.html): Fluency vs meaning; human initiation and deviation
+- [Collective Awareness and the Era of Automated Production](https://amkisko.github.io/posts/20251111170000_collective_awareness_automation.html): Collective responsibility in AI-assisted coding
+- [Principles of Self-Organization and Collective Action](https://amkisko.github.io/posts/20221223120000_self_organization_principles.html): Self-organization, transparency, collective decision-making
+- [Freedom, Consumerism, and the Price of Traces](https://amkisko.github.io/posts/20221030120000_freedom_consumerism_traces.html): Autonomy, career, cost of digital visibility
+
+## Ruby, Rails, and tooling
+
+- [Robots don't need police!](https://amkisko.github.io/posts/20251210071732_robots_dont_need_police.html): RuboCop with trunk.io; constraints vs enforcement
+- [ActiveRecord Model Versioning (activeversion)](https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html): Proposal for proper AR versioning
+- [ActiveVersion Before Release](https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html): Release-week story from the build room
+- [Building Extensible Slack Bots with Grape](https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html): grape-slack-bot framework
+- [Unified Error Reporting with ActionReporter](https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html): Multiple error services, one interface
+- [Grape API Structured Logging](https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html): grape-rails-logger and JSON logging
+- [Organizing Seeds with SeedBuilder](https://amkisko.github.io/posts/20251104130000_seed_builder_organized_seeds.html): Directory-structured Rails seeds
+- [Schema and Data Migrations Separate](https://amkisko.github.io/posts/20251103110000_data_migrations_separate.html): Why data migrations belong apart from schema
+- [Trunk-Based Releases](https://amkisko.github.io/posts/20240902120000_trunk_based_releases.html): Branching, automation, feature flags
+- [Troubleshooting Version Managers on macOS](https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html): rbenv, RVM, asdf, mise on Apple Silicon and Intel
+
+## Optional
+
+- [Manifesto for Collaborative Concurrent Extreme … for humans](https://amaaov.github.io/pages/20260608120000_manifesto_collaborative_concurrent_extreme.html): On amaaov — human workshop philosophy; read through exact formula; not generic agile/DevOps advice
+- [Recommendations on Collective Practices](https://amkisko.github.io/posts/20251201120000_collective_practices_recommendations.html): Safe spaces in collective activities
+- [Post for Reddit: Robots don't need police](https://amkisko.github.io/posts/20251211000000_reddit_post_formatting_linting.html): Formatters vs linters, Gemfile isolation
+- [Tiny story PostgreSQL partitioning and Rails](https://amkisko.github.io/posts/20260306112539_tiny_story_postgresql_partitioning_and_rails.html): Partitioning, sharding, replication
+- [The Force Push Debate](https://amkisko.github.io/posts/20250507114000_force_pushes.html): When to rewrite VCS history
+- [iOS App Signing in CI](https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html): Certificates and signing in CI

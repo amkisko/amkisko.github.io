@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://amkisko.github.io/sitemap.xml
+# LLM index: https://amkisko.github.io/llms.txt
