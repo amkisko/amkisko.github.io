@@ -19,6 +19,12 @@
     <meta name="twitter:description" content="Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility.">
     <link rel="stylesheet" href="../styles/posts_text.css">
     <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        body { font-family: ui-serif, Georgia, serif; }
+        a { color: #a61e1e; }
+        code { color: #5c1a1a; border-color: #e8d4d4; }
+        pre { border-color: #e8d4d4; }
+    </style>
 </head>
 <body>
     <a href="../posts.html" id="map-link" title="Map"></a>
@@ -26,7 +32,7 @@
         <h1>ActiveRecord Model Versioning: A Proposal for ActiveVersion</h1>
         <div class="date">11 November 2025, Helsinki, Åndrei Makarov</div>
 
-        <p>ActiveRecord versioning and internationalization have followed similar paths in the Ruby ecosystem: start simple with JSON or YAML storage in database columns, then struggle with the limitations. JSONB is fun at the start, but becomes painful when you need to query, maintain, or extend functionality. YAML has no native PostgreSQL support. Neither approach scales well for complex requirements like custom attributes, attachments, rich text, or versioning by platform or user role.</p>
+        <p>ActiveRecord versioning and internationalization often start with JSON or YAML in database columns, then hit limits as requirements grow. JSONB works for small cases but gets awkward to query, maintain, and extend. YAML has no native PostgreSQL support. Neither approach scales cleanly for custom attributes, attachments, rich text, or versioning by platform or user role.</p>
 
         <p>I'm proposing a new gem called <code>active_version</code> (with the <code>ActiveVersion</code> module) that takes a different approach: proper schema design with separate tables for versions, a DSL for building relations and automations, and extensibility as a first-class concern. This post explores the design, requirements, and seeks feedback from the community.</p>
 

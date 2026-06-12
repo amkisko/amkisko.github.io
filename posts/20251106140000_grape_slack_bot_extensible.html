@@ -19,6 +19,13 @@
     <meta name="twitter:description" content="How grape-slack-bot provides an extensible framework for building Slack bots with Grape.">
     <link rel="stylesheet" href="../styles/posts_text.css">
     <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        body { font-family: Palatino, "Palatino Linotype", serif; }
+        a { color: #4a154b; }
+        .date { letter-spacing: 0.04em; }
+        pre { border-color: #e0d4e0; }
+        code { border-color: #e0d4e0; }
+    </style>
 </head>
 <body>
     <a href="../posts.html" id="map-link" title="Map"></a>
@@ -26,9 +33,9 @@
         <h1>Building Extensible Slack Bots with Grape: The grape-slack-bot Framework</h1>
         <div class="date">6 November 2025, Helsinki, Åndrei Makarov</div>
 
-        <p>Slack bots live in the space between user intent and system response. A user types <code>/command</code> and expects something to happen. A button is clicked, an event fires, a modal opens. Each interaction carries the weight of expectation—the bot must respond correctly, securely, immediately.</p>
+        <p>A Slack bot must verify incoming requests, route slash commands and interactive events, store callback state, and return payloads in the format Slack expects. A missed signature check or malformed response shows up immediately in production.</p>
 
-        <p>Building this responsiveness requires handling signatures that prove authenticity, parsing requests that arrive in different formats, storing callbacks that preserve state, formatting responses that satisfy Slack's requirements. The complexity accumulates like layers of sediment—each requirement building on the last, each edge case revealing another.</p>
+        <p>Each feature adds boilerplate: signature verification, request parsing, callback storage, response formatting. Edge cases stack quickly across commands, modals, and event subscriptions.</p>
 
         <p><a href="https://github.com/amkisko/grape-slack-bot.rb">grape-slack-bot</a> provides a framework that handles this complexity, allowing you to focus on what your bot does while signature verification and request parsing are handled consistently. It integrates with Grape's routing system in Rails applications, automatically handles signature verification, manages callback storage, and provides a declarative configuration system that makes bot behavior clear and extensible.</p>
 

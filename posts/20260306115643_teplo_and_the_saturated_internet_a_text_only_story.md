@@ -1,7 +1,7 @@
-# Teplo and the Saturated Internet: A Text-Only Story
+# Teplo and the Saturated Internet: A Text-Only Browser Guide
 
 URL: https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html
-Description: Why Teplo matters in LLM-amplified workflows: text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.
+Description: Technical guide: why Teplo matters in LLM-amplified workflows — text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.
 Date: 6 March 2026, Helsinki, Åndrei Makarov
 Published: 2026-03-06T09:56:43+00:00
 

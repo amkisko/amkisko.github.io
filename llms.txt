@@ -27,7 +27,7 @@ Related personal site and manifesto: [amaaov.github.io](https://amaaov.github.io
 - [When Reading Costs More Than Writing](https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html): Generated artifacts cheaper to produce than to read
 - [Manual Gravity in the Probability Storm](https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html): LLM-era review discipline, tests-first reading, UAT
 - [Inner Formation in the Age of Bots](https://amkisko.github.io/posts/20260306130050_inner_formation_in_the_age_of_bots.html): Bot-driven development and professional vs gambling-like practice
-- [Teplo and the Saturated Internet](https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html): Text-only navigation and structured extraction in LLM workflows
+- [Teplo and the Saturated Internet: A Text-Only Browser Guide](https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html): Text-only navigation and structured extraction in LLM workflows
 - [LLMs as Probabilistic Medium](https://amkisko.github.io/posts/20251111160000_llms_probabilistic_medium.html): Fluency vs meaning; human initiation and deviation
 - [Collective Awareness and the Era of Automated Production](https://amkisko.github.io/posts/20251111170000_collective_awareness_automation.html): Collective responsibility in AI-assisted coding
 - [Principles of Self-Organization and Collective Action](https://amkisko.github.io/posts/20221223120000_self_organization_principles.html): Self-organization, transparency, collective decision-making
@@ -37,7 +37,7 @@ Related personal site and manifesto: [amaaov.github.io](https://amaaov.github.io
 
 - [Robots don't need police!](https://amkisko.github.io/posts/20251210071732_robots_dont_need_police.html): RuboCop with trunk.io; constraints vs enforcement
 - [ActiveRecord Model Versioning (activeversion)](https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html): Proposal for proper AR versioning
-- [ActiveVersion Before Release](https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html): Release-week story from the build room
+- [ActiveVersion Before Release: Build Room Notes](https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html): Release-week technical notes from the build room
 - [Building Extensible Slack Bots with Grape](https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html): grape-slack-bot framework
 - [Unified Error Reporting with ActionReporter](https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html): Multiple error services, one interface
 - [Grape API Structured Logging](https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html): grape-rails-logger and JSON logging

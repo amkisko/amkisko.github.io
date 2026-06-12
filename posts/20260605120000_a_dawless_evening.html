@@ -85,43 +85,22 @@
             position: relative;
             z-index: 2;
             box-sizing: border-box;
-            width: min(100%, calc(var(--tex-textwidth) + 2 * var(--tex-margin-inner-h) + 2.4rem));
+            width: min(100%, calc(var(--tex-textwidth) + 2 * var(--tex-margin-inner-h) + 1rem));
             max-width: 21cm;
             margin: 0 auto;
-            padding: 0.85rem;
-            background: var(--tex-frame-soft);
-            border-radius: 18px;
-            box-shadow: 0 10px 32px rgba(90, 70, 120, 0.12);
-        }
-
-        .storybook::before {
-            content: "✦";
-            position: absolute;
-            top: 0.55rem;
-            left: 1.1rem;
-            font-size: 0.75rem;
-            color: var(--tex-accent);
-            opacity: 0.7;
-        }
-
-        .storybook::after {
-            content: "☽";
-            position: absolute;
-            top: 0.5rem;
-            right: 1.15rem;
-            font-size: 0.85rem;
-            color: var(--tex-frame);
-            opacity: 0.85;
+            padding: 0.35rem;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
         }
 
         .sheet {
             box-sizing: border-box;
             padding: var(--tex-margin-inner-v) var(--tex-margin-inner-h);
             background: var(--tex-paper);
-            border: 2px solid var(--tex-frame);
-            border-radius: 12px;
-            outline: 3px dotted rgba(201, 184, 232, 0.55);
-            outline-offset: -10px;
+            border: 1px solid var(--tex-frame);
+            border-radius: 8px;
+            box-shadow: 0 4px 18px rgba(90, 70, 120, 0.08);
         }
 
         .tex-doc {
@@ -243,16 +222,19 @@
         @media (max-width: 640px) {
             :root {
                 --tex-textwidth: 100%;
+                --tex-size: clamp(1.0625rem, 2.8vw, 1.125rem);
+                --tex-baseline: 1.55;
             }
 
             body.tex-page {
                 padding: 0.65rem;
                 padding-bottom: 3rem;
+                font-size: var(--tex-size);
+                line-height: var(--tex-baseline);
             }
 
             .storybook {
-                padding: 0.55rem;
-                border-radius: 14px;
+                padding: 0;
             }
 
             .sheet {
@@ -261,6 +243,12 @@
 
             .doc-body p {
                 text-align: left;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                background: var(--sky-bottom);
             }
         }
 
@@ -329,7 +317,7 @@
                 <div class="doc-body">
                     <p class="lead">On a mellow evening I made ambient beside green tea while boxes blinked like a small secular altar, and I called the night DAW-less because my hands touched knobs while the grid stayed elsewhere; the claim felt true until the take travelled into the laptop to be trimmed, named, mastered, uploaded, and fed to the same platforms that love thumbnails more than rooms.</p>
 
-                    <p>Synthesizers, samplers, grooveboxes, pedals, wooden side panels: the photograph is persuasive, it promises physical sound and direct hands, yet if the performance only becomes real after the computer baptizes it, the word describes the jam and no longer the whole act, and that slip matters because it shows how easily we misplace where music begins.</p>
+                    <p>Synthesizers, samplers, grooveboxes, pedals, wooden side panels: the photograph is persuasive, it promises physical sound and direct hands, yet if the performance only becomes real after the computer baptizes it, the word covers the jam and leaves the upload outside the frame, and that slip matters because it shows how easily we misplace where music begins.</p>
 
                     <p>I have heard people use DAW-less as a production label and I have heard it used as a stricter climate: the personal computer is not the center, the screen is not the master clock, the session is not waiting for infinite undo; in that version even my phone counts as a pocket command center with worse manners, recording on a laptop is out, editing on a laptop is out, publishing through the usual rectangle is suspicious, and Slack talk about purity already spoils the joke while the joke keeps going.</p>
 
@@ -351,7 +339,7 @@
 
                     <p>So I keep the severe club as useful fiction: closed ritual with open output, computation hidden in instruments and pipes, more software perhaps, less cockpit; mockery marks the boundary with comic violence, green tea keeps the room quiet, the machines ask for touch, the recorder asks for commitment, and the open question stays where I like it: what to build so sound can travel outward without making me a content operator in the same breath that ends the song.</p>
 
-                    <p class="end-strip">the real club is a design problem, not a nostalgia club</p>
+                    <p class="end-strip">knobs still warm · tea gone cold · upload waiting in another room</p>
                 </div>
             </article>
         </div>

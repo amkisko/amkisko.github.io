@@ -82,7 +82,7 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.38;
+            opacity: 0.22;
         }
 
         body.tex-page::before {
@@ -98,7 +98,7 @@
                 var(--fax-line) 2px,
                 var(--fax-line) 3px
             );
-            opacity: 0.4;
+            opacity: 0.18;
         }
 
         #map-link,
@@ -234,11 +234,15 @@
         @media (max-width: 640px) {
             :root {
                 --tex-textwidth: 100%;
+                --tex-size: clamp(1.0625rem, 2.8vw, 1.125rem);
+                --tex-baseline: 1.55;
             }
 
             body.tex-page {
                 padding: 0.75rem;
                 padding-bottom: 3rem;
+                font-size: var(--tex-size);
+                line-height: var(--tex-baseline);
             }
 
             .sheet {
@@ -350,9 +354,9 @@
 
         <p>Most customers do not weigh commit messages, do not hear formatting debates, do not treat the merge thread as historical trace; distancing spreads the same way through food, sound, software, public surfaces, owners who do not see the image as image, developers who do not see style as handwriting, listeners who do not ask whether a song needed its own pulse; typical consumerism, accelerated, smoother, cheaper to produce carelessness.</p>
 
-        <p>At this point I see little use in calling particular materials <em>slop</em>; the phenomenon is cultural, ambient, already inside TV habits and feeds and walls and repos; the sharper questions stay sensory: does this hybrid compress too many familiar micro-pieces into one narcotic object, does it train numbness, does it leave room for interpretation, does it carry attention, does it know why it exists.</p>
+        <p>At this point I see little use in calling particular materials <em>slop</em>; the phenomenon is cultural, ambient, already inside TV habits and feeds and walls and repos; on the tram I still cannot tell whether the chest overload was bad art or only unfamiliar density, whether numbness was being trained or my filters were simply tired, and I carry those questions into the lunch room where the printed mural watches me chew without offering a verdict.</p>
 
-        <p>I still want remix, template, automation, generated culture as culture; I want criticism without the lazy word; in sound I listen for breath, wrong notes, tension, silence; in text I watch for stacked mystic resonance; in code I try to leave traces a future reader can feel; in daily contradiction I eat under the printed mural and hope the noticing stays, small, unheroic, real, because the last loss I fear is the loss of the difference itself, not the presence of fragments, but the disappearance of touch across the whole route from making to public trace.</p>
+        <p>I still want remix, template, automation, generated culture as culture; I want criticism without the lazy word; in sound I listen for breath, wrong notes, tension, silence; in text I watch for stacked mystic resonance; in code I try to leave traces a future reader can feel; in daily contradiction I eat under the printed mural and hope the noticing stays, small, unheroic, real, and I do not yet know whether touch will survive the whole route from making to public trace, only that I notice when it thins.</p>
 
         <p class="end-strip">\hfill touch remains \hfill</p>
             </div>

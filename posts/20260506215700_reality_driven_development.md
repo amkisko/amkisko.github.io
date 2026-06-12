@@ -38,11 +38,9 @@ One evening Maaria, the youngest apprentice, found Yrjö by the unfinished rail 
 
 Yrjö kept the stones moving. “That builds like us.”
 
-In the air the stones were never quite owned, neither part of the hand nor yet lost nor yet caught, living in order only through timing, where too much fear dropped them and too much confidence launched them past reach, each throw correcting the last and accusing the next until Maaria saw the bridge inside the pattern: body, object, weather, mistake, return.
+In the air the stones were never quite owned, neither part of the hand nor yet lost nor yet caught, living in order only through timing, where too much fear dropped them and too much confidence launched them past reach, each throw correcting the last and accusing the next until Maaria saw the bridge inside the pattern: body, object, weather, mistake, return, the deliberate break in holding where rhythm and correction kept the object alive in the gap.
 
-The pattern wore an old blunt name: juggling, the creation, maintenance, and control of an unstable state inside the body–object–environment system, where the object stays free of a permanent rigid grip and control runs on rhythm, impulse, balance, a phase of free movement, and continuous correction; locomotion steadies the body’s instability for movement’s sake, juggling steadies the object’s instability through the deliberate break in holding, and when instability is performed by a living body in real time you may call it juggling, whereas when instability is only represented by a steady machine you have media about juggling.
-
-The speaking box could trace a juggler’s arc with tender precision, yet it could not catch the town’s stone.
+Yrjö had an old river word for that pattern and no patience to lecture with it; the speaking box could trace a juggler’s arc with tender precision, yet it could not catch the town’s stone.
 
 At summer’s end the elders descended in formal coats, the stranger behind them with the speaking box wrapped in blue cloth, and they carried the final specification in red ink with the town’s seal pressed deep in wax, which the oldest elder offered toward Yrjö like a relic while he wiped his hands on his trousers, read, and the apprentices closed around him and the river held its old animal patience below.
 

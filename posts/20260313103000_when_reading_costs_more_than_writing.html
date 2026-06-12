@@ -31,7 +31,7 @@
             font-family: "IBM Plex Sans", "Inter", "Source Sans 3", system-ui, sans-serif;
             background: var(--bg);
             color: var(--ink);
-            max-width: 860px;
+            max-width: 740px;
             letter-spacing: 0.002em;
         }
 
@@ -55,20 +55,14 @@
         }
 
         h1 {
-            border: none;
             color: #22201d;
             font-size: 2.62rem;
             line-height: 1.14;
             margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border: none;
+            border-bottom: 3px solid #d1c8b9;
             text-wrap: balance;
-        }
-
-        h1::after {
-            content: "";
-            display: block;
-            margin-top: 0.9rem;
-            width: 7rem;
-            border-top: 1px solid #d1c8b9;
         }
 
         p {
@@ -148,12 +142,12 @@
     <article>
         <aside class="entry-meta">
             <div class="date">13 March 2026, Helsinki, Åndrei Makarov</div>
-            <p class="signal">read_cost &gt; write_cost<br>verify_attention == scarce</p>
+            <p class="signal">eleven pm · four sentences · wrong branch</p>
         </aside>
         <section class="entry-main">
             <h1>When Reading Costs More Than Writing</h1>
 
-            <p class="lead">I started treating this as a minor annoyance and ended up recording it as a workflow event: generated commit messages often look acceptable from a distance and expensive up close, so expensive that if I have to read them carefully I can usually write a better one by hand in less time than it takes to verify the generated version.</p>
+            <p class="lead">I was diffing a pull request late when the commit message arrived: four perfect sentences, each describing a change I had not made, and I spent longer reading it than writing a replacement by hand.</p>
 
             <p>At first this showed up only in occasional commits, then it became a stable branch in daily practice where the decision tree stopped being ideological and became practical, because according to the shape of the diff I either use a free commit message generator, or write it manually, or in rare cases ask the chatbot window for a draft, and every branch of that tree is now chosen by reading cost, not by novelty or tool preference.</p>
 
@@ -161,9 +155,11 @@
 
             <p>This sounds irrational until you watch it for long enough across real projects, because once artifact generation is abundant the bottleneck moves to verification attention, and verification attention is still human, still finite, still metabolically costly, so the center of gravity shifts from "can we produce" to "can we trust what we produced without paying more to read it than to make another candidate".</p>
 
+            <p>Last week the same thing happened in review: a colleague pasted a generated summary of their diff, fluent and orderly, and I caught myself skimming for the shape of competence instead of the shape of the change, then checked out the branch locally because my own eyes were cheaper than trusting the paragraph.</p>
+
             <p>In that landscape commit messages become a small laboratory for a larger transition, with readable truth gradually separating from fluent output, and the practical response becomes selective trust where machines can draft aggressively but humans keep final authorship at the points where intent and accountability must stay legible.</p>
 
-            <p class="observation">Observation window: this behavior has repeated across multiple projects from 2023 to 2026, and the pattern keeps strengthening as generation speed rises faster than reading reliability.</p>
+            <p class="observation">I have watched this repeat across projects since 2023, and I still do not know whether reading will get cheaper or whether we are simply learning to generate faster than we can afford to verify.</p>
         </section>
     </article>
     <a href="#" id="to-top" title="To the top"></a>

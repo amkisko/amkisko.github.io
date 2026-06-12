@@ -10,7 +10,7 @@ Published: 2026-06-05T12:00:00+00:00
 
 On a mellow evening I made ambient beside green tea while boxes blinked like a small secular altar, and I called the night DAW-less because my hands touched knobs while the grid stayed elsewhere; the claim felt true until the take travelled into the laptop to be trimmed, named, mastered, uploaded, and fed to the same platforms that love thumbnails more than rooms.
 
-Synthesizers, samplers, grooveboxes, pedals, wooden side panels: the photograph is persuasive, it promises physical sound and direct hands, yet if the performance only becomes real after the computer baptizes it, the word describes the jam and no longer the whole act, and that slip matters because it shows how easily we misplace where music begins.
+Synthesizers, samplers, grooveboxes, pedals, wooden side panels: the photograph is persuasive, it promises physical sound and direct hands, yet if the performance only becomes real after the computer baptizes it, the word covers the jam and leaves the upload outside the frame, and that slip matters because it shows how easily we misplace where music begins.
 
 I have heard people use DAW-less as a production label and I have heard it used as a stricter climate: the personal computer is not the center, the screen is not the master clock, the session is not waiting for infinite undo; in that version even my phone counts as a pocket command center with worse manners, recording on a laptop is out, editing on a laptop is out, publishing through the usual rectangle is suspicious, and Slack talk about purity already spoils the joke while the joke keeps going.
 
@@ -32,4 +32,4 @@ The anti-screen jam still becomes screen content: camera angle, title, tags, alg
 
 So I keep the severe club as useful fiction: closed ritual with open output, computation hidden in instruments and pipes, more software perhaps, less cockpit; mockery marks the boundary with comic violence, green tea keeps the room quiet, the machines ask for touch, the recorder asks for commitment, and the open question stays where I like it: what to build so sound can travel outward without making me a content operator in the same breath that ends the song.
 
-the real club is a design problem, not a nostalgia club
+knobs still warm · tea gone cold · upload waiting in another room

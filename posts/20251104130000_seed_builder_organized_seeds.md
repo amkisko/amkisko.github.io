@@ -9,7 +9,7 @@ Published: 2025-11-04T13:00:00+00:00
 
 # Organizing Seeds: From Single File to Structured Directory with SeedBuilder
 
-In the Rails ecosystem, seeds exist in a liminal space. They're not migrations—they don't change structure. They're not application code—they don't run in production. They're data scripts that populate databases with initial content, and Rails provides exactly one mechanism for them: a single file called `db/seeds.rb`.
+Rails seeds populate the database with initial content. The default setup is a single file, `db/seeds.rb`. That works until seed data grows across teams, environments, and dependencies.
 
 For small applications, this works. You open the file, add a few `User.create!` calls, run `rails db:seed`, and you're done. But as applications grow, this single file becomes a repository of everything: users, products, settings, categories, permissions, demo data, test fixtures. All mixed together, unorganized, unversioned, untestable.
 

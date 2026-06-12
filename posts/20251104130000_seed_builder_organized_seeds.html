@@ -19,6 +19,12 @@
     <meta name="twitter:description" content="How SeedBuilder extends ActiveRecord to organize seeds in a directory structure and generate them as migrations.">
     <link rel="stylesheet" href="../styles/posts_text.css">
     <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        body { font-family: Literata, Georgia, serif; }
+        a { color: #3d6b4f; }
+        code { background: #f0f5f1; border-color: #d4e5db; }
+        pre { border-color: #d4e5db; background: #f5faf7; }
+    </style>
 </head>
 <body>
     <a href="../posts.html" id="map-link" title="Map"></a>
@@ -26,7 +32,7 @@
         <h1>Organizing Seeds: From Single File to Structured Directory with SeedBuilder</h1>
         <div class="date">4 November 2025, Helsinki, Åndrei Makarov</div>
 
-        <p>In the Rails ecosystem, seeds exist in a liminal space. They're not migrations—they don't change structure. They're not application code—they don't run in production. They're data scripts that populate databases with initial content, and Rails provides exactly one mechanism for them: a single file called <code>db/seeds.rb</code>.</p>
+        <p>Rails seeds populate the database with initial content. The default setup is a single file, <code>db/seeds.rb</code>. That works until seed data grows across teams, environments, and dependencies.</p>
 
         <p>For small applications, this works. You open the file, add a few <code>User.create!</code> calls, run <code>rails db:seed</code>, and you're done. But as applications grow, this single file becomes a repository of everything: users, products, settings, categories, permissions, demo data, test fixtures. All mixed together, unorganized, unversioned, untestable.</p>
 

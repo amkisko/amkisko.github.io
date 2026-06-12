@@ -9,9 +9,9 @@ Published: 2025-11-06T14:00:00+00:00
 
 # Building Extensible Slack Bots with Grape: The grape-slack-bot Framework
 
-Slack bots live in the space between user intent and system response. A user types `/command` and expects something to happen. A button is clicked, an event fires, a modal opens. Each interaction carries the weight of expectation—the bot must respond correctly, securely, immediately.
+A Slack bot must verify incoming requests, route slash commands and interactive events, store callback state, and return payloads in the format Slack expects. A missed signature check or malformed response shows up immediately in production.
 
-Building this responsiveness requires handling signatures that prove authenticity, parsing requests that arrive in different formats, storing callbacks that preserve state, formatting responses that satisfy Slack's requirements. The complexity accumulates like layers of sediment—each requirement building on the last, each edge case revealing another.
+Each feature adds boilerplate: signature verification, request parsing, callback storage, response formatting. Edge cases stack quickly across commands, modals, and event subscriptions.
 
 grape-slack-bot (https://github.com/amkisko/grape-slack-bot.rb) provides a framework that handles this complexity, allowing you to focus on what your bot does while signature verification and request parsing are handled consistently. It integrates with Grape's routing system in Rails applications, automatically handles signature verification, manages callback storage, and provides a declarative configuration system that makes bot behavior clear and extensible.
 

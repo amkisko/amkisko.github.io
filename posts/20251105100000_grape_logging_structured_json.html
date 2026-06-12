@@ -19,6 +19,12 @@
     <meta name="twitter:description" content="Why existing Grape logging solutions fail to provide complete request logging and structured JSON output.">
     <link rel="stylesheet" href="../styles/posts_text.css">
     <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        body { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+        a { color: #5c4a7a; }
+        pre { background: #f5f3f8; border-color: #ddd6e8; }
+        code { border-color: #ddd6e8; }
+    </style>
 </head>
 <body>
     <a href="../posts.html" id="map-link" title="Map"></a>
@@ -30,7 +36,7 @@
         <strong>Classification:</strong> Technical Investigation<br>
         <strong>Subject:</strong> Grape API logging gaps and structured logging fragmentation in Rails applications</p>
 
-        <h2>Evidence Collection</h2>
+        <h2>Problem summary</h2>
 
         <p><strong>Observation 1:</strong> Rails controllers log automatically. Grape APIs do not. This asymmetry creates blind spots in production monitoring.</p>
 

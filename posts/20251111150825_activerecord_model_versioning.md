@@ -7,7 +7,7 @@ Published: 2025-11-11T15:08:25+00:00
 
 ---
 
-ActiveRecord versioning and internationalization have followed similar paths in the Ruby ecosystem: start simple with JSON or YAML storage in database columns, then struggle with the limitations. JSONB is fun at the start, but becomes painful when you need to query, maintain, or extend functionality. YAML has no native PostgreSQL support. Neither approach scales well for complex requirements like custom attributes, attachments, rich text, or versioning by platform or user role.
+ActiveRecord versioning and internationalization often start with JSON or YAML in database columns, then hit limits as requirements grow. JSONB works for small cases but gets awkward to query, maintain, and extend. YAML has no native PostgreSQL support. Neither approach scales cleanly for custom attributes, attachments, rich text, or versioning by platform or user role.
 
 I'm proposing a new gem called `active_version` (with the `ActiveVersion` module) that takes a different approach: proper schema design with separate tables for versions, a DSL for building relations and automations, and extensibility as a first-class concern. This post explores the design, requirements, and seeks feedback from the community.
 

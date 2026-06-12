@@ -11,7 +11,7 @@ Document ID: LOG-2025-001
 Classification: Technical Investigation
 Subject: Grape API logging gaps and structured logging fragmentation in Rails applications
 
-## Evidence Collection
+## Problem summary
 
 Observation 1: Rails controllers log automatically. Grape APIs do not. This asymmetry creates blind spots in production monitoring.
 

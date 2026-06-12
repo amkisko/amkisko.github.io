@@ -1,7 +1,7 @@
-# ActiveVersion Before Release: A Story from the Build Room
+# ActiveVersion Before Release: Build Room Notes
 
 URL: https://amkisko.github.io/posts/20260306115209_activeversion_before_release_a_story_from_the_build_room.html
-Description: A release-week story of active_version.rb: from proposal to implementation, what is stable, and how Rails multi-db patterns shape the next steps.
+Description: Release-week technical notes for active_version.rb: from proposal to implementation, what is stable, and how Rails multi-db patterns shape the next steps.
 Date: 6 March 2026, Helsinki, Åndrei Makarov
 Published: 2026-03-06T09:52:09+00:00
 
