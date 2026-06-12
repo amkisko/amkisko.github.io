@@ -63,9 +63,6 @@ date_string = "#{formatted_date}, Helsinki, Åndrei Makarov"
 # Format datetime for meta tags (ISO 8601)
 iso_datetime = now.utc.strftime("%Y-%m-%dT%H:%M:%S+00:00")
 
-# Format date for sitemap (YYYY-MM-DD)
-sitemap_date = now.strftime("%Y-%m-%d")
-
 # Format date for posts.html (e.g., "December 1, 2025")
 posts_date = now.strftime("%B %-d, %Y")
 
@@ -134,30 +131,13 @@ FileUtils.mkdir_p(posts_dir)
 # Write the file
 File.write(filepath, html_content)
 
-# Update sitemap.xml
-sitemap_path = File.join(__dir__, '..', '..', 'sitemap.xml')
-if File.exist?(sitemap_path)
-  doc = Nokogiri::XML(File.read(sitemap_path))
-  doc.encoding = 'UTF-8'
-
-  # Find the posts.html url entry
-  posts_url = doc.at_xpath("//url[loc[text()='https://amkisko.github.io/posts.html']]")
-
-  if posts_url
-    # Create new url entry
-    new_url = Nokogiri::XML::Node.new('url', doc)
-    new_url.add_child("<loc>#{url}</loc>")
-    new_url.add_child("<lastmod>#{sitemap_date}</lastmod>")
-    new_url.add_child("<changefreq>monthly</changefreq>")
-    new_url.add_child("<priority>0.8</priority>")
-
-    # Insert after posts.html entry
-    posts_url.add_next_sibling(new_url)
+generate_sitemap = File.expand_path('../../scripts/generate_sitemap.rb', __dir__)
+if File.exist?(generate_sitemap)
+  unless system(RbConfig.ruby, generate_sitemap)
+    warn 'Warning: failed to regenerate sitemap.xml'
   end
-
-  # Write back with proper formatting
-  File.write(sitemap_path, doc.to_xml(indent: 2))
-  puts "Updated sitemap.xml"
+else
+  warn 'Warning: generate_sitemap.rb not found'
 end
 
 # Update posts.html
@@ -251,6 +231,12 @@ if File.exist?(feed_path)
   # Write back with proper formatting
   File.write(feed_path, doc.to_xml(indent: 2))
   puts "Updated feed.xml"
+end
+
+submit_script = File.join(__dir__, '..', '..', 'scripts', 'submit_urls.rb')
+if File.exist?(submit_script)
+  puts "\nSubmitting new URL to IndexNow..."
+  system('ruby', submit_script, 'submit', url) || warn('IndexNow submission failed (site may not be deployed yet)')
 end
 
 puts "\nCreated new post: #{filepath}"
