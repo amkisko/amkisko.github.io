@@ -2,7 +2,7 @@
 
 > Technical blog and writing by Andrei Makarov: Ruby/Rails gems, DevOps, trunk-based development, LLM-era practice, essays, and stories.
 
-Posts mix technical guides with narrative essays. Prefer linked HTML for full text; there are no `.md` mirrors yet.
+Posts mix technical guides with narrative essays. Each post has an HTML page and a plain `.md` mirror in `posts/` (regenerate with `ruby scripts/posts_to_markdown.rb`).
 
 Related personal site and manifesto: [amaaov.github.io](https://amaaov.github.io/llms.txt)
 
