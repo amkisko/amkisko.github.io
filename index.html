@@ -5,6 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Andrei Makarov - Ruby Developer & Technical Writer</title>
     <meta name="description" content="Collection of Ruby gems, technical blog posts, and insights on software development, DevOps, and technology by Andrei Makarov." />
+    <meta name="author" content="Åndrei Makarov" />
+    <link rel="canonical" href="https://amkisko.github.io/" />
+    <meta property="og:title" content="Andrei Makarov — Ruby Developer & Technical Writer" />
+    <meta property="og:description" content="Ruby gems, technical blog posts, and essays on software development, DevOps, LLM-era practice, and technology." />
+    <meta property="og:url" content="https://amkisko.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Andrei Makarov — Ruby Developer & Technical Writer" />
+    <meta name="twitter:description" content="Ruby gems, technical blog posts, and essays on software development, DevOps, LLM-era practice, and technology." />
+    <meta name="twitter:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Åndrei Makarov",
+      "alternateName": ["amkisko", "Andrei Makarov"],
+      "url": "https://amkisko.github.io/",
+      "sameAs": [
+        "https://github.com/amkisko",
+        "https://amaaov.github.io/"
+      ],
+      "jobTitle": "Ruby Developer",
+      "description": "Ruby developer, technical writer, and digital gardener. Essays on Rails, DevOps, and LLM-era software practice."
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Åndrei Makarov",
+      "url": "https://amkisko.github.io/",
+      "description": "Technical blog and Ruby gems by Andrei Makarov.",
+      "author": {
+        "@type": "Person",
+        "name": "Åndrei Makarov",
+        "url": "https://amkisko.github.io/"
+      }
+    }
+    </script>
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
@@ -116,7 +156,8 @@
         opacity: 0.3;
       }
 
-      .header h1 {
+      .header h1,
+      .header .header-title {
         font-size: 3rem;
         font-weight: 600;
         letter-spacing: 0.005em;
@@ -409,7 +450,8 @@
           margin-bottom: var(--spacing-6);
         }
 
-        .header h1 {
+        .header h1,
+      .header .header-title {
           font-size: 2rem;
         }
 
@@ -462,6 +504,8 @@
   <body>
     <div class="container">
       <header class="header">
+        <h1 class="header-title">Andrei Makarov</h1>
+        <p class="subtitle">Ruby developer, technical writer, digital gardener</p>
         <div class="header-info">
           <div class="header-info-item">👋 Hi, I'm @amkisko</div>
           <div class="header-info-item">👀 Available at <a href="https://kiskolabs.com" target="_blank" rel="noopener">@kiskolabs</a></div>
@@ -474,6 +518,7 @@
       <nav class="nav">
         <a href="posts.html">All Posts</a>
         <a href="feed.xml">RSS Feed</a>
+        <a href="llms.txt">LLM index</a>
         <a href="https://github.com/amkisko" target="_blank" rel="noopener">GitHub</a>
         <a href="https://discord.gg/TEhVxcBj" target="_blank" rel="noopener">Discord</a>
       </nav>

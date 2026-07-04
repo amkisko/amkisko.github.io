@@ -4,6 +4,7 @@
 require 'time'
 require 'fileutils'
 require 'cgi'
+require 'json'
 require 'nokogiri'
 
 # Get title and description from command line arguments or prompt
@@ -74,14 +75,7 @@ def html_escape(text)
   CGI.escapeHTML(text)
 end
 
-# Generate keywords (basic extraction from title and description)
-keywords = (title + " " + description)
-           .downcase
-           .split(/\s+/)
-           .reject { |w| w.length < 4 }
-           .uniq
-           .first(10)
-           .join(", ")
+# Generate keywords removed — Google ignores meta keywords; see .agents/seo/SITE_CONTRACT.md
 
 # Generate HTML content
 html_content = <<~HTML
@@ -92,18 +86,36 @@ html_content = <<~HTML
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>#{html_escape(title)}</title>
     <meta name="description" content="#{html_escape(description)}">
-    <meta name="keywords" content="#{html_escape(keywords)}">
     <meta name="author" content="Åndrei Makarov">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="#{url}">
     <meta property="og:title" content="#{html_escape(title)}">
     <meta property="og:description" content="#{html_escape(description)}">
     <meta property="og:type" content="article">
     <meta property="og:url" content="#{url}">
+    <meta property="og:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
     <meta property="article:published_time" content="#{iso_datetime}">
     <meta property="article:modified_time" content="#{iso_datetime}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="#{html_escape(title)}">
     <meta name="twitter:description" content="#{html_escape(description)}">
+    <meta name="twitter:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": #{JSON.generate(title)},
+      "author": {
+        "@type": "Person",
+        "name": "Åndrei Makarov",
+        "url": "https://amkisko.github.io/"
+      },
+      "datePublished": "#{iso_datetime}",
+      "dateModified": "#{iso_datetime}",
+      "url": "#{url}",
+      "inLanguage": "en"
+    }
+    </script>
     <link rel="stylesheet" href="../styles/posts_text.css">
     <link rel="stylesheet" href="../styles/posts_navigation.css">
 </head>
@@ -132,8 +144,10 @@ FileUtils.mkdir_p(posts_dir)
 File.write(filepath, html_content)
 
 generate_sitemap = File.expand_path('../../scripts/generate_sitemap.rb', __dir__)
+sitemap_config = File.expand_path('../../scripts/sitemap.yml', __dir__)
 if File.exist?(generate_sitemap)
-  unless system(RbConfig.ruby, generate_sitemap)
+  config_arg = File.exist?(sitemap_config) ? sitemap_config : nil
+  unless system(RbConfig.ruby, generate_sitemap, *(config_arg ? [config_arg] : []))
     warn 'Warning: failed to regenerate sitemap.xml'
   end
 else
@@ -244,4 +258,5 @@ puts "Title: #{title}"
 puts "Description: #{description}"
 puts "Slug: #{slug}"
 puts "Datetime prefix: #{datetime_prefix}"
+puts "\nRemember to add this post to llms.txt under the appropriate section."
 puts "\nAll files updated successfully!"

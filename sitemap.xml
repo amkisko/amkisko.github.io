@@ -2,11 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://amkisko.github.io/</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-07-04</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts.html</loc>
-    <lastmod>2026-06-11</lastmod>
+    <lastmod>2026-07-04</lastmod>
+  </url>
+  <url>
+    <loc>https://amkisko.github.io/games/index.html</loc>
+    <lastmod>2026-07-04</lastmod>
+  </url>
+  <url>
+    <loc>https://amkisko.github.io/asoc/index.html</loc>
+    <lastmod>2026-07-04</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html</loc>
@@ -18,7 +26,7 @@
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html</loc>
-    <lastmod>2026-06-05</lastmod>
+    <lastmod>2026-06-04</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20260506215700_reality_driven_development.html</loc>
@@ -102,11 +110,11 @@
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html</loc>
-    <lastmod>2024-05-07</lastmod>
+    <lastmod>2025-05-07</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20250507114000_force_pushes.html</loc>
-    <lastmod>2024-05-07</lastmod>
+    <lastmod>2025-05-07</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html</loc>
