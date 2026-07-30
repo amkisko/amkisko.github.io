@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proof of Presence</title>
+    <meta name="description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta name="author" content="Åndrei Makarov">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html">
+    <meta property="og:title" content="Proof of Presence">
+    <meta property="og:description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html">
+    <meta property="og:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
+    <meta property="article:published_time" content="2026-07-30T11:26:55+00:00">
+    <meta property="article:modified_time" content="2026-07-30T11:26:55+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Proof of Presence">
+    <meta name="twitter:description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta name="twitter:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/posts_text.css">
+    <link rel="stylesheet" href="../styles/posts_navigation.css">
+    <style>
+        /*
+         * Visual language aligned with crates.io (cream paper, forest header,
+         * Fira Sans / Fira Mono, gold CTAs, green links). Reference tokens from
+         * crates.io svelte/src/lib/css/global.css, not a fork of their CSS.
+         */
+        :root {
+            --main-bg: #f9f7ec;
+            --main-bg-dark: #edebdd;
+            --main-color: #383838;
+            --main-color-light: #858585;
+            --gray-border: #d5d3cb;
+            --header-bg: #254223;
+            --green900: #274624;
+            --green800: #3a6736;
+            --link: #00ac5b;
+            --link-hover: #007940;
+            --yellow500: #ffc832;
+            --code-bg: #f6f8fa;
+            --font: "Fira Sans", sans-serif;
+            --mono: "Fira Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            --max: 960px;
+            --radius: 5px;
+            --shadow-card: 0 1px 3px hsla(51, 90%, 42%, 0.35);
+            --space-s: clamp(0.875rem, 0.8rem + 0.35vw, 1.125rem);
+            --space-m: clamp(1.3125rem, 1.2rem + 0.5vw, 1.6875rem);
+            --space-l: clamp(1.75rem, 1.6rem + 0.7vw, 2.25rem);
+        }
+
+        html {
+            background: var(--header-bg);
+        }
+
+        body.crates-page {
+            position: relative;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 4rem;
+            font-family: var(--font);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--main-color);
+            background: var(--main-bg) !important;
+            box-shadow: 0 0 6px 0 var(--green900);
+            min-height: 100vh;
+            letter-spacing: 0;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        body.crates-page h1,
+        body.crates-page h2,
+        body.crates-page h3 {
+            font-family: var(--font);
+            border: none;
+            letter-spacing: 0;
+            color: var(--main-color);
+        }
+
+        #map-link,
+        #to-top {
+            z-index: 1000;
+        }
+
+        #map-link {
+            background: linear-gradient(145deg, #edebdd, #d5d3cb);
+            box-shadow:
+                0 2px 8px rgba(39, 70, 36, 0.2),
+                inset 0 -1px 2px rgba(37, 66, 35, 0.12),
+                inset 0 1px 2px rgba(249, 247, 236, 0.7);
+        }
+
+        #map-link:hover {
+            box-shadow:
+                0 4px 12px rgba(39, 70, 36, 0.28),
+                inset 0 -1px 2px rgba(37, 66, 35, 0.15),
+                inset 0 1px 2px rgba(249, 247, 236, 0.8);
+        }
+
+        #map-link:focus-visible,
+        #to-top:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--yellow500);
+            outline-offset: 2px;
+        }
+
+        .site-header {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 0.85rem var(--space-s);
+        }
+
+        .site-header-inner {
+            max-width: var(--max);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .crate-mark {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .site-wordmark {
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+            color: #fff;
+            text-decoration: none;
+            text-shadow: 1px 1px 0 var(--green900);
+        }
+
+        .site-wordmark:hover {
+            color: var(--yellow500);
+        }
+
+        .site-tag {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.72);
+            font-weight: 500;
+        }
+
+        .shell {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: var(--space-s);
+            padding-bottom: var(--space-l);
+        }
+
+        .page-header {
+            background: var(--main-bg-dark);
+            border-radius: var(--radius);
+            padding: var(--space-s) var(--space-m);
+            margin-bottom: var(--space-s);
+            box-shadow: var(--shadow-card);
+        }
+
+        .page-header h1 {
+            margin: 0 0 0.35rem;
+            font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.15rem);
+            font-weight: 600;
+            line-height: 1.2;
+            text-wrap: balance;
+        }
+
+        .page-lede {
+            margin: 0;
+            color: var(--main-color);
+            font-size: 1.05rem;
+            line-height: 1.45;
+            font-weight: 400;
+            max-width: 42rem;
+        }
+
+        .page-meta {
+            margin: 0.75rem 0 0;
+            font-size: 0.8rem;
+            color: var(--main-color-light);
+            letter-spacing: 0.02em;
+        }
+
+        .article-box {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: var(--space-m);
+            box-shadow: var(--shadow-card);
+            margin-bottom: var(--space-s);
+        }
+
+        .article-box p {
+            margin: 0 0 1.15rem;
+            font-size: 1.0625rem;
+            line-height: 1.65;
+            color: var(--main-color);
+            text-wrap: pretty;
+            max-width: none;
+        }
+
+        .article-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .article-box h2 {
+            margin: 2rem 0 0.85rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .article-box h2:first-child {
+            margin-top: 0;
+        }
+
+        .article-box a {
+            color: var(--link);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .article-box a:hover {
+            color: var(--link-hover);
+        }
+
+        .wire {
+            margin: 1.25rem 0;
+            padding: 0.85rem 1rem;
+            background: var(--code-bg);
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 0.85em;
+            line-height: 1.55;
+            color: var(--main-color);
+            border: 1px solid var(--gray-border);
+        }
+
+        code {
+            font-family: var(--mono);
+            font-size: 0.85em;
+            background: var(--code-bg);
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+            color: var(--main-color);
+            border: none;
+        }
+
+        .wire code {
+            background: transparent;
+            padding: 0;
+        }
+
+        .site-footer {
+            background: var(--header-bg);
+            color: #fff;
+            padding: var(--space-m) var(--space-s);
+            margin-top: var(--space-s);
+        }
+
+        .site-footer-inner {
+            max-width: var(--max);
+            margin: 0 auto;
+        }
+
+        .site-footer h2 {
+            margin: 0 0 0.5rem;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--yellow500);
+            text-shadow: 1px 1px 1px var(--green900);
+            border: none;
+        }
+
+        .site-footer p,
+        .site-footer a {
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.95rem;
+        }
+
+        .site-footer a:hover {
+            color: var(--yellow500);
+        }
+
+        .site-footer .signoff {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .references {
+            margin-top: 1.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-border);
+            font-size: 0.92rem;
+            color: var(--main-color-light);
+        }
+
+        .references ul {
+            margin: 0.5rem 0 0;
+            padding-left: 1.2rem;
+        }
+
+        .references li {
+            margin-bottom: 0.35rem;
+        }
+
+        @media (max-width: 640px) {
+            .site-tag {
+                display: none;
+            }
+
+            .article-box {
+                padding: var(--space-s);
+            }
+
+            .article-box p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #map-link {
+                transition: none;
+            }
+        }
+
+        @media print {
+            html,
+            body.crates-page {
+                background: #fff !important;
+                box-shadow: none;
+            }
+
+            .site-header,
+            .site-footer,
+            #map-link,
+            #to-top {
+                display: none !important;
+            }
+
+            .article-box,
+            .page-header {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+    <style>
+        /*
+         * Process-dark reinterpretation:
+         * crates.io supplies the Fira typography, compact registry chrome,
+         * warm paper and yellow focus. The surrounding field translates those
+         * roles into a CMYK/post-simulacrum system used across amkisko/amaaov:
+         * key-black structure, cyan navigation, magenta challenge, yellow presence.
+         */
+        :root {
+            --process-k: #030408;
+            --process-k-raised: #090b12;
+            --process-k-soft: #11141d;
+            --process-paper: #f9f7ec;
+            --process-paper-soft: #d9d8d1;
+            --process-paper-muted: #92959c;
+            --process-c: #00e5ff;
+            --process-c-soft: rgba(0, 229, 255, 0.24);
+            --process-m: #ff2d95;
+            --process-m-soft: rgba(255, 45, 149, 0.22);
+            --process-y: #ffc832;
+            --process-y-soft: rgba(255, 200, 50, 0.22);
+            --process-line: rgba(249, 247, 236, 0.15);
+            --process-surface: rgba(7, 9, 15, 0.82);
+            --process-surface-solid: #080a10;
+            --process-shadow: 0 2rem 7rem rgba(0, 0, 0, 0.52);
+            --radius: 18px;
+            --max: 1024px;
+        }
+
+        html {
+            color-scheme: dark;
+            background: var(--process-k);
+        }
+
+        body.crates-page {
+            isolation: isolate;
+            overflow-x: hidden;
+            padding-bottom: 2rem;
+            color: var(--process-paper);
+            background:
+                radial-gradient(circle at 12% 4%, rgba(0, 229, 255, 0.16), transparent 31rem),
+                radial-gradient(circle at 92% 18%, rgba(255, 45, 149, 0.14), transparent 34rem),
+                radial-gradient(circle at 52% 94%, rgba(255, 200, 50, 0.08), transparent 38rem),
+                var(--process-k) !important;
+            box-shadow: none;
+        }
+
+        body.crates-page::before,
+        body.crates-page::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        body.crates-page::before {
+            z-index: 1;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0,
+                    transparent 3px,
+                    rgba(255, 255, 255, 0.018) 3px,
+                    rgba(255, 255, 255, 0.018) 4px
+                ),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.025), transparent 28%, transparent 72%, rgba(255, 45, 149, 0.025));
+            mix-blend-mode: screen;
+        }
+
+        body.crates-page::after {
+            z-index: 1;
+            background:
+                radial-gradient(ellipse 105% 76% at 50% 32%, transparent 26%, rgba(3, 4, 8, 0.44) 82%),
+                linear-gradient(180deg, rgba(3, 4, 8, 0.08), rgba(3, 4, 8, 0.54));
+        }
+
+        #plasma-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.46;
+            filter: saturate(1.28) contrast(1.08) blur(0.45px);
+            mix-blend-mode: screen;
+            transform: scale(1.015);
+        }
+
+        .site-header,
+        .shell,
+        .site-footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 12;
+            padding: 0.8rem var(--space-s);
+            color: var(--process-paper);
+            background: rgba(3, 4, 8, 0.68);
+            border-bottom: 1px solid var(--process-line);
+            -webkit-backdrop-filter: blur(20px) saturate(1.25);
+            backdrop-filter: blur(20px) saturate(1.25);
+        }
+
+        .site-header::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: -1px;
+            left: 0;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                var(--process-c) 0 33.333%,
+                var(--process-m) 33.333% 66.666%,
+                var(--process-y) 66.666% 100%
+            );
+            opacity: 0.72;
+            transform-origin: left center;
+        }
+
+        body.reading-progress .site-header::after {
+            transform: scaleX(var(--reading-progress, 0));
+            box-shadow:
+                0 0 0.55rem rgba(0, 229, 255, 0.28),
+                0 0 0.8rem rgba(255, 45, 149, 0.18);
+            will-change: transform;
+        }
+
+        .site-header-inner {
+            max-width: var(--max);
+        }
+
+        .crate-mark {
+            filter:
+                drop-shadow(1.5px 0 5px rgba(0, 229, 255, 0.35))
+                drop-shadow(-1.5px 0 5px rgba(255, 45, 149, 0.3));
+        }
+
+        .crate-mark .crate-shell {
+            fill: var(--process-y);
+        }
+
+        .crate-mark .crate-top {
+            fill: var(--process-m);
+            opacity: 0.46;
+        }
+
+        .crate-mark .crate-line {
+            stroke: var(--process-k);
+        }
+
+        .site-wordmark {
+            color: var(--process-c);
+            text-shadow: none;
+        }
+
+        .site-wordmark:hover {
+            color: var(--process-y);
+        }
+
+        .site-tag {
+            color: var(--process-paper-soft);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .shell {
+            padding-top: clamp(1.25rem, 3vw, 2.75rem);
+        }
+
+        .page-header {
+            position: relative;
+            overflow: visible;
+            margin-bottom: 0;
+            min-height: 15rem;
+            padding: clamp(1.6rem, 4vw, 3.75rem) clamp(12rem, 25vw, 18rem) clamp(2.6rem, 6vw, 5rem) 0;
+            color: var(--process-paper);
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .ecosystem-mark {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: clamp(11rem, 22vw, 15rem);
+            height: auto;
+            opacity: 0.78;
+            overflow: visible;
+            transform: translateY(-50%);
+            filter:
+                drop-shadow(0 0 1.5rem rgba(0, 229, 255, 0.09))
+                drop-shadow(0 0 2rem rgba(255, 45, 149, 0.08));
+            animation: mark-processing 14s steps(1, end) infinite;
+        }
+
+        .signal-film,
+        .signal-overflow {
+            position: absolute;
+            z-index: 4;
+            display: block;
+            pointer-events: none;
+        }
+
+        .signal-film {
+            inset: -1.5rem -8vw;
+            opacity: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 0 31%,
+                    rgba(249, 247, 236, 0.2) 31.1%,
+                    rgba(249, 247, 236, 0.04) 31.35%,
+                    transparent 31.6% 100%
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0 3px,
+                    rgba(249, 247, 236, 0.06) 3px 4px
+                );
+            mix-blend-mode: screen;
+            animation: film-processing 17s steps(1, end) infinite;
+        }
+
+        .signal-overflow {
+            top: 43%;
+            right: -12vw;
+            left: -12vw;
+            height: 6px;
+            opacity: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent 0 5%,
+                    var(--process-c) 5% 24%,
+                    transparent 24% 31%,
+                    var(--process-m) 31% 58%,
+                    transparent 58% 67%,
+                    var(--process-y) 67% 91%,
+                    transparent 91% 100%
+                );
+            filter: blur(0.35px);
+            mix-blend-mode: screen;
+            animation: signal-overrun 11s steps(1, end) infinite;
+        }
+
+        .ecosystem-mark .rust-ring,
+        .ecosystem-mark .rust-tooth {
+            fill: none;
+            stroke: rgba(249, 247, 236, 0.28);
+            stroke-width: 2;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ecosystem-mark .rust-assembly {
+            transform-box: view-box;
+            transform-origin: center;
+        }
+
+        .ecosystem-mark .rust-ring {
+            stroke-dasharray: 3 8;
+            transform-box: view-box;
+            transform-origin: center;
+            animation: rust-ring-turn 38s linear infinite;
+        }
+
+        .ecosystem-mark .rust-teeth {
+            transform-box: view-box;
+            transform-origin: center;
+            animation: rust-teeth-turn 54s linear infinite;
+        }
+
+        .ecosystem-mark .cargo-path {
+            fill: none;
+            stroke: var(--process-c);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 2 8;
+            vector-effect: non-scaling-stroke;
+            animation: cargo-flow 5.5s linear infinite;
+        }
+
+        .ecosystem-mark .cargo-node {
+            fill: var(--process-c);
+            filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: cargo-node 3s ease-in-out infinite;
+        }
+
+        .ecosystem-mark .cargo-node:nth-of-type(2) {
+            animation-delay: -1.5s;
+        }
+
+        .ecosystem-mark .crate-body {
+            transform-box: view-box;
+            transform-origin: 120px 125px;
+            animation: crate-breathe 5.2s ease-in-out infinite;
+        }
+
+        .ecosystem-mark .spatial-body {
+            transform-origin: 120px 120px;
+            will-change: transform, opacity;
+        }
+
+        .ecosystem-mark .key-symbol {
+            transform-box: view-box;
+            transform-origin: 120px 120px;
+            animation: key-self-spin 13s linear infinite;
+        }
+
+        .ecosystem-mark .key-ring,
+        .ecosystem-mark .key-stem {
+            fill: none;
+            stroke: var(--process-y);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke;
+            filter: drop-shadow(0 0 7px rgba(255, 200, 50, 0.38));
+        }
+
+        .ecosystem-mark .lock-body {
+            fill: rgba(3, 4, 8, 0.84);
+            stroke: var(--process-m);
+            stroke-width: 2;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ecosystem-mark .lock-shackle {
+            fill: none;
+            stroke: var(--process-paper);
+            stroke-width: 3;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ecosystem-mark .lock-keyway {
+            fill: none;
+            stroke: var(--process-y);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ecosystem-mark .crate-top-face {
+            fill: rgba(255, 200, 50, 0.88);
+        }
+
+        .ecosystem-mark .crate-left-face {
+            fill: rgba(255, 45, 149, 0.66);
+        }
+
+        .ecosystem-mark .crate-right-face {
+            fill: rgba(0, 229, 255, 0.62);
+        }
+
+        .ecosystem-mark .crate-edge {
+            fill: none;
+            stroke: var(--process-k);
+            stroke-width: 2;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ecosystem-mark .presence-core {
+            fill: var(--process-y);
+            stroke: var(--process-k);
+            stroke-width: 2;
+            filter: drop-shadow(0 0 9px rgba(255, 200, 50, 0.62));
+            vector-effect: non-scaling-stroke;
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: presence-pulse 2.6s ease-in-out infinite;
+        }
+
+        @keyframes rust-ring-turn {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rust-teeth-turn {
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        @keyframes key-self-spin {
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        @keyframes cargo-flow {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+
+        @keyframes cargo-node {
+            0%,
+            100% {
+                opacity: 0.46;
+                transform: scale(0.78);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.16);
+            }
+        }
+
+        @keyframes crate-breathe {
+            0%,
+            100% {
+                transform: scale(0.985) translateY(1px);
+            }
+            50% {
+                transform: scale(1.018) translateY(-1px);
+            }
+        }
+
+        @keyframes presence-pulse {
+            0%,
+            100% {
+                opacity: 0.72;
+                transform: scale(0.76);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.22);
+            }
+        }
+
+        @keyframes mark-processing {
+            0%,
+            78%,
+            82%,
+            100% {
+                filter:
+                    drop-shadow(0 0 1.5rem rgba(0, 229, 255, 0.09))
+                    drop-shadow(0 0 2rem rgba(255, 45, 149, 0.08));
+            }
+            79% {
+                filter:
+                    contrast(1.45)
+                    saturate(0.72)
+                    drop-shadow(5px 0 0 rgba(0, 229, 255, 0.38))
+                    drop-shadow(-4px 0 0 rgba(255, 45, 149, 0.34));
+            }
+            80% {
+                filter:
+                    contrast(0.82)
+                    saturate(1.7)
+                    hue-rotate(9deg)
+                    drop-shadow(-7px 0 0 rgba(0, 229, 255, 0.32))
+                    drop-shadow(6px 0 0 rgba(255, 45, 149, 0.4));
+            }
+            81% {
+                filter:
+                    brightness(1.32)
+                    contrast(1.18)
+                    drop-shadow(2px 0 0 rgba(255, 200, 50, 0.34));
+            }
+        }
+
+        @keyframes film-processing {
+            0%,
+            70%,
+            76%,
+            100% {
+                opacity: 0;
+                background-position: 0 0;
+            }
+            71% {
+                opacity: 0.13;
+                background-position: -14vw 0;
+            }
+            72% {
+                opacity: 0.28;
+                background-position: 23vw 2px;
+            }
+            73% {
+                opacity: 0.08;
+                background-position: 41vw -1px;
+            }
+            74% {
+                opacity: 0.2;
+                background-position: 68vw 1px;
+            }
+            75% {
+                opacity: 0.04;
+                background-position: 91vw 0;
+            }
+        }
+
+        @keyframes signal-overrun {
+            0%,
+            61%,
+            67%,
+            100% {
+                opacity: 0;
+                transform: translateX(-9%) scaleY(0.5);
+            }
+            62% {
+                opacity: 0.24;
+                transform: translateX(-5%) scaleY(0.5);
+            }
+            63% {
+                opacity: 0.7;
+                transform: translateX(3%) scaleY(1);
+            }
+            64% {
+                opacity: 0.32;
+                transform: translateX(8%) scaleY(0.35);
+            }
+            65% {
+                opacity: 0.58;
+                transform: translateX(14%) scaleY(0.72);
+            }
+            66% {
+                opacity: 0.08;
+                transform: translateX(19%) scaleY(0.2);
+            }
+        }
+
+        .page-header h1,
+        body.crates-page h1 {
+            position: relative;
+            max-width: 15ch;
+            margin-bottom: 0.65rem;
+            color: var(--process-y);
+            font-size: clamp(2.35rem, 6.8vw, 5.4rem);
+            font-weight: 600;
+            line-height: 0.98;
+            letter-spacing: -0.055em;
+            text-shadow: 0 0 2.4rem rgba(255, 200, 50, 0.18);
+        }
+
+        .page-lede {
+            position: relative;
+            max-width: 57ch;
+            color: var(--process-paper-soft);
+            font-size: clamp(1.05rem, 1rem + 0.35vw, 1.22rem);
+            line-height: 1.58;
+        }
+
+        .page-meta {
+            position: relative;
+            margin-top: 1.25rem;
+            color: var(--process-paper-muted);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+        }
+
+        .article-box {
+            counter-reset: article-section;
+            padding: 0 0 clamp(1.45rem, 4vw, 3.6rem);
+            color: var(--process-paper);
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+
+        .article-box p {
+            max-width: 71ch;
+            margin-right: auto;
+            color: var(--process-paper-soft);
+            font-size: clamp(1.02rem, 0.98rem + 0.18vw, 1.12rem);
+            line-height: 1.74;
+        }
+
+        .article-box h2 {
+            counter-increment: article-section;
+            position: relative;
+            display: grid;
+            grid-template-columns: 2.8rem minmax(0, 1fr);
+            gap: 0.8rem;
+            align-items: baseline;
+            max-width: 30ch;
+            margin-top: clamp(2.75rem, 7vw, 5.25rem);
+            margin-bottom: 1.25rem;
+            color: var(--process-y);
+            font-size: clamp(1.35rem, 1.15rem + 0.9vw, 1.9rem);
+            font-weight: 600;
+            line-height: 1.18;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
+        }
+
+        body.crates-page .article-box h2 {
+            color: var(--process-y);
+        }
+
+        body.crates-page .article-box h2:nth-of-type(3n + 2) {
+            color: var(--process-m);
+        }
+
+        .article-box h2::before {
+            content: "0" counter(article-section);
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: var(--process-paper-muted);
+            text-shadow: none;
+        }
+
+        .article-box h2::after {
+            content: "";
+            position: absolute;
+            top: calc(100% + 0.55rem);
+            left: 3.6rem;
+            width: min(13rem, 44vw);
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                var(--process-c),
+                var(--process-m) 58%,
+                var(--process-y)
+            );
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: left center;
+        }
+
+        body.article-motion .article-box > h2,
+        body.article-motion .article-box > p,
+        body.article-motion .article-box > .wire,
+        body.article-motion .article-box > .references {
+            opacity: 0;
+            transform: translate3d(0, 1.15rem, 0);
+            transition:
+                opacity 620ms cubic-bezier(0.2, 0.76, 0.24, 1),
+                transform 780ms cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--reveal-delay, 0ms);
+            will-change: opacity, transform;
+        }
+
+        body.article-motion .article-box > h2 {
+            transform: translate3d(-1.75rem, 0.45rem, 0);
+        }
+
+        body.article-motion .article-box > .is-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            will-change: auto;
+        }
+
+        body.article-motion .article-box > h2.is-visible::after {
+            animation: section-trace 1050ms cubic-bezier(0.16, 1, 0.3, 1)
+                calc(var(--reveal-delay, 0ms) + 140ms) both;
+        }
+
+        @keyframes section-trace {
+            0% {
+                opacity: 0;
+                transform: scaleX(0);
+            }
+            34% {
+                opacity: 0.88;
+            }
+            72% {
+                opacity: 0.58;
+                transform: scaleX(1);
+            }
+            100% {
+                opacity: 0.18;
+                transform: scaleX(1);
+            }
+        }
+
+        .article-box a {
+            color: var(--process-c);
+            font-weight: 500;
+            text-decoration: underline;
+            text-decoration-color: rgba(0, 229, 255, 0.34);
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.2em;
+        }
+
+        .article-box a:hover {
+            color: var(--process-y);
+            text-decoration-color: rgba(255, 200, 50, 0.66);
+        }
+
+        code {
+            color: #ff8bc5;
+            background: rgba(255, 45, 149, 0.09);
+            border: 1px solid rgba(255, 45, 149, 0.18);
+        }
+
+        .wire {
+            position: relative;
+            max-width: 76ch;
+            margin: 1.65rem 0 1.85rem;
+            padding: 1.15rem 1.25rem 1.25rem;
+            color: var(--process-paper-soft);
+            background:
+                linear-gradient(100deg, rgba(0, 229, 255, 0.055), transparent 38%, rgba(255, 45, 149, 0.05)),
+                #03050a;
+            border: 0;
+            border-radius: 0;
+            box-shadow:
+                inset 3px 0 0 rgba(0, 229, 255, 0.78),
+                inset -3px 0 0 rgba(255, 45, 149, 0.68),
+                0 1.2rem 3rem rgba(0, 0, 0, 0.28);
+        }
+
+        .wire::before {
+            content: "REGISTRY / ADDITIONAL AUTH";
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--process-paper-muted);
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+        }
+
+        .wire code {
+            color: var(--process-paper-soft);
+            border: 0;
+        }
+
+        .references {
+            max-width: 71ch;
+            margin-top: 4rem;
+            padding-top: 1.25rem;
+            color: var(--process-paper-muted);
+            border-top: 0;
+        }
+
+        .references p {
+            color: var(--process-paper-muted);
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .references li {
+            color: var(--process-paper-soft);
+            line-height: 1.55;
+        }
+
+        .references li::marker {
+            color: var(--process-m);
+        }
+
+        .references .visual-credit {
+            margin-top: 1.3rem;
+            color: var(--process-paper-muted);
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            line-height: 1.5;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .site-footer {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: var(--space-m) var(--space-s) 3rem;
+            color: var(--process-paper-soft);
+            background: transparent;
+        }
+
+        .site-footer-inner {
+            padding: 1.25rem 0;
+            border-top: 0;
+        }
+
+        .site-footer h2 {
+            color: var(--process-y);
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 16px var(--process-y-soft);
+            text-transform: uppercase;
+        }
+
+        .site-footer p,
+        .site-footer a {
+            color: var(--process-paper-muted);
+        }
+
+        .site-footer a:hover {
+            color: var(--process-c);
+        }
+
+        #map-link,
+        #to-top {
+            z-index: 20;
+            background: rgba(3, 4, 8, 0.78);
+            border: 1px solid rgba(249, 247, 236, 0.2);
+            box-shadow:
+                0 0 0 1px rgba(0, 229, 255, 0.07),
+                0 0 2rem rgba(255, 45, 149, 0.14),
+                inset 0 0 1.5rem rgba(0, 229, 255, 0.06);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+        }
+
+        #map-link {
+            top: 5.4rem;
+            width: 62px;
+            height: 62px;
+        }
+
+        #map-link svg {
+            width: 56px;
+            height: 56px;
+        }
+
+        #map-link:hover,
+        #to-top:hover {
+            border-color: rgba(255, 200, 50, 0.58);
+            box-shadow:
+                0 0 0 1px rgba(255, 200, 50, 0.12),
+                0 0 2.2rem rgba(0, 229, 255, 0.2),
+                inset 0 0 1.2rem rgba(255, 45, 149, 0.08);
+        }
+
+        .compass-circle,
+        .compass-marker {
+            stroke: rgba(0, 229, 255, 0.48);
+        }
+
+        .compass-arrow-line {
+            stroke: var(--process-paper);
+        }
+
+        .compass-arrow-head,
+        .compass-pole-north {
+            fill: var(--process-m);
+        }
+
+        .compass-pole-south {
+            fill: var(--process-c);
+        }
+
+        .compass-text {
+            fill: var(--process-paper-soft);
+            filter: none;
+        }
+
+        #to-top {
+            width: 52px;
+            height: 52px;
+        }
+
+        #to-top svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        #map-link:focus-visible,
+        #to-top:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--process-y);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 767px) {
+            .shell {
+                padding: 0.75rem;
+                padding-top: 1.1rem;
+            }
+
+            .page-header,
+            .article-box {
+                border-radius: 0;
+            }
+
+            .page-header {
+                min-height: 0;
+                padding: 1.6rem 0 3rem;
+            }
+
+            .ecosystem-mark {
+                top: 1rem;
+                right: -3.75rem;
+                width: 12rem;
+                opacity: 0.23;
+                transform: none;
+            }
+
+            .page-header h1,
+            body.crates-page h1 {
+                font-size: clamp(2.45rem, 13vw, 4rem);
+            }
+
+            .article-box {
+                padding: 0 0 2rem;
+            }
+
+            .article-box h2 {
+                grid-template-columns: 2.25rem minmax(0, 1fr);
+                gap: 0.55rem;
+                margin-top: 3.5rem;
+            }
+
+            .article-box p {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+
+            .wire {
+                margin-right: -0.4rem;
+                margin-left: -0.4rem;
+                padding: 1rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            #map-link {
+                top: 4.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #plasma-canvas {
+                display: none;
+            }
+
+            .site-header::after {
+                transform: none !important;
+            }
+
+            .ecosystem-mark .rust-ring,
+            .ecosystem-mark .rust-teeth,
+            .ecosystem-mark .cargo-path,
+            .ecosystem-mark .cargo-node,
+            .ecosystem-mark .crate-body,
+            .ecosystem-mark .key-symbol,
+            .ecosystem-mark .presence-core {
+                animation: none;
+            }
+
+            .ecosystem-mark {
+                animation: none;
+            }
+
+            .signal-film,
+            .signal-overflow {
+                display: none;
+            }
+
+            body.article-motion .article-box > h2,
+            body.article-motion .article-box > p,
+            body.article-motion .article-box > .wire,
+            body.article-motion .article-box > .references {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .article-box h2::after {
+                animation: none !important;
+                opacity: 0.18;
+                transform: scaleX(1);
+            }
+
+            body.crates-page {
+                background:
+                    radial-gradient(circle at 15% 5%, rgba(0, 229, 255, 0.12), transparent 28rem),
+                    radial-gradient(circle at 90% 20%, rgba(255, 45, 149, 0.1), transparent 30rem),
+                    var(--process-k) !important;
+            }
+        }
+
+        @media (prefers-contrast: more) {
+            #plasma-canvas,
+            body.crates-page::before {
+                display: none;
+            }
+
+            .signal-film,
+            .signal-overflow {
+                display: none;
+            }
+
+            .ecosystem-mark {
+                animation: none;
+            }
+
+            .page-header,
+            .article-box,
+            .site-header {
+                background: var(--process-surface-solid);
+                border-color: rgba(249, 247, 236, 0.45);
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+            }
+
+            .article-box p,
+            .page-lede {
+                color: var(--process-paper);
+            }
+        }
+
+        @media print {
+            html,
+            body.crates-page {
+                color-scheme: light;
+                color: #111;
+                background: #fff !important;
+            }
+
+            #plasma-canvas,
+            .ecosystem-mark,
+            .signal-film,
+            .signal-overflow,
+            body.crates-page::before,
+            body.crates-page::after {
+                display: none !important;
+            }
+
+            .page-header,
+            .article-box {
+                color: #111;
+                background: #fff;
+                border: 0;
+                box-shadow: none;
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+            }
+
+            .page-header h1,
+            body.crates-page h1,
+            .article-box h2,
+            .article-box p,
+            .page-lede,
+            .page-meta,
+            .references,
+            .references p,
+            .references li {
+                color: #111;
+                text-shadow: none;
+            }
+
+            .wire {
+                color: #111;
+                background: #f5f5f5;
+                border-color: #aaa;
+                box-shadow: none;
+            }
+
+            .wire code,
+            code,
+            .article-box a {
+                color: #111;
+            }
+
+            body.article-motion .article-box > h2,
+            body.article-motion .article-box > p,
+            body.article-motion .article-box > .wire,
+            body.article-motion .article-box > .references {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .article-box h2::after {
+                display: none;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Proof of Presence",
+      "author": {
+        "@type": "Person",
+        "name": "Åndrei Makarov",
+        "url": "https://amkisko.github.io/"
+      },
+      "datePublished": "2026-07-30T11:26:55+00:00",
+      "dateModified": "2026-07-30T11:26:55+00:00",
+      "url": "https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html",
+      "inLanguage": "en",
+      "description": "A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout."
+    }
+    </script>
+</head>
+<body class="crates-page">
+    <canvas id="plasma-canvas" aria-hidden="true"></canvas>
+    <a href="../posts.html" id="map-link" title="Map"></a>
+
+    <header class="site-header">
+        <div class="site-header-inner">
+            <svg class="crate-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                <path class="crate-shell" fill="#ffc832" d="M16 3 L28 10 L28 22 L16 29 L4 22 L4 10 Z"/>
+                <path class="crate-top" fill="#254223" opacity="0.35" d="M16 3 L28 10 L16 17 L4 10 Z"/>
+                <path class="crate-line" fill="none" stroke="#274624" stroke-width="1.4" d="M16 17 L16 29 M4 10 L16 17 L28 10"/>
+            </svg>
+            <a class="site-wordmark" href="../index.html">amkisko</a>
+            <span class="site-tag">cargo · crates.io · security</span>
+        </div>
+    </header>
+
+    <div class="shell">
+        <header class="page-header">
+            <svg class="ecosystem-mark" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+                <g class="rust-space spatial-body">
+                    <g class="rust-assembly">
+                        <circle class="rust-ring" cx="120" cy="120" r="92"/>
+                        <g class="rust-teeth">
+                            <path class="rust-tooth" d="M120 15 V31"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(30 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(60 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(90 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(120 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(150 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(180 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(210 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(240 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(270 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(300 120 120)"/>
+                            <path class="rust-tooth" d="M120 15 V31" transform="rotate(330 120 120)"/>
+                        </g>
+                    </g>
+                </g>
+                <g class="key-space spatial-body" transform="translate(0 -68)">
+                    <g class="key-symbol">
+                        <circle class="key-ring" cx="105" cy="120" r="8"/>
+                        <path class="key-stem" d="M113 120 H139 M129 120 V128 M136 120 V125"/>
+                    </g>
+                </g>
+                <g class="cargo-space spatial-body">
+                    <path class="cargo-path" d="M40 150 C50 78 113 38 174 61 C220 78 224 132 201 168 C185 193 158 205 132 206"/>
+                    <circle class="cargo-node" cx="40" cy="150" r="4"/>
+                    <circle class="cargo-node" cx="132" cy="206" r="4"/>
+                </g>
+                <g class="crate-space spatial-body" transform="translate(-12 10)">
+                    <g class="crate-body">
+                        <polygon class="crate-top-face" points="120,72 167,98 120,125 73,98"/>
+                        <polygon class="crate-left-face" points="73,98 120,125 120,178 73,151"/>
+                        <polygon class="crate-right-face" points="120,125 167,98 167,151 120,178"/>
+                        <path class="crate-edge" d="M120 72 L167 98 L167 151 L120 178 L73 151 L73 98 Z M73 98 L120 125 L167 98 M120 125 V178"/>
+                    </g>
+                </g>
+                <g class="lock-space spatial-body" transform="translate(52 10)">
+                    <g class="lock-symbol">
+                        <path class="lock-shackle" d="M109 119 V110 C109 96 131 96 131 110 V119"/>
+                        <rect class="lock-body" x="102" y="117" width="36" height="32" rx="5"/>
+                        <circle class="presence-core" cx="120" cy="130" r="5"/>
+                        <path class="lock-keyway" d="M120 135 V142"/>
+                    </g>
+                </g>
+            </svg>
+            <span class="signal-film" aria-hidden="true"></span>
+            <span class="signal-overflow" aria-hidden="true"></span>
+            <h1>Proof of Presence</h1>
+            <p class="page-lede">An account of what I learned while prototyping passkey-based step-up authentication across crates.io and Cargo.</p>
+            <p class="page-meta">30 July 2026, Helsinki · Åndrei Makarov</p>
+        </header>
+
+        <article class="article-box">
+            <h2>The gap I wanted to understand</h2>
+            <p>I began with a mismatch between the care we put into signing in and the authority we hand to a session or API token afterwards. crates.io has made that token less powerful than it once was: it can be scoped to particular crates and operations, it expires by default, and Cargo can ask an operating-system credential provider to store it, while Trusted Publishing can avoid a persistent CI secret altogether.</p>
+            <p>But a valid bearer credential still answers a different question from the one I care about. It identifies an account; it does not show that an owner is present and intends this particular publish or security change. <a href="https://github.com/rust-lang/crates.io/issues/13367">Issue #13367</a> made the distinction concrete in 2026 by describing how a compromised authenticated session might be used to weaken a crate’s Trusted Publishing protection and publish with a newly created token. The scenario depends on sensitive transitions accepting the existing session without asking the owner to return through a separate credential.</p>
+            <p>That is the gap I use “proof of presence” to name. It is narrower than general account security and narrower than supply-chain security. I wanted to see whether crates.io could require fresh, operation-bound evidence from the owner when a reusable credential reaches a high-risk transition, while preserving the non-interactive path that release automation needs.</p>
+
+            <h2>What the record changed for me</h2>
+            <p>I first expected to find one proposal that had stalled. Instead I found the same concern splitting into several different problems over more than a decade: web login, Cargo credentials, unattended CI, account recovery, artifact signing, and the integrity of the registry itself. They are related, but a mechanism designed for one does not automatically solve the others.</p>
+            <p><a href="https://github.com/rust-lang/crates.io/issues/815">Issue #815</a> has remained open since 2017. Of its suggested protections, publication email was eventually delivered; website confirmation, two-factor requirements for important crates, and second-maintainer confirmation remain open ideas. The long <a href="https://internals.rust-lang.org/t/requiring-2fa-to-publish-to-crates-io/7931">2018 discussion about requiring 2FA</a> surfaced the hard parts early: headless publishing, CI, recovery, accessibility, compromised developer machines, and the limited value of a TOTP code typed into such a machine. It ended without an accepted protocol or policy.</p>
+            <p>What changed my view most was the amount of incremental work that did ship. Scoped API tokens arrived after several years; in its <a href="https://blog.rust-lang.org/inside-rust/2023/05/09/api-token-scopes/">account of that work</a>, the project says competing priorities delayed it until Rust Foundation-funded engineering resumed it. Cargo gained safer credential providers, while the <a href="https://blog.rust-lang.org/2025/02/05/crates-io-development-update/">February 2025 development update</a> records publication emails and a default 90-day lifetime for new tokens. <a href="https://rust-lang.github.io/rfcs/3691-trusted-publishing-cratesio.html">Trusted Publishing</a> then gave supported CI systems short-lived authority derived from OIDC, while <code>trustpub_only</code> let owners refuse ordinary token publication. I came away seeing a small team reducing risk layer by layer, not a team that had forgotten or rejected MFA.</p>
+            <p>The signing and registry-integrity work belongs beside this history, but not inside the same claim. <a href="https://github.com/rust-lang/rfcs/pull/2474">RFC #2474</a>, about signing the registry index, was postponed when the Cargo team said it lacked review bandwidth. The older <a href="https://github.com/rust-lang/crates.io/issues/75">TUF issue</a> was later closed in favor of the still-open <a href="https://github.com/rust-lang/rfcs/pull/3724">RFC #3724</a>; that closure did not mean TUF had been deployed. TUF is concerned with what clients can trust when registry or distribution infrastructure is compromised. Step-up authentication is concerned with what the registry should accept from a valid owner credential. They are complementary, and the TUF RFC explicitly leaves crate-owner account compromise outside its direct scope.</p>
+            <p>After checking the upstream implementation and public record, I could not find a production transaction-level step-up mechanism for publishing or for changing the security configuration that permits publishing as of 30 July 2026. That more precise boundary became the starting point for my prototype.</p>
+
+            <h2>Following a publish request</h2>
+            <p>I built the idea as two connected sketches: opt-in passkey MFA in crates.io and an additional-authentication handshake in Cargo. On the registry side, an owner enrolls a passkey and chooses to protect sensitive changes. A recent browser authorization can cover website actions for a short period. When Cargo makes the same kind of change, the registry rejects the first request with a structured challenge rather than treating the token as sufficient:</p>
+
+            <div class="wire"><code>{
+  "errors": [{
+    "detail": "Additional authentication is required",
+    "id": "step_up_required",
+    "interaction": "browser",
+    "challenge_id": "stp_…",
+    "verification_url": "https://crates.io/verify/stp_…",
+    "poll_url": "https://crates.io/api/v1/auth/challenges/stp_…"
+  }]
+}</code></div>
+
+            <p>Working through the Cargo side made the proposal much more concrete. Cargo recognizes <code>step_up_required</code>, opens a short-lived listener on the loopback interface when possible, and sends the owner to the verification URL. The browser completes WebAuthn and returns a one-time value to the Cargo process, which retries the original request with <code>Crates-OTP</code>. Cargo never receives the passkey material; it only receives proof that this particular challenge was completed.</p>
+            <p>A localhost callback is comfortable when Cargo and the browser run on the same machine, but that assumption falls apart over SSH or on a remote development host. For those cases I kept a polling path: the owner opens the verification page on another device, completes the passkey check, and Cargo learns that the challenge has been approved. I arrived at localhost first and polling second after reading about the options RubyGems considered for WebAuthn MFA in its CLI. Their experience was a reminder that this is ordinary command-line plumbing with awkward real-world environments, not a place where novelty is valuable.</p>
+            <p>The distinction between interactive use and automation also became clearer while I was implementing the flow. Trusted Publishing should remain the preferred route for CI, where the workload can present an OIDC identity and no person is waiting at a terminal. A CI job that receives <code>step_up_required</code> should stop with an explanation instead of waiting for a browser interaction that will never happen. Reusable API tokens, by contrast, are precisely where a fresh passkey check adds something that the bearer token cannot prove.</p>
+
+            <h2>The parts around the passkey</h2>
+            <p>At first the browser ceremony occupied most of my attention. The prototype quickly showed me that enrollment, recovery, and visibility deserve at least as much design work. A stolen browser session must not be able to enroll an attacker’s passkey and enable enforcement, so setup and recovery need a verified-email check. Changing the recovery address needs confirmation from both the old and new addresses. Owners need notifications when MFA settings change, a way to invalidate existing sessions, and a short-lived activity record that lets them recognize actions they did not take.</p>
+            <p>Those records introduce a different responsibility. Even truncated IP addresses and briefly retained security events are personal data, so a production rollout would need privacy review and notice changes rather than treating the activity page as a harmless extra. This was one of the useful consequences of building more than the successful publish demo: it exposed operational and policy work that is easy to omit from an API proposal.</p>
+            <p>The challenge itself also needs narrower boundaries than my first description suggested. A callback listener must accept only loopback traffic and expire with the challenge. A polling URL must share the registry API’s origin. The resulting grant must be bound to the token, operation, crate, and publication metadata that created it; otherwise an approval could be replayed or redirected towards a different mutation. The verification page should show that context so an owner can recognize a misleading request. None of this prevents a person from approving a convincing prompt, but it reduces the value of a stolen token or session on its own.</p>
+            <p>I also had to separate adjacent security ideas that initially looked as though they might belong together. An SSH public key is still a possession credential and may be used through an agent without human interaction, so I do not consider it a substitute for the passkey step. Email OTP is useful for enrollment and recovery, but I would not use it to authorize every publish. Package signing and consumer-facing trust signals answer questions about an artifact; this proposal answers whether an account owner returned before the registry accepted a mutation.</p>
+            <p>That boundary matters in both directions. Step-up authentication can mitigate stolen tokens, stolen sessions, and some remote account takeovers. It cannot protect the registry from a malicious maintainer, a compromised workstation or CI job, a vulnerable dependency, or compromised registry infrastructure. Building it only makes sense if the claim stays that narrow.</p>
+
+            <h2>What the prototype looks like now</h2>
+            <p>My starting point for review is <a href="https://github.com/amkisko/crates.io/blob/patch/api-mfa-passkey-verification/docs/API-MFA.md">API-MFA.md</a> in my personal crates.io fork. It describes the threat model and protocol, with related notes about activity records and CLI login. The corresponding server code is in the <a href="https://github.com/amkisko/crates.io/tree/patch/api-mfa-passkey-verification"><code>patch/api-mfa-passkey-verification</code></a> branch, and the Cargo client changes are in <a href="https://github.com/amkisko/cargo/tree/feature/crates-io-api-mfa"><code>feature/crates-io-api-mfa</code></a>. I kept the Cargo protocol registry-generic because the client should not have to encode crates.io product terminology to handle an additional-authentication challenge.</p>
+            <p>One compatibility detail influenced that decision. Cargo has historically tolerated some unusual crates.io error responses, so the challenge cannot look like a successful response with extra instructions hidden inside it. In the sketch it is an explicit non-2xx response: the token is valid, but the requested operation is not yet authorized. An older Cargo version therefore fails visibly, while a version that understands the challenge can guide the owner through verification and retry.</p>
+            <p>The server-side rollout is deliberately reversible. I would begin in staging, keep enrollment opt-in, and separate the switch that enforces challenges from the switches needed to enroll and recover. Enforcement is disabled by default in the branch. If it caused an incident, it could be paused without locking people out of the controls needed to manage their accounts.</p>
+            <p>Neither branch has been through an upstream crates.io or Cargo security review, and there is no upstream pull request or production deployment. I treat the code as an implementation candidate: concrete enough to test the protocol and expose operational questions, but still subject to changes in threat model, policy, recovery, and maintenance scope.</p>
+
+            <h2>Why I am publishing sketches</h2>
+            <p>My first instinct was to make the prototype comprehensive enough to answer every likely review question. That produced working demonstrations of login without printing a token, failure in CI, expired and malformed verification links, and a publish that travels from Cargo through a browser passkey check and back to the upload. It also made the branches much larger than a useful opening contribution.</p>
+            <p>I do not want to present a large implementation as though the design decision has already been made. My next step is to reduce the work to questions maintainers can answer: whether opt-in step-up authentication belongs in crates.io, which mutations it should protect, and whether Cargo should support a registry-generic challenge. The existing crates.io and Cargo discussions matter more at this stage than the amount of code in my forks.</p>
+            <p>The most useful outcome of the exercise has been a clearer view of the boundary between a token and a person. The token can identify an account and start a request. A short-lived challenge can ask the owner to return through a separate device-bound credential before the registry accepts the change. I am sharing the sketches so that people can examine this boundary together with its recovery, compatibility, privacy, and maintenance costs before anyone is asked to merge an implementation.</p>
+
+            <div class="references">
+                <p>Sources and related reading:</p>
+                <ul>
+                    <li><a href="https://github.com/rust-lang/crates.io/issues/815">crates.io #815</a>: Lessons from NPM password vulnerabilities</li>
+                    <li><a href="https://internals.rust-lang.org/t/requiring-2fa-to-publish-to-crates-io/7931">Requiring 2FA to publish to crates.io</a></li>
+                    <li><a href="https://github.com/rust-lang/rfcs/pull/2474">RFC #2474</a>: Signing the registry index</li>
+                    <li><a href="https://blog.rust-lang.org/inside-rust/2023/05/09/api-token-scopes/">Scoped API tokens</a></li>
+                    <li><a href="https://blog.rust-lang.org/2025/02/05/crates-io-development-update/">February 2025 crates.io development update</a></li>
+                    <li><a href="https://rust-lang.github.io/rfcs/3691-trusted-publishing-cratesio.html">RFC #3691</a>: Trusted Publishing</li>
+                    <li><a href="https://github.com/rust-lang/crates.io/issues/13367">crates.io #13367</a>: “Require trusted publishing for all new versions” could be unchecked by compromised user</li>
+                    <li><a href="https://github.com/rust-lang/rfcs/pull/3724">RFC #3724</a>: The Update Framework</li>
+                    <li><a href="https://doc.rust-lang.org/cargo/reference/registry-authentication.html">Cargo registry authentication</a></li>
+                    <li><a href="https://guides.rubygems.org/using-webauthn-mfa-in-command-line/">RubyGems WebAuthn CLI MFA</a></li>
+                    <li><a href="https://docs.npmjs.com/requiring-2fa-for-package-publishing-and-settings-modification/">npm 2FA for package publishing</a></li>
+                </ul>
+                <p class="visual-credit">Visual mark: <a href="https://rustfoundation.org/policy/rust-trademark-policy/">Rust and Cargo logos © Rust Foundation</a>, adapted for this page under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
+            </div>
+        </article>
+    </div>
+
+    <a href="#" id="to-top" title="To the top"></a>
+    <script src="../scripts/posts_navigation.js"></script>
+    <script>
+        (function () {
+            var canvas = document.getElementById("plasma-canvas");
+            var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            if (!canvas || reducedMotion) return;
+
+            var context = canvas.getContext("2d", { alpha: false });
+            if (!context) return;
+
+            var width = 0;
+            var height = 0;
+            var pixels;
+            var data;
+            var time = 0;
+            var lastFrame = 0;
+            var animationFrame = 0;
+            var resizeFrame = 0;
+
+            function clamp(value) {
+                return Math.max(0, Math.min(255, value));
+            }
+
+            function resize() {
+                var scale = Math.min(
+                    0.34,
+                    720 / Math.max(window.innerWidth, 1),
+                    480 / Math.max(window.innerHeight, 1)
+                );
+
+                width = Math.max(1, Math.floor(window.innerWidth * scale));
+                height = Math.max(1, Math.floor(window.innerHeight * scale));
+                canvas.width = width;
+                canvas.height = height;
+                pixels = context.createImageData(width, height);
+                data = pixels.data;
+            }
+
+            function paint() {
+                var offset = 0;
+
+                for (var y = 0; y < height; y++) {
+                    var ny = y / height;
+
+                    for (var x = 0; x < width; x++) {
+                        var nx = x / width;
+                        var dx = nx - 0.5;
+                        var dy = ny - 0.5;
+                        var field =
+                            Math.sin(nx * 10.4 + time * 0.72) +
+                            Math.sin(ny * 12.1 - time * 0.61) +
+                            Math.sin((nx + ny) * 8.3 + time * 0.42) +
+                            Math.sin((dx * dx + dy * dy) * 31 - time * 0.88);
+
+                        var cyan = (Math.sin(field * 1.13 + time * 0.55) + 1) * 0.5;
+                        var magenta = (Math.sin(field * 1.31 + 2.12 - time * 0.34) + 1) * 0.5;
+                        var yellow = (Math.sin(field * 0.91 + 4.26 + time * 0.21) + 1) * 0.5;
+                        var key = 0.28 + 0.26 * Math.sin(field * 0.48 - time * 0.2);
+
+                        data[offset++] = clamp(7 + magenta * 156 + yellow * 78 - cyan * 52 - key * 34);
+                        data[offset++] = clamp(8 + cyan * 132 + yellow * 68 - magenta * 58 - key * 38);
+                        data[offset++] = clamp(15 + cyan * 170 + magenta * 114 - yellow * 70 - key * 30);
+                        data[offset++] = 255;
+                    }
+                }
+
+                context.putImageData(pixels, 0, 0);
+            }
+
+            function frame(now) {
+                animationFrame = window.requestAnimationFrame(frame);
+                if (now - lastFrame < 42) return;
+
+                lastFrame = now;
+                paint();
+                time += 0.018;
+            }
+
+            function queueResize() {
+                window.cancelAnimationFrame(resizeFrame);
+                resizeFrame = window.requestAnimationFrame(resize);
+            }
+
+            function resume() {
+                if (!document.hidden && !animationFrame) {
+                    lastFrame = 0;
+                    animationFrame = window.requestAnimationFrame(frame);
+                }
+            }
+
+            function pause() {
+                if (document.hidden && animationFrame) {
+                    window.cancelAnimationFrame(animationFrame);
+                    animationFrame = 0;
+                }
+            }
+
+            resize();
+            paint();
+            window.addEventListener("resize", queueResize, { passive: true });
+            document.addEventListener("visibilitychange", function () {
+                pause();
+                resume();
+            });
+            resume();
+        })();
+    </script>
+    <script>
+        (function () {
+            var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var mark = document.querySelector(".ecosystem-mark");
+            if (!mark || reducedMotion) return;
+
+            var bodies = [
+                {
+                    name: "rust",
+                    element: mark.querySelector(".rust-space"),
+                    radius: 5,
+                    eccentricity: 0.18,
+                    inclination: 0.82,
+                    node: 0.12,
+                    speed: 0.06,
+                    direction: 1,
+                    baseScale: 1,
+                    tilt: 0.1,
+                    spin: 1.5,
+                    phase: 0.2,
+                    minOpacity: 0.38
+                },
+                {
+                    name: "cargo",
+                    element: mark.querySelector(".cargo-space"),
+                    radius: 11,
+                    eccentricity: 0.31,
+                    inclination: 1.08,
+                    node: 2.05,
+                    speed: 0.1,
+                    direction: -1,
+                    baseScale: 0.96,
+                    tilt: 0.2,
+                    spin: -2.2,
+                    phase: 2.1,
+                    minOpacity: 0.44
+                },
+                {
+                    name: "crate",
+                    element: mark.querySelector(".crate-space"),
+                    radius: 22,
+                    eccentricity: 0.24,
+                    inclination: 0.62,
+                    node: 4.28,
+                    speed: 0.13,
+                    direction: 1,
+                    baseScale: 0.78,
+                    tilt: 0.14,
+                    spin: 2.8,
+                    phase: 4.2,
+                    minOpacity: 0.58
+                },
+                {
+                    name: "lock",
+                    element: mark.querySelector(".lock-space"),
+                    radius: 52,
+                    eccentricity: 0.28,
+                    inclination: 1.02,
+                    node: 2.72,
+                    speed: 0.24,
+                    direction: 1,
+                    baseScale: 0.9,
+                    tilt: 0.18,
+                    spin: -8,
+                    phase: 1.3,
+                    minOpacity: 0.62
+                },
+                {
+                    name: "key",
+                    element: mark.querySelector(".key-space"),
+                    radius: 70,
+                    eccentricity: 0.36,
+                    inclination: 0.9,
+                    node: 0.74,
+                    speed: 0.32,
+                    direction: -1,
+                    baseScale: 1,
+                    tilt: 0.22,
+                    spin: 10,
+                    phase: 3.5,
+                    minOpacity: 0.58
+                }
+            ].filter(function (body) {
+                return Boolean(body.element);
+            });
+
+            if (!bodies.length) return;
+
+            var perspective = 430;
+            var orbitalTime = 0;
+            var lastFrame = 0;
+            var animationFrame = 0;
+            var paintOrder = "";
+            var pendingPaintOrder = "";
+            var pendingPaintFrames = 0;
+
+            /*
+             * Mean anomaly advances evenly. The Fourier correction approximates
+             * a Kepler orbit, making each body accelerate near periapsis.
+             */
+            function trueAnomaly(mean, eccentricity) {
+                var e2 = eccentricity * eccentricity;
+                var e3 = e2 * eccentricity;
+
+                return mean +
+                    (2 * eccentricity - e3 / 4) * Math.sin(mean) +
+                    (5 * e2 / 4) * Math.sin(2 * mean) +
+                    (13 * e3 / 12) * Math.sin(3 * mean);
+            }
+
+            function place(body) {
+                var mean = body.phase + orbitalTime * body.speed * body.direction;
+                var angle = trueAnomaly(mean, body.eccentricity);
+                var radius = body.radius *
+                    (1 - body.eccentricity * body.eccentricity) /
+                    (1 + body.eccentricity * Math.cos(angle));
+                var planeX = radius * Math.cos(angle);
+                var planeY = radius * Math.sin(angle);
+                var inclinedY = planeY * Math.cos(body.inclination);
+                var depth = planeY * Math.sin(body.inclination);
+                var screenX =
+                    planeX * Math.cos(body.node) -
+                    inclinedY * Math.sin(body.node);
+                var screenY =
+                    planeX * Math.sin(body.node) +
+                    inclinedY * Math.cos(body.node);
+                var perspectiveScale = perspective / (perspective - depth);
+                var scaleX = body.baseScale * perspectiveScale;
+                var scaleY = scaleX *
+                    (1 - body.tilt * (0.55 + 0.45 * Math.sin(angle + body.node)));
+                var rotation = orbitalTime * body.spin + Math.sin(angle) * 8;
+                var depthRatio = Math.max(0, Math.min(1, (depth / body.radius + 1) / 2));
+
+                body.depth = depth;
+                body.element.setAttribute(
+                    "transform",
+                    "translate(" + (screenX * perspectiveScale).toFixed(3) + " " +
+                        (screenY * perspectiveScale).toFixed(3) + ") " +
+                    "translate(120 120) " +
+                    "rotate(" + rotation.toFixed(3) + ") " +
+                    "scale(" + scaleX.toFixed(4) + " " + scaleY.toFixed(4) + ") " +
+                    "translate(-120 -120)"
+                );
+                body.element.style.opacity =
+                    (body.minOpacity + (1 - body.minOpacity) * depthRatio).toFixed(3);
+            }
+
+            function reorderByDepth() {
+                var ordered = bodies.slice().sort(function (left, right) {
+                    return left.depth - right.depth;
+                });
+                var nextOrder = ordered.map(function (body) {
+                    return body.name;
+                }).join(":");
+
+                if (nextOrder === paintOrder) {
+                    pendingPaintOrder = "";
+                    pendingPaintFrames = 0;
+                    return;
+                }
+
+                if (paintOrder && nextOrder !== pendingPaintOrder) {
+                    pendingPaintOrder = nextOrder;
+                    pendingPaintFrames = 1;
+                    return;
+                }
+
+                if (paintOrder && pendingPaintFrames < 5) {
+                    pendingPaintFrames += 1;
+                    return;
+                }
+
+                ordered.forEach(function (body) {
+                    mark.appendChild(body.element);
+                });
+                paintOrder = nextOrder;
+                pendingPaintOrder = "";
+                pendingPaintFrames = 0;
+            }
+
+            function frame(now) {
+                animationFrame = window.requestAnimationFrame(frame);
+                if (lastFrame && now - lastFrame < 32) return;
+
+                var delta = lastFrame ? Math.min(0.06, (now - lastFrame) / 1000) : 0;
+                lastFrame = now;
+                orbitalTime += delta;
+                bodies.forEach(place);
+                reorderByDepth();
+            }
+
+            function pause() {
+                if (!document.hidden || !animationFrame) return;
+                window.cancelAnimationFrame(animationFrame);
+                animationFrame = 0;
+                lastFrame = 0;
+            }
+
+            function resume() {
+                if (document.hidden || animationFrame) return;
+                animationFrame = window.requestAnimationFrame(frame);
+            }
+
+            document.addEventListener("visibilitychange", function () {
+                pause();
+                resume();
+            });
+            bodies.forEach(place);
+            reorderByDepth();
+            resume();
+        })();
+    </script>
+    <script>
+        (function () {
+            var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            var article = document.querySelector(".article-box");
+            var header = document.querySelector(".site-header");
+            if (!article || !header || reducedMotion) return;
+
+            var revealItems = Array.prototype.filter.call(
+                article.children,
+                function (element) {
+                    return element.matches("h2, p, .wire, .references");
+                }
+            );
+
+            if ("IntersectionObserver" in window && revealItems.length) {
+                var revealObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add("is-visible");
+                        revealObserver.unobserve(entry.target);
+                    });
+                }, {
+                    rootMargin: "0px 0px -8% 0px",
+                    threshold: 0.08
+                });
+
+                revealItems.forEach(function (element, index) {
+                    element.style.setProperty("--reveal-delay", (index % 3) * 42 + "ms");
+                    revealObserver.observe(element);
+                });
+                document.body.classList.add("article-motion");
+            }
+
+            var progressFrame = 0;
+
+            function updateProgress() {
+                progressFrame = 0;
+                var articleTop = article.getBoundingClientRect().top + window.scrollY;
+                var articleLength = Math.max(1, article.offsetHeight - window.innerHeight * 0.75);
+                var progress = Math.max(
+                    0,
+                    Math.min(1, (window.scrollY - articleTop + window.innerHeight * 0.25) / articleLength)
+                );
+
+                document.body.style.setProperty("--reading-progress", progress.toFixed(4));
+            }
+
+            function queueProgress() {
+                if (progressFrame) return;
+                progressFrame = window.requestAnimationFrame(updateProgress);
+            }
+
+            document.body.classList.add("reading-progress");
+            window.addEventListener("scroll", queueProgress, { passive: true });
+            window.addEventListener("resize", queueProgress, { passive: true });
+            updateProgress();
+        })();
+    </script>
+</body>
+</html>

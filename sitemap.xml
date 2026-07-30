@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://amkisko.github.io/</loc>
-    <lastmod>2026-07-04</lastmod>
+    <lastmod>2026-07-30</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts.html</loc>
-    <lastmod>2026-07-04</lastmod>
+    <lastmod>2026-07-30</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/games/index.html</loc>
@@ -15,6 +15,10 @@
   <url>
     <loc>https://amkisko.github.io/asoc/index.html</loc>
     <lastmod>2026-07-04</lastmod>
+  </url>
+  <url>
+    <loc>https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html</loc>
+    <lastmod>2026-07-30</lastmod>
   </url>
   <url>
     <loc>https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html</loc>

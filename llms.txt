@@ -21,6 +21,7 @@ Related personal site and manifesto: [amaaov.github.io](https://amaaov.github.io
 
 ## Recent writing
 
+- [Proof of Presence](https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html): A first-person account of prototyping passkey step-up authentication for crates.io and Cargo
 - [Before the Dashboard](https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html): Tape, verification culture, platforms, music before the dashboard
 - [A DAW-less Evening](https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html): Hardware jams and publishing sound without the DAW
 - [Slop Is a Lazy Word](https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html): Generic culture, generated walls, why touch matters more than purity
