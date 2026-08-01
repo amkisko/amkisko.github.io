@@ -5,7 +5,7 @@
   <link href="https://amkisko.github.io/feed.xml" rel="self"/>
   <link href="https://amkisko.github.io/"/>
   <id>https://amkisko.github.io/</id>
-  <updated>2026-07-30T11:26:55+00:00</updated>
+  <updated>2026-08-01T18:19:00+00:00</updated>
   <author>
     <name>Åndrei Makarov</name>
   </author>
@@ -14,9 +14,9 @@
     <title>Proof of Presence</title>
     <link href="https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html"/>
     <id>https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html</id>
-    <updated>2026-07-30T11:26:55+00:00</updated>
+    <updated>2026-08-01T18:19:00+00:00</updated>
     <published>2026-07-30T11:26:55+00:00</published>
-    <summary>A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.</summary>
+    <summary>A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts.</summary>
   </entry>
 
   <entry>

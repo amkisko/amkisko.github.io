@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proof of Presence</title>
-    <meta name="description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta name="description" content="A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts.">
     <meta name="author" content="Åndrei Makarov">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html">
     <meta property="og:title" content="Proof of Presence">
-    <meta property="og:description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta property="og:description" content="A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html">
     <meta property="og:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
     <meta property="article:published_time" content="2026-07-30T11:26:55+00:00">
-    <meta property="article:modified_time" content="2026-07-30T11:26:55+00:00">
+    <meta property="article:modified_time" content="2026-08-01T18:19:00+00:00">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Proof of Presence">
-    <meta name="twitter:description" content="A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout.">
+    <meta name="twitter:description" content="A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts.">
     <meta name="twitter:image" content="https://amkisko.github.io/favicon/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -924,6 +924,20 @@
             text-transform: uppercase;
         }
 
+        .page-update {
+            position: relative;
+            max-width: 64ch;
+            margin: 1rem 0 0;
+            color: var(--process-paper-soft);
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .page-update strong {
+            color: var(--process-c);
+            font-weight: 500;
+        }
+
         .article-box {
             counter-reset: article-section;
             padding: 0 0 clamp(1.45rem, 4vw, 3.6rem);
@@ -1406,6 +1420,7 @@
             .article-box p,
             .page-lede,
             .page-meta,
+            .page-update,
             .references,
             .references p,
             .references li {
@@ -1451,10 +1466,10 @@
         "url": "https://amkisko.github.io/"
       },
       "datePublished": "2026-07-30T11:26:55+00:00",
-      "dateModified": "2026-07-30T11:26:55+00:00",
+      "dateModified": "2026-08-01T18:19:00+00:00",
       "url": "https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html",
       "inLanguage": "en",
-      "description": "A first-person account of prototyping passkey step-up authentication for crates.io and Cargo, from the threat model to the browser/CLI handshake and rollout."
+      "description": "A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts."
     }
     </script>
 </head>
@@ -1527,8 +1542,9 @@
             <span class="signal-film" aria-hidden="true"></span>
             <span class="signal-overflow" aria-hidden="true"></span>
             <h1>Proof of Presence</h1>
-            <p class="page-lede">An account of what I learned while prototyping passkey-based step-up authentication across crates.io and Cargo.</p>
+            <p class="page-lede">An account of developing registry mutation authorization across crates.io and Cargo, from a passkey prototype to a preflight protocol.</p>
             <p class="page-meta">30 July 2026, Helsinki · Åndrei Makarov</p>
+            <p class="page-update"><strong>Updated on 1 August 2026</strong> — The design now uses mutation preflight, with separate RFC drafts for core authorization, idempotent execution, and loopback wake-up.</p>
         </header>
 
         <article class="article-box">
@@ -1569,7 +1585,7 @@
             <p>I also had to separate adjacent security ideas that initially looked as though they might belong together. An SSH public key is still a possession credential and may be used through an agent without human interaction, so I do not consider it a substitute for the passkey step. Email OTP is useful for enrollment and recovery, but I would not use it to authorize every publish. Package signing and consumer-facing trust signals answer questions about an artifact; this proposal answers whether an account owner returned before the registry accepted a mutation.</p>
             <p>That boundary matters in both directions. Step-up authentication can mitigate stolen tokens, stolen sessions, and some remote account takeovers. It cannot protect the registry from a malicious maintainer, a compromised workstation or CI job, a vulnerable dependency, or compromised registry infrastructure. Building it only makes sense if the claim stays that narrow.</p>
 
-            <h2>What the prototype looks like now</h2>
+            <h2>What the prototype looked like at publication</h2>
             <p>My starting point for review is <a href="https://github.com/amkisko/crates.io/blob/patch/api-mfa-passkey-verification/docs/API-MFA.md">API-MFA.md</a> in my personal crates.io fork. It describes the threat model and protocol, with related notes about activity records and CLI login. The corresponding server code is in the <a href="https://github.com/amkisko/crates.io/tree/patch/api-mfa-passkey-verification"><code>patch/api-mfa-passkey-verification</code></a> branch, and the Cargo client changes are in <a href="https://github.com/amkisko/cargo/tree/feature/crates-io-api-mfa"><code>feature/crates-io-api-mfa</code></a>. I kept the Cargo protocol registry-generic because the client should not have to encode crates.io product terminology to handle an additional-authentication challenge.</p>
             <p>One compatibility detail influenced that decision. Cargo has historically tolerated some unusual crates.io error responses, so the challenge cannot look like a successful response with extra instructions hidden inside it. In the sketch it is an explicit non-2xx response: the token is valid, but the requested operation is not yet authorized. An older Cargo version therefore fails visibly, while a version that understands the challenge can guide the owner through verification and retry.</p>
             <p>The server-side rollout is deliberately reversible. I would begin in staging, keep enrollment opt-in, and separate the switch that enforces challenges from the switches needed to enroll and recover. Enforcement is disabled by default in the branch. If it caused an incident, it could be paused without locking people out of the controls needed to manage their accounts.</p>
@@ -1579,6 +1595,14 @@
             <p>My first instinct was to make the prototype comprehensive enough to answer every likely review question. That produced working demonstrations of login without printing a token, failure in CI, expired and malformed verification links, and a publish that travels from Cargo through a browser passkey check and back to the upload. It also made the branches much larger than a useful opening contribution.</p>
             <p>I do not want to present a large implementation as though the design decision has already been made. My next step is to reduce the work to questions maintainers can answer: whether opt-in step-up authentication belongs in crates.io, which mutations it should protect, and whether Cargo should support a registry-generic challenge. The existing crates.io and Cargo discussions matter more at this stage than the amount of code in my forks.</p>
             <p>The most useful outcome of the exercise has been a clearer view of the boundary between a token and a person. The token can identify an account and start a request. A short-lived challenge can ask the owner to return through a separate device-bound credential before the registry accepts the change. I am sharing the sketches so that people can examine this boundary together with its recovery, compatibility, privacy, and maintenance costs before anyone is asked to merge an implementation.</p>
+
+            <h2>Update — mutation authorization and preflight</h2>
+            <p>After publishing the article, I opened a <a href="https://rust-lang.zulipchat.com/#narrow/channel/246057-t-cargo/topic/Support.20registry.20step-up.20handshake.20on.20publish.2C.20yank.2C.20and.20own/near/613728786">Cargo team Zulip discussion</a> and continued revising the implementation in the Cargo and crates.io forks. The later protocol differs structurally from the first prototype. That version reacted after an ordinary mutation was rejected with <code>step_up_required</code>, then let a browser return a one-time value to Cargo. The current protocol performs an authenticated preflight before Cargo sends the ordinary mutation. Cargo packages the request once and describes the exact operation, request-body digest and size, crate and version, and, for publish, the archive digest and size. The verification page exposes the archive SHA-256 for optional comparison but omits the archive size.</p>
+            <p>The registry answers that preflight with <code>ready</code>, <code>pending</code>, or <code>interaction_required</code>. A pending record carries bounded plain-text instructions and an independent, same-origin polling capability. Non-interactive automatic use sends <code>allow_pending: false</code>, which lets an exempt credential proceed without creating a record that no person will complete. Fallback to the ordinary mutation is defined only for a definitive preflight <code>404</code>; transport failures, malformed responses, and other statuses stop the operation.</p>
+            <p>When the record becomes ready, Cargo obtains its ordinary credential again and sends the byte-identical mutation with <code>Cargo-Mutation-Id</code>. The registry checks the credential identity, method, target, media type, content length, raw request digest, and parsed operation against the stored descriptor. This gives the proposal its current name: <em>registry mutation authorization</em>. Step-up authentication remains one policy a registry may apply, and passkeys remain the verification method in the crates.io prototype, but Cargo does not prescribe MFA or interpret an authentication factor.</p>
+            <p>The localhost mechanism also changed. It no longer returns an OTP or any other mutation authority. The optional callback contains client-generated state and only wakes Cargo so that Cargo can poll immediately; the registry’s server-side grant and a <code>ready</code> poll remain authoritative. Polling is therefore a complete core flow for local terminals, SSH, and explicit CI use, while loopback is a latency optimization with separate browser-isolation and Content Security Policy requirements.</p>
+            <p>I moved the specification work into three draft RFCs on my <a href="https://github.com/amkisko/rust-lang-rfcs/tree/cargo-registry-step-up-authentication">RFC branch</a>. The <a href="https://github.com/amkisko/rust-lang-rfcs/blob/cargo-registry-step-up-authentication/text/0000-cargo-registry-mutation-authorization.md">core mutation-authorization proposal</a> defines preflight, polling, exact binding, client modes, inert display of registry instructions, and the final request. The <a href="https://github.com/amkisko/rust-lang-rfcs/blob/cargo-registry-step-up-authentication/text/0000-cargo-registry-mutation-idempotency.md"><code>idempotent-final</code> proposal</a> adds receive leases, bounded retry, at-most-once logical execution, and replay of a committed terminal response after response loss. The <a href="https://github.com/amkisko/rust-lang-rfcs/blob/cargo-registry-step-up-authentication/text/0000-cargo-registry-loopback-callback.md"><code>loopback-callback</code> proposal</a> defines the wake-only listener and verification-page isolation. Splitting them leaves the poll-based core usable without requiring every registry to implement crash-safe response replay or a browser callback.</p>
+            <p>The commits after the original article also added protocol versioning, preflight identifiers and retry rules, extension negotiation, response and text-size limits, redaction of poll and callback capabilities, same-origin and no-redirect checks, <code>Cache-Control: no-store</code>, terminal-control and bidirectional-text neutralization, transactional outcome storage in the crates.io prototype, and tests for concurrent and response-ambiguous final requests. These branches and RFC files remain personal drafts. They have not been submitted as numbered RFC pull requests, accepted by the Cargo team, or deployed by crates.io.</p>
 
             <div class="references">
                 <p>Sources and related reading:</p>
@@ -1594,6 +1618,8 @@
                     <li><a href="https://doc.rust-lang.org/cargo/reference/registry-authentication.html">Cargo registry authentication</a></li>
                     <li><a href="https://guides.rubygems.org/using-webauthn-mfa-in-command-line/">RubyGems WebAuthn CLI MFA</a></li>
                     <li><a href="https://docs.npmjs.com/requiring-2fa-for-package-publishing-and-settings-modification/">npm 2FA for package publishing</a></li>
+                    <li><a href="https://rust-lang.zulipchat.com/#narrow/channel/246057-t-cargo/topic/Support.20registry.20step-up.20handshake.20on.20publish.2C.20yank.2C.20and.20own/near/613728786">Cargo team Zulip discussion</a></li>
+                    <li><a href="https://github.com/amkisko/rust-lang-rfcs/tree/cargo-registry-step-up-authentication">Draft registry mutation-authorization RFCs</a></li>
                 </ul>
                 <p class="visual-credit">Visual mark: <a href="https://rustfoundation.org/policy/rust-trademark-policy/">Rust and Cargo logos © Rust Foundation</a>, adapted for this page under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
             </div>
