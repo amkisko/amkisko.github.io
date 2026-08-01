@@ -5,6 +5,9 @@ sitemap: sitemap.xml
 sitemap_generate:
   static:
     - /
+    - posts.html
+    - games/index.html
+    - asoc/index.html
   globs:
     - posts/*.html
 

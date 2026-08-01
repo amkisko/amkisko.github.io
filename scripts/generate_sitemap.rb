@@ -6,7 +6,8 @@ require "yaml"
 
 SCRIPT_DIR = File.expand_path(__dir__)
 ROOT_DIR = File.expand_path("..", SCRIPT_DIR)
-DEFAULT_CONFIG = File.join(SCRIPT_DIR, "submit_urls.yml")
+DEFAULT_CONFIG = File.join(SCRIPT_DIR, "sitemap.yml")
+FALLBACK_CONFIG = File.join(SCRIPT_DIR, "submit_urls.yml")
 
 def load_config(path)
   YAML.load_file(path)
@@ -94,7 +95,7 @@ def build_xml(urls)
   "#{lines.join("\n")}\n"
 end
 
-config_path = ARGV.fetch(0, DEFAULT_CONFIG)
+config_path = ARGV[0] || (File.exist?(DEFAULT_CONFIG) ? DEFAULT_CONFIG : FALLBACK_CONFIG)
 config = load_config(config_path)
 urls = collect_urls(config)
 output_path = File.join(ROOT_DIR, config.fetch("sitemap", "sitemap.xml"))
