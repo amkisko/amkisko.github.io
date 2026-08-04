@@ -17,9 +17,9 @@ ActionReporter wraps these integrations behind one interface. A single call can 
 
 Production Rails applications typically integrate with multiple reporting and tracking services. Error tracking services like Sentry or Honeybadger monitor exceptions in production. Rails logger provides detailed logs for development. Audit trail gems like Audited or PaperTrail track changes to records. APM tools like Scout monitor performance. Custom internal systems may require their own reporting endpoints.
 
-Each service has different requirements. Sentry expects user objects with specific attributes. Honeybadger uses a different context format. Rails logger accepts plain strings. Audited requires ActiveRecord objects. Without a unified interface, you end up writing the same error reporting logic multiple times, each time adapting it to a different service's API.
+Each service has different requirements: Sentry expects user objects with specific attributes, Honeybadger uses a different context format, Rails logger accepts plain strings, and Audited requires ActiveRecord objects. Without a unified interface, you end up writing the same error reporting logic multiple times, each time adapting it to a different service's API.
 
-Consider setting user context across services. Without ActionReporter, you might write conditional checks for each service, setting context in different formats. If Sentry is present, set its user context. If Honeybadger is present, set its context. If Rails logger is active, log the user information. This approach is verbose, error-prone, and difficult to maintain.
+Consider setting user context across services. Without ActionReporter, you might write conditional checks for each service, setting context in different formats. If Sentry is present, set its user context; if Honeybadger is present, set its context; if Rails logger is active, log the user information. This approach is verbose, error-prone, and difficult to maintain.
 
 ## The Thread Safety Imperative
 
@@ -37,7 +37,7 @@ This isolation is essential in production environments where services may be tem
 
 ## Automatic Context Transformation
 
-Different services expect context in different formats. Sentry may need user objects with specific attributes. Honeybadger may need a hash with user IDs. Rails logger may need plain strings. ActionReporter automatically transforms context to match each service's requirements.
+Different services expect context in different formats: Sentry may need user objects with specific attributes, Honeybadger a hash with user IDs, Rails logger plain strings. ActionReporter automatically transforms context to match each service's requirements.
 
 You can pass ActiveRecord objects directly to ActionReporter. The framework converts them to GlobalID strings or extracts the necessary attributes, depending on what each service expects. This eliminates the need to manually transform context for each service.
 

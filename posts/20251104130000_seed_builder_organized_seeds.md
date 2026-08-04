@@ -19,7 +19,7 @@ SeedBuilder observes this pattern and offers an alternative. It extends ActiveRe
 
 Watch a Rails developer work with seeds in a growing application. They open `db/seeds.rb`, scroll past hundreds of lines, find the section they need (or create a new one), add their seed data, save, and run the seed command. If another developer is working on seeds simultaneously, merge conflicts are inevitable. There's no way to see when a seed was added, what it does, or whether it's still needed.
 
-The file grows organically, accumulating seed data without structure. User seeds appear at the top. Product seeds appear later. Settings seeds appear at the bottom. Comments attempt to organize sections, but comments are easily ignored or removed. There's no enforcement of organization, no versioning, no selective execution.
+The file grows organically, accumulating seed data without structure. User seeds appear at the top, product seeds later, settings seeds at the bottom. Comments attempt to organize sections, but comments are easily ignored or removed. There's no enforcement of organization, no versioning, no selective execution.
 
 When a developer needs to re-seed just users, they must run all seeds. When they need to test a specific seed, they must extract it from the monolithic file. When they need to understand the history of seed data, they must read through git history of a single file, parsing changes that may span hundreds of lines.
 
@@ -27,17 +27,17 @@ When a developer needs to re-seed just users, they must run all seeds. When they
 
 Rails developers are already familiar with a pattern that solves similar problems: migrations. Migrations are organized in a directory (`db/migrate`), each file is timestamped, each migration is a class with a `change` method, and you can run specific migrations or all of them. This pattern works well for structural changes.
 
-SeedBuilder applies the same pattern to seed data. Seeds live in `db/seeds`, each file is timestamped, each seed is a plain Ruby class with a `change` method. The structure is familiar, the execution model is familiar, the organization is familiar. Developers don't need to learn a new pattern—they already know this one.
+SeedBuilder applies the same pattern to seed data. Seeds live in `db/seeds`, each file is timestamped, each seed is a plain Ruby class with a `change` method. The structure is familiar, the execution model is familiar, the organization is familiar. Developers don't need to learn a new pattern; they already know this one.
 
 The gem automatically patches `Rails.application.load_seed` via Railtie, so existing commands like `rails db:seed` continue to work. The default `db/seeds.rb` file is still loaded first (if enabled), then all seeds from the directory are loaded in timestamp order. This backward compatibility ensures existing workflows don't break.
 
 ## The Class-Based Ritual
 
-Each seed is a plain Ruby class. No base class, no inheritance, no framework dependencies beyond the `change` method. SeedBuilder loads the file, instantiates the class, calls `change`, and logs the execution. The class structure provides testability—you can instantiate the class and call `change` in tests. It provides organization—each seed is self-contained. It provides versioning—the timestamp in the filename shows when the seed was created.
+Each seed is a plain Ruby class. No base class, no inheritance, no framework dependencies beyond the `change` method. SeedBuilder loads the file, instantiates the class, calls `change`, and logs the execution. The class structure provides testability: you can instantiate the class and call `change` in tests. It provides organization (each seed is self-contained) and versioning (the timestamp in the filename shows when the seed was created).
 
 When you generate a new seed with `rails g seed create_users`, the generator creates a file with the proper structure and timestamp. By default, it also includes an in-file RSpec test, embedded directly in the seed file. This test can be run independently, providing a way to verify seed logic without running the entire seed suite.
 
-The generator follows the same pattern as the migration generator. Developers already know how to use it. The output follows the same conventions. The workflow is identical. Only the purpose differs—structure versus content.
+The generator follows the same pattern as the migration generator. Developers already know how to use it: the output follows the same conventions, the workflow is identical, and only the purpose differs (structure versus content).
 
 ## Selective Execution as Practice
 
@@ -65,7 +65,7 @@ This gradual migration path reduces friction. Teams can adopt SeedBuilder increm
 
 SeedBuilder observes the Rails ecosystem's patterns and applies them to seed data. The migration pattern, familiar to all Rails developers, becomes the organizing principle for seeds. The single file remains supported, but the directory structure provides organization at scale.
 
-The framework integrates seamlessly with Rails' infrastructure—logging, schema management, generators, Railtie hooks. It doesn't disrupt existing workflows. It adds capabilities: selective execution, versioning, testability, organization. These capabilities become valuable as applications grow and seed data becomes more complex.
+The framework integrates seamlessly with Rails' infrastructure: logging, schema management, generators, Railtie hooks. It doesn't disrupt existing workflows. It adds capabilities: selective execution, versioning, testability, organization. These capabilities become valuable as applications grow and seed data becomes more complex.
 
 For teams managing seed data in growing applications, SeedBuilder provides structure without breaking existing patterns. The single file works for simple cases. The directory structure works for complex cases. Both coexist, and teams can choose the appropriate tool for each seed.
 

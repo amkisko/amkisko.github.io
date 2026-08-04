@@ -24,7 +24,7 @@ Observation 3: Even when Grape logging is solved, the problem expands. Modern Ra
 - OmniAuth, Shrine, Sentry, and other gems each maintain independent logging mechanisms
 - ActiveRecord, ActiveJob, ActionMailer each have configurable loggers
 
-Observation 4: Each logger produces different output formats. Rails controllers emit plain text. Sidekiq uses timestamp-prefixed lines. Puma uses bracket-enclosed timestamps. Without unification, correlating events across components becomes impossible.
+Observation 4: Each logger produces different output formats. Rails controllers emit plain text, Sidekiq uses timestamp-prefixed lines, and Puma uses bracket-enclosed timestamps. Without unification, correlating events across components becomes impossible.
 
 ## Technical Analysis
 
@@ -52,15 +52,15 @@ Component 2: activesupport-json_logging
 Provides structured JSON formatter for Rails loggers. Handles hashes, JSON strings, plain strings, and Exception objects. Never raises exceptions from the formatter, ensuring logging failures don't break applications.
 
 Unification Process:
-To achieve unified structured logging, configure each gem's logger to use the JSON logger. This includes Sidekiq, Puma, OmniAuth, Shrine, Sentry, and all Rails component loggers. The configuration is manual but necessary—no automated mechanism exists.
+To achieve unified structured logging, configure each gem's logger to use the JSON logger. This includes Sidekiq, Puma, OmniAuth, Shrine, Sentry, and all Rails component loggers. The configuration is manual but necessary; no automated mechanism exists.
 
 ## Case Study: Fragmented Logging
 
 Scenario: A production issue requires tracing a request from a Grape API endpoint through a Sidekiq background job.
 
-Without unified logging: Grape endpoint produces no logs. Sidekiq job logs in plain text with different timestamp format. Rails controller logs in yet another format. Request IDs don't propagate. Correlation impossible.
+Without unified logging: Grape endpoint produces no logs. Sidekiq job logs in plain text with different timestamp format. Rails controller logs in yet another format, request IDs don't propagate, and correlation is impossible.
 
-With unified logging: All components emit structured JSON with consistent request IDs. Single query traces the request across all components. Duration metrics reveal bottlenecks. Database query times visible in all logs.
+With unified logging: All components emit structured JSON with consistent request IDs. A single query traces the request across all components, duration metrics reveal bottlenecks, and database query times stay visible in all logs.
 
 ## Conclusion
 

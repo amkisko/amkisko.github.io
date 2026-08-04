@@ -21,7 +21,7 @@ Most versioning and i18n gems in Ruby store data as JSON, YAML, or hstore in dat
 - No PostgreSQL support for YAML: YAML requires application-level parsing, adding complexity
 - Schema rigidity: Changes to versioned attributes require application-level migrations, with database-level schema changes intentionally avoided here
 
-The better approach is to have a proper schema—a table schema copy to separate `_translations` or `_versions` tables. This provides:
+The better approach is to have a proper schema: a table schema copy to separate `_translations` or `_versions` tables. This provides:
 
 - Native database queries and indexes
 - Support for custom attributes and associations
@@ -57,10 +57,10 @@ Any proposed solution must meet these requirements:
 
 - Easiness of extensibility: The code should be easy to extend and customize
 - Easiness of setup: Simple configuration, either through code patching or documented configuration options
-- Performance: Fewer performance problems to solve (than more)—design for performance from the start
+- Performance: Fewer performance problems to solve (than more); design for performance from the start
 - Separate tables: Support for partitioning and sharding of version tables
 - Custom attributes: Support for attachments, rich text, and other custom attribute types
-- PostgreSQL support: Fine if it works only with PostgreSQL—no need to support every database
+- PostgreSQL support: Fine if it works only with PostgreSQL; no need to support every database
 - No serialization: No JSON, YAML, hstore, or serialization in the core implementation
 - Versions of versions: (Optional) Ability to have versions of versions for complex scenarios
 
@@ -107,7 +107,7 @@ Each versioned model gets a corresponding `_versions` table with the same schema
 
 ### Index-Based Version Access
 
-Versions should be accessible by index—locale, datetime, string ID, or any other dimension. Console users should be able to fetch versions easily:
+Versions should be accessible by index: locale, datetime, string ID, or any other dimension. Console users should be able to fetch versions easily:
 
 ```
 article.version(locale: 'en')

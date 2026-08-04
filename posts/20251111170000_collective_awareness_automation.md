@@ -17,7 +17,7 @@ Security here is also business alignment: a diff can be technically correct and 
 
 Individual tools arrived first; collective benefit lags, and shared cloud sessions where everyone sees the same agent trace change the temperature of responsibility because personal output stops being private before it is understood.
 
-Responsibility thickens when generated code arrives production-shaped yet needs refinement; people defend diffs they did not fully author, review threads become training data for the next automation pass, and the old principle returns that code is not the value—the shipped outcome is.
+Responsibility thickens when generated code arrives production-shaped yet needs refinement; people defend diffs they did not fully author, review threads become training data for the next automation pass, and the old principle returns that code is not the value: the shipped outcome is.
 
 The cognitive load is the story now: layers of generated artifacts, some teammates exporting model suggestions into chat, others accepting outputs with a skim, and the cumulative reading cost exceeding the writing cost until someone checks out the branch locally because eyes are cheaper than trust.
 

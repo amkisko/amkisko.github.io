@@ -66,7 +66,7 @@
             <li><strong>Schema rigidity:</strong> Changes to versioned attributes require application-level migrations, with database-level schema changes intentionally avoided here</li>
         </ul>
 
-        <p>The better approach is to have a proper schema—a table schema copy to separate <code>_translations</code> or <code>_versions</code> tables. This provides:</p>
+        <p>The better approach is to have a proper schema: a table schema copy to separate <code>_translations</code> or <code>_versions</code> tables. This provides:</p>
 
         <ul>
             <li>Native database queries and indexes</li>
@@ -104,10 +104,10 @@
         <ul>
             <li><strong>Easiness of extensibility:</strong> The code should be easy to extend and customize</li>
             <li><strong>Easiness of setup:</strong> Simple configuration, either through code patching or documented configuration options</li>
-            <li><strong>Performance:</strong> Fewer performance problems to solve (than more)—design for performance from the start</li>
+            <li><strong>Performance:</strong> Fewer performance problems to solve (than more); design for performance from the start</li>
             <li><strong>Separate tables:</strong> Support for partitioning and sharding of version tables</li>
             <li><strong>Custom attributes:</strong> Support for attachments, rich text, and other custom attribute types</li>
-            <li><strong>PostgreSQL support:</strong> Fine if it works only with PostgreSQL—no need to support every database</li>
+            <li><strong>PostgreSQL support:</strong> Fine if it works only with PostgreSQL; no need to support every database</li>
             <li><strong>No serialization:</strong> No JSON, YAML, hstore, or serialization in the core implementation</li>
             <li><strong>Versions of versions:</strong> (Optional) Ability to have versions of versions for complex scenarios</li>
         </ul>
@@ -155,7 +155,7 @@
         </ul>
 
         <h3>Index-Based Version Access</h3>
-        <p>Versions should be accessible by index—locale, datetime, string ID, or any other dimension. Console users should be able to fetch versions easily:</p>
+        <p>Versions should be accessible by index: locale, datetime, string ID, or any other dimension. Console users should be able to fetch versions easily:</p>
 
         <pre><code>article.version(locale: 'en')
 article.version(at: 1.week.ago)

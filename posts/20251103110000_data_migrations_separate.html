@@ -51,21 +51,21 @@
         <h1>Schema and Data Migrations: Why They Should Be Separate</h1>
         <div class="date">3 November 2025, Helsinki, Åndrei Makarov</div>
 
-        <p>Rails developers often mix schema and data work in the same timestamped migration file. The framework handles structural changes well—adding columns, creating tables, modifying indexes. Long-running data transforms in that same pipeline cause deployment, rollback, and bootstrap problems that tend to surface months later.</p>
+        <p>Rails developers often mix schema and data work in the same timestamped migration file. The framework handles structural changes well: adding columns, creating tables, modifying indexes. Long-running data transforms in that same pipeline cause deployment, rollback, and bootstrap problems that tend to surface months later.</p>
 
         <p>Vesa Vänskä's 2014 essay on <a href="http://vesavanska.com/2014/activerecord-migrations-best-practices">ActiveRecord migrations best practices</a> states plainly: "Migrations should not contain seed data." Yet teams continue to bundle data transformations into schema migrations, creating problems that surface during deployments, rollbacks, and database bootstrapping.</p>
 
         <h2>Schema vs data migrations</h2>
 
-        <p>Schema migrations and data migrations appear similar—both modify the database, both use timestamped files, both run during deployment. This superficial similarity masks fundamental differences in purpose, execution requirements, and failure modes.</p>
+        <p>Schema migrations and data migrations appear similar (both modify the database, both use timestamped files, both run during deployment). This superficial similarity masks fundamental differences in purpose, execution requirements, and failure modes.</p>
 
-        <p>Schema migrations change structure. They should be fast, automatic, and reversible. Data migrations transform content. They may take hours, require operator oversight, and often cannot be reversed. Mixing them creates a category error that manifests as deployment failures, incomplete databases, and impossible rollbacks.</p>
+        <p>Schema migrations change structure and should be fast, automatic, and reversible; data migrations transform content. They may take hours, require operator oversight, and often cannot be reversed. Mixing them creates a category error that manifests as deployment failures, incomplete databases, and impossible rollbacks.</p>
 
         <h2>Bootstrap and schema:load</h2>
 
         <p>When you run <code>db:schema:load</code> to bootstrap a new database, Rails loads only the schema structure. Data migrations bundled into schema migrations never execute. Your database structure exists, but the data remains in its previous state. This breaks applications that assume data transformations have occurred.</p>
 
-        <p>Teams discover this when staging environments behave differently than production, or when new developers struggle to set up local databases. The workaround—running all migrations sequentially—defeats the purpose of <code>schema.rb</code> as a snapshot of the current database state.</p>
+        <p>Teams discover this when staging environments behave differently than production, or when new developers struggle to set up local databases. The workaround (running all migrations sequentially) defeats the purpose of <code>schema.rb</code> as a snapshot of the current database state.</p>
 
         <h2>Deployment automation</h2>
 
@@ -88,7 +88,7 @@
 
         <h2>Testing data migrations</h2>
 
-        <p>Rails doesn't test schema migrations by default—they're considered framework-level operations. Data migrations inherit this pattern, but teams often want to test critical data transformations. Mixing schema and data migrations makes it unclear what requires testing and what doesn't.</p>
+        <p>Rails doesn't test schema migrations by default; they're considered framework-level operations. Data migrations inherit this pattern, but teams often want to test critical data transformations. Mixing schema and data migrations makes it unclear what requires testing and what doesn't.</p>
 
         <p>The <a href="https://github.com/amkisko/data-migration.rb">data-migration</a> gem provides in-file RSpec tests as an option, embedded directly in migration files. This acknowledges that data migrations may need testing while maintaining the Rails convention that migrations themselves aren't part of the main test suite.</p>
 
@@ -115,7 +115,7 @@
 
         <h2>Conclusion</h2>
 
-        <p>The temptation to mix schema and data migrations stems from convenience—one file, one execution, one commit. But this convenience creates operational debt that compounds over time. Deployment failures, incomplete databases, and impossible rollbacks are the inevitable results.</p>
+        <p>The temptation to mix schema and data migrations stems from convenience: one file, one execution, one commit. But this convenience creates operational debt that compounds over time. Deployment failures, incomplete databases, and impossible rollbacks are the inevitable results.</p>
 
         <p>Separating schema and data migrations requires discipline, but the benefits are immediate: better control over when data transformations execute, proper handling of database bootstrapping, and the ability to test and monitor data migrations independently. The data-migration gem provides the framework needed to implement this separation while maintaining familiar Rails patterns.</p>
 

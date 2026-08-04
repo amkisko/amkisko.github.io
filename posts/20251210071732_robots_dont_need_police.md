@@ -11,7 +11,7 @@ A computer hums and slowly starts; a faint light from the screen illuminates the
 
 This year, many things moved towards automation of text production (lol if you try producing music with LLMs, not lol if it's juggling or skating).
 
-There is one area of text application which is called coding — the practice of typing exact symbols to make something happen. Some programming languages make you wait until you get a dopamine hit; some make it happen faster.
+There is one area of text application which is called coding: the practice of typing exact symbols to make something happen. Some programming languages make you wait until you get a dopamine hit; some make it happen faster.
 
 Within rapid development and delivery times, automations require constraints (not police!). The reason for this is hidden in the superpower that with these services and tools, one can produce almost anything (according to the past, for sure).
 

@@ -316,17 +316,17 @@
 
                 <p>Coding is art! Just don't let formatters override your decisions.</p>
 
-                <p>Enforcement applies things automatically without asking, using force and overriding decisions. Like police taking someone to jail due to legal decisions — the action is forced and coerced. Although in some countries police also warns before enforcement, this still often produces trauma and fear and reduces deep understanding of why these things exist. Formatters are enforcement: they automatically change code, overriding your decisions without asking. They remove agency by forcing changes.</p>
+                <p>Enforcement applies things automatically without asking, using force and overriding decisions. Like police taking someone to jail due to legal decisions: the action is forced and coerced. Although in some countries police also warns before enforcement, this still often produces trauma and fear and reduces deep understanding of why these things exist. Formatters are enforcement: they automatically change code, overriding your decisions without asking. They remove agency by forcing changes.</p>
 
                 <p>Constraints are different and operate without direct enforcement. They can be a force that constrains, and that force is sustainable and more durable than one-time enforcement. Like guardrails on a road: they limit what's possible, but don't force you to drive a certain way. Linters are constraints: they provide feedback and flag issues, but don't automatically change code. They preserve agency by allowing you to choose how to respond.</p>
 
-                <p>The isolation we're discussing — moving tools out of dependencies — is about finding the right kind of separation. It is isolation from coercive control while preserving relation. Tools that provide feedback without controlling the workflow. This is why linters work better than formatters: they constrain without enforcing, preserving agency while reducing coercive automation.</p>
+                <p>The isolation we're discussing (moving tools out of dependencies) is about finding the right kind of separation. It is isolation from coercive control while preserving relation. Tools that provide feedback without controlling the workflow. This is why linters work better than formatters: they constrain without enforcing, preserving agency while reducing coercive automation.</p>
 
                 <h2>The principle</h2>
 
                 <p>This journey led me to a clear principle: all linters, formatters and code quality tools should be configured per-project and run within isolated environments. They should never appear in project dependencies. They are not mandatory. Code quality automations are not mandatory for coding and delivery. They should never block releases.</p>
 
-                <p>But here's the uncomfortable truth: nobody measured these. All the maintenance and debates around formatting-linting-compilation — it's just done because we can't avoid this stuff anymore. Someone has to handle it, and maybe do it for free. Being a "linters expert" is also not much of a good role — not sure if any company is interested in buying such specific services from a person.</p>
+                <p>But here's the uncomfortable truth: nobody measured these. All the maintenance and debates around formatting-linting-compilation are just done because we can't avoid this stuff anymore. Someone has to handle it, and maybe do it for free. Being a "linters expert" is also not much of a good role; not sure if any company is interested in buying such specific services from a person.</p>
 
                 <p>Just check out the recent eslint breaking change when they introduced flat config (what?!?) — yes, it costs money! We're spending time and money on tooling maintenance without evidence it improves outcomes.</p>
 
@@ -340,8 +340,8 @@
                     <li>Always prefer committing changes that are only required for the task or story, even if you are the only person who works with the code</li>
                     <li>There is a visible price for using different editors and environments</li>
                     <li>There is no reason to bring additional and uncontrollable automations</li>
-                    <li>Never update code text automatically—all automations should be run manually, including formatters, linters, and code generators</li>
-                    <li>Formatting, linting and running test suites are all developer responsibilities. We have enough tools — one can automate these processes, but there should be no global enforcement. One should be able to not opt for automations, same as being able to opt-in. If one can produce valuable and high quality things without these practices, then what is the value of enforcement for everyone?</li>
+                    <li>Never update code text automatically; all automations should be run manually, including formatters, linters, and code generators</li>
+                    <li>Formatting, linting and running test suites are all developer responsibilities. We have enough tools: one can automate these processes, but there should be no global enforcement. One should be able to not opt for automations, same as being able to opt-in. If one can produce valuable and high quality things without these practices, then what is the value of enforcement for everyone?</li>
                 </ul>
 
                 <p>This brings us back to the beginning: "Iteration over perfection" and "human over machine". The tools should serve us, not the other way around.</p>

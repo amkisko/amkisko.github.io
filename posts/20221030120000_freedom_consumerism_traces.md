@@ -13,7 +13,7 @@ Consumerism does not need instant feedback to function, yet the internet taught 
 
 The same tension shows up between people: connection wants transparency, boundaries want cover, professional life wants demonstration, private life wants room to fail without inventory, and I have felt the stress of standing inside someone else's vulnerability knowing my words will leave marks I cannot fully recall later, which is perhaps the honest price of work that is not merely transactional.
 
-Career was never a clean line for me; coding began as community labor long before it became income, hundreds of small contributions whose reward was knowledge or recognition or simply the object existing, and I still wonder whether the marketplace lesson—demo, sell, buy, negotiate visibility—belongs to the same craft or sits beside it like a second language learned too late, uncomfortable precisely because the work itself was once enough.
+Career was never a clean line for me; coding began as community labor long before it became income, hundreds of small contributions whose reward was knowledge or recognition or simply the object existing, and I still wonder whether the marketplace lesson (demo, sell, buy, negotiate visibility) belongs to the same craft or sits beside it like a second language learned too late, uncomfortable precisely because the work itself was once enough.
 
 When freedom is discussed as points of movement, control means steering the object according to intention inside those points, and I see the parallel in professional life as accountability inside expectations, transparency inside commitments, autonomy inside teams that still have to ship, always with emotions present, never optional, adding entropy to every decision we pretend was only technical.
 
