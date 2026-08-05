@@ -1,4 +1,5 @@
 # Schema and Data Migrations: Why They Should Be Separate
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251103110000_data_migrations_separate.html
 Description: Why schema migrations and data migrations are fundamentally different and should be managed separately, with best practices for implementing data migrations in Rails.

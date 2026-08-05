@@ -1,4 +1,5 @@
 # A DAW-less Evening
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260605120000_a_dawless_evening.html
 Description: A fairy-tale story about hardware jams, green tea, the severe DAW-less club, and what it would mean to publish sound without the glowing rectangle.

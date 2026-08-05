@@ -1,4 +1,5 @@
 # Troubleshooting Version Managers on macOS (Apple Silicon & Intel)
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20241103120000_macos_arm_ruby_build.html
 Description: A comprehensive guide to troubleshooting Ruby and Node.js version managers on macOS, covering rbenv, RVM, nodenv, nvm, asdf, and mise. Learn about common issues and solutions for both Apple Silicon and Intel Macs.

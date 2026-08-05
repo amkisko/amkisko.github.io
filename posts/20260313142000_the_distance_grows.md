@@ -1,4 +1,5 @@
 # The Distance Grows
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260313142000_the_distance_grows.html
 Description: A story about hallucinations, dreams, definitions, and why outsourced language creates distance between words and lived experience.

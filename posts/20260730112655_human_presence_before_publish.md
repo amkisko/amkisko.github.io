@@ -1,4 +1,5 @@
 # Proof of Presence
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260730112655_human_presence_before_publish.html
 Description: A first-person account of developing registry mutation authorization for Cargo and crates.io, from passkey experiments to a preflight protocol and three RFC drafts.

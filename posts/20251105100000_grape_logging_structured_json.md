@@ -1,4 +1,5 @@
 # Solving Grape API Logging: The Missing Piece for Structured Logs
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251105100000_grape_logging_structured_json.html
 Description: Why existing Grape logging solutions fail to provide complete request logging and structured JSON output, and how grape-rails-logger and activesupport-json_logging solve this problem.

@@ -1,4 +1,5 @@
 # Robots don't need police!
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251210071732_robots_dont_need_police.html
 Description: A guide to setting up RuboCop with trunk.io for automated code quality checks in Ruby projects, including configuration examples and GitHub Actions integration.

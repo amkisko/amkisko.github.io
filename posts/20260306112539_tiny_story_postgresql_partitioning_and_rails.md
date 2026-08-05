@@ -1,4 +1,5 @@
 # Tiny story PostgreSQL partitioning and Rails
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260306112539_tiny_story_postgresql_partitioning_and_rails.html
 Description: A tiny story about PostgreSQL partitioning in Rails, including how it fits with sharding, clustering, replication, and multi-shard operations.

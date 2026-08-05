@@ -1,4 +1,5 @@
 # Playing Computer, Playing Music
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260313130000_playing_computer_playing_music.html
 Description: A philosophical story about intention, effort, and distance: when sound machines play, when humans play, and how juggling helps redraw the line.

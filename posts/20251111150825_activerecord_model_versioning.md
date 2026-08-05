@@ -1,4 +1,5 @@
 # ActiveRecord Model Versioning: A Proposal for ActiveVersion
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251111150825_activerecord_model_versioning.html
 Description: Exploring a new approach to ActiveRecord versioning with proper schema design, avoiding JSON/YAML storage, and supporting extensibility for i18n, auditing, and draft management.

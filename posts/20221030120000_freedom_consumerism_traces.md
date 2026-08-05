@@ -1,4 +1,5 @@
 # Freedom, Consumerism, and the Price of Traces
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20221030120000_freedom_consumerism_traces.html
 Description: Exploring the relationship between freedom, consumerism, personal boundaries, and the traces we leave in digital spaces. Reflections on autonomy, career, and the cost of visibility.

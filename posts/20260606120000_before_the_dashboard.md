@@ -1,4 +1,5 @@
 # Before the Dashboard
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260606120000_before_the_dashboard.html
 Description: After the DAW-less evening: tape, green tea, verification culture, platforms, and music before the dashboard takes the origin.

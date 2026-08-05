@@ -1,4 +1,5 @@
 # When Reading Costs More Than Writing
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260313103000_when_reading_costs_more_than_writing.html
 Description: An observation from 2023-2026: generated commit messages and review artifacts can become cheaper to produce than to read, shifting software practice toward local generation, manual verification, and selective trust.

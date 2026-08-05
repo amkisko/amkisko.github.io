@@ -1,4 +1,5 @@
 # Post for Reddit: Robots don't need police: Constraints vs Enforcement and Why linters and formatters shouldn't be in your Gemfile (or how to isolate it)
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251211000000_reddit_post_formatting_linting.html
 Description: A Reddit-style post discussing the distinction between formatters and linters, and how moving tools out of project dependencies changes the development workflow.

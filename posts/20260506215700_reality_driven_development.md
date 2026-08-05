@@ -1,4 +1,5 @@
 # Reality-Driven Development
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260506215700_reality_driven_development.html
 Description: A novella about a river, a bridge, a speaking box, and why a specification compresses contact with the world, or mere noise when no crossing had weight.

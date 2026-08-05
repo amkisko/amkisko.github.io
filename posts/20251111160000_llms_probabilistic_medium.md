@@ -1,4 +1,5 @@
 # LLMs as Probabilistic Medium: Between Imitation and Deviation
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251111160000_llms_probabilistic_medium.html
 Description: Exploring Large Language Models as probabilistic mediums rather than intelligence, examining the tension between fluency and meaning, and the essential role of human initiation and deviation.

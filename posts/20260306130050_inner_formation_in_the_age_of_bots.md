@@ -1,4 +1,5 @@
 # Inner Formation in the Age of Bots
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260306130050_inner_formation_in_the_age_of_bots.html
 Description: A detective-style essay on bot-driven development and LLM dopamine loops, with practical criteria for distinguishing professional practice from gambling-like behavior.

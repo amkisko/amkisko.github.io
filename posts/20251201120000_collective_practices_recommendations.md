@@ -1,4 +1,5 @@
 # Recommendations on Collective Practices
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251201120000_collective_practices_recommendations.html
 Description: Guidelines for creating safe, respectful, and inclusive spaces in collective activities and public events. Principles of mutual respect, privacy, and zero tolerance for discrimination.

@@ -1,4 +1,5 @@
 # Collective Awareness and the Era of Automated Production
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251111170000_collective_awareness_automation.html
 Description: Exploring collective awareness in software development, automation with background agents, and the shift from individual to collective responsibility in the age of AI-assisted coding.

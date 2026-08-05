@@ -1,4 +1,5 @@
 # Teplo and the Saturated Internet: A Text-Only Browser Guide
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260306115643_teplo_and_the_saturated_internet_a_text_only_story.html
 Description: Technical guide: why Teplo matters in LLM-amplified workflows — text-only navigation, structured extraction, security research utility, mobile-first operation, and multi-language implementation strategy.

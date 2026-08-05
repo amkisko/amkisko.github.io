@@ -1,4 +1,5 @@
 # Slop Is a Lazy Word
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260604120000_slop_is_a_lazy_word.html
 Description: A stand-up story about generic culture, Suno overload, commit messages, lunch under a generated wall, and why touch matters more than purity.

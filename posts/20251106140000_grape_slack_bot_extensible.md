@@ -1,4 +1,5 @@
 # Building Extensible Slack Bots with Grape Framework
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251106140000_grape_slack_bot_extensible.html
 Description: How grape-slack-bot provides an extensible framework for building Slack bots with Grape, supporting slash commands, interactive components, events, and views.

@@ -1,4 +1,5 @@
 # Organizing Seeds: From Single File to Structured Directory
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251104130000_seed_builder_organized_seeds.html
 Description: How SeedBuilder extends ActiveRecord to organize seeds in a directory structure and generate them as migrations, solving the problem of managing seed data in Rails applications.

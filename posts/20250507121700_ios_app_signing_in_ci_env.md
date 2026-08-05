@@ -1,4 +1,5 @@
 # iOS App Signing and Certificates Management in CI Environment
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20250507121700_ios_app_signing_in_ci_env.html
 Description: A comprehensive guide to managing iOS app signing certificates and provisioning profiles in a CI environment. Learn about certificate creation, profile management, and automated deployment workflows.

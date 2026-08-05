@@ -1,4 +1,5 @@
 # Principles of Self-Organization and Collective Action
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20221223120000_self_organization_principles.html
 Description: Exploring principles of self-organization, diversity and inclusion, transparency, and ethical guidelines for effective collective action and group decision-making.

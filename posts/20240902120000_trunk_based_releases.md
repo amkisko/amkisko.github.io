@@ -1,4 +1,5 @@
 # Trunk-Based Releases: A Practical Guide
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20240902120000_trunk_based_releases.html
 Description: A comprehensive guide to trunk-based development and release management, including branching strategies, automation, and feature flag management.

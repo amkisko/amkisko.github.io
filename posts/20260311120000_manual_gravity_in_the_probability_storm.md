@@ -1,4 +1,5 @@
 # Manual Gravity in the Probability Storm
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20260311120000_manual_gravity_in_the_probability_storm.html
 Description: A futuristic story about code review in the LLM era: quality guards, manual acceptance, tests-first reading, staged validation, and intent alignment through demos and UAT.

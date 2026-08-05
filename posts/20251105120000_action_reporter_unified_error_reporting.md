@@ -1,4 +1,5 @@
 # Unified Error Reporting: Managing Multiple Services
+**Licence:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — credit Andrei Makarov / amkisko
 
 URL: https://amkisko.github.io/posts/20251105120000_action_reporter_unified_error_reporting.html
 Description: How ActionReporter solves the problem of managing multiple error reporting services (Sentry, Honeybadger, Rails logger, etc.) with a single unified interface.
